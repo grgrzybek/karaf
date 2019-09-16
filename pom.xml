@@ -292,7 +292,7 @@
         <pax.swissbox.version>1.8.3</pax.swissbox.version>
         <pax.url.version>2.6.1</pax.url.version>
         <pax.web.version>7.3.4</pax.web.version>
-        <pax.web.undertow.version>2.0.22.Final-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.0.23.Final</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.4.0</pax.jdbc.version>
         <pax.jms.version>1.0.5</pax.jms.version>
