@@ -18,6 +18,7 @@ import org.apache.karaf.itests.KarafTestSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -42,15 +43,18 @@ public class JmsExampleTest extends KarafTestSupport {
     public Option[] config() {
         String version = MavenUtils.getArtifactVersion("org.apache.karaf", "apache-karaf");
         List<Option> result = new LinkedList<>(Arrays.asList(super.config()));
+       // workaround https://issues.jboss.org/browse/ENTMQBR-2900
+        result.add(CoreOptions.mavenBundle().groupId("org.apache.qpid").artifactId("qpid-jms-client").version("0.42.0.redhat-00002"));
+        result.add(CoreOptions.mavenBundle().groupId("org.ops4j.pax.jms").artifactId("pax-jms-artemis").version("1.0.5"));
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
                 "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/standard/" + version + "/xml/features, " +
-                        "mvn:org.apache.activemq/artemis-features/2.6.3.redhat-00015/xml/features"
+                        "mvn:org.apache.activemq/artemis-features/2.9.0.redhat-00005/xml/features"
         ));
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
-                "instance,package,log,ssh,framework,system,eventadmin,feature,shell,management,service,jaas,deployer,diagnostic,wrap,bundle,config,kar,aries-blueprint,artemis,jms,pax-jms-artemis"));
+                "instance,package,log,ssh,framework,system,eventadmin,feature,shell,management,service,jaas,deployer,diagnostic,wrap,bundle,config,kar,aries-blueprint,artemis,jms,pax-jms-core"));
         result.add(replaceConfigurationFile("etc/org.ops4j.connectionfactory-artemis.cfg", getConfigFile("/org/apache/karaf/itests/features/org.ops4j.connectionfactory-artemis.cfg")));
         return result.toArray(new Option[result.size()]);
     }
