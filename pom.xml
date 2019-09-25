@@ -167,7 +167,7 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
-        <commons-lang3.version>3.6.0.redhat-1</commons-lang3.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-pool.version>1.6</commons-pool.version>
         <commons-pool2.version>2.6.2</commons-pool2.version>
@@ -265,13 +265,13 @@
         <hibernate52.version>5.2.17.Final</hibernate52.version>
         <hibernate.version>5.3.10.Final-redhat-00001</hibernate.version>
         <hibernate.validator.version>5.3.5.Final-redhat-2</hibernate.validator.version>
-        <httpclient.version>4.5.6</httpclient.version>
+        <httpclient.version>4.5.5</httpclient.version>
         <jansi.version>1.18</jansi.version>
         <javassist.version>3.24.1-GA</javassist.version>
         <jackson.version>2.9.9</jackson.version>
         <jboss.logging.version>3.4.0.Final-redhat-00001</jboss.logging.version>
         <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
-        <jetty.version>9.4.18.v20190429</jetty.version>
+        <jetty.version>9.4.20.v20190813</jetty.version>
         <jline.version>3.11.0</jline.version>
         <junit.version>4.12</junit.version>
         <jsw.version>3.2.3</jsw.version>
@@ -308,7 +308,7 @@
         <spring40.version>4.0.9.RELEASE_1</spring40.version>
         <spring41.version>4.1.9.RELEASE_1</spring41.version>
         <spring42.version>4.2.9.RELEASE_1</spring42.version>
-        <spring43.version>4.3.24.RELEASE_1</spring43.version>
+        <spring43.version>4.3.25.RELEASE_1</spring43.version>
         <spring50.version>5.0.14.RELEASE_1</spring50.version>
         <spring51.version>5.1.8.RELEASE_1</spring51.version>
         <spring.security31.version>3.1.4.RELEASE</spring.security31.version>

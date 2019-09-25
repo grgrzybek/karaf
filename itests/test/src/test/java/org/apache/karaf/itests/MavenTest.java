@@ -169,6 +169,7 @@ public class MavenTest /*extends KarafTestSupport*/ {
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-http").versionAsInProject()).noStart(),
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-util").versionAsInProject()).noStart(),
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-io").versionAsInProject()).noStart(),
+                mavenBundle(maven().groupId("org.apache.karaf.itests").artifactId("servlet-compatibility").versionAsInProject()).noStart(),
                 replaceConfigurationFile("etc/maven-settings.xml", new File("src/test/resources/etc/maven-settings.xml")),
                 replaceConfigurationFile("etc/org.ops4j.pax.url.mvn.cfg", new File("src/test/resources/etc/org.ops4j.pax.url.mvn.cfg"))
         ));

@@ -43,6 +43,12 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.karaf.itests</groupId>
+            <artifactId>servlet-compatibility</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -257,7 +263,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
-            <version>9.4.12.v20180830</version>
+            <version>${jetty.version}</version>
         </dependency>
     </dependencies>
 
@@ -315,6 +321,7 @@
                     <excludes>
                         <exclude>MavenTest</exclude>
                     </excludes>
+                    <runOrder>alphabetical</runOrder>
                 </configuration>
             </plugin>
             <plugin>

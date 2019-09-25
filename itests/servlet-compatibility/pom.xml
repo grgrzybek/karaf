@@ -10,7 +10,7 @@
         (the "License"); you may not use this file except in compliance with
         the License.  You may obtain a copy of the License at
 
-           http://www.apache.org/licenses/LICENSE-2.0
+            http://www.apache.org/licenses/LICENSE-2.0
 
         Unless required by applicable law or agreed to in writing, software
         distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,29 +22,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.karaf.examples</groupId>
-        <artifactId>apache-karaf-examples</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <groupId>org.apache.karaf.itests</groupId>
+        <artifactId>itests</artifactId>
+        <version>4.2.6.fuse-750012</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>karaf-websocket-example</artifactId>
+    <artifactId>servlet-compatibility</artifactId>
+    <name>Apache Karaf :: Integration Tests :: Servlet Compatibility</name>
     <packaging>bundle</packaging>
-    <name>Apache Karaf :: Examples :: Websocket</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>websocket-servlet</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <version>6.0.0</version>
-        </dependency>
-    </dependencies>
+    <description>
+        This bundle should be used for integration tests that use Jetty or other bundles requiring
+        Servlet API 3.1, while Karaf for Fuse 7.x uses Pax Web that's compatible with Servlet API 4.0.
+    </description>
 
     <build>
         <plugins>
@@ -53,13 +44,14 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Import-Package>
-                            org.osgi.service.component,
-                            *
-                        </Import-Package>
-                        <Private-Package>
-                            org.apache.karaf.examples.websocket
-                        </Private-Package>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Fragment-Host>javax.servlet-api</Fragment-Host>
+                        <Export-Package>
+                            javax.servlet;uses:="javax.servlet.annotation,javax.servlet.descriptor";version=3.1.0,
+                            javax.servlet.annotation;uses:=javax.servlet;version=3.1.0,
+                            javax.servlet.http;uses:=javax.servlet;version=3.1.0,
+                            javax.servlet.descriptor;version=3.1.0
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
