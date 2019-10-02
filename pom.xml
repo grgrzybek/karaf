@@ -176,7 +176,7 @@
         <dom4j.bundle.version>1.6.1_5</dom4j.bundle.version>
         <eclipselink.version>2.7.4</eclipselink.version>
         <jasypt.bundle.version>1.9.3.redhat_3</jasypt.bundle.version>
-        <jolokia.version>1.6.1.redhat-1</jolokia.version>
+        <jolokia.version>1.6.2.redhat-00002</jolokia.version>
         <serp.bundle.version>1.15.1_1</serp.bundle.version>
         <servlet.spec3.version>3.1.0</servlet.spec3.version>
         <servlet.spec.version>4.0.1</servlet.spec.version>
