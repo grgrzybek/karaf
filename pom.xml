@@ -295,7 +295,7 @@
         <pax.web.version>7.3.4</pax.web.version>
         <pax.web.undertow.version>2.0.23.Final</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
-        <pax.jdbc.version>1.4.0</pax.jdbc.version>
+        <pax.jdbc.version>1.4.3</pax.jdbc.version>
         <pax.jms.version>1.0.5</pax.jms.version>
         <pax.transx.version>0.4.4</pax.transx.version>
 
