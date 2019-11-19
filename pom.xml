@@ -292,7 +292,7 @@
         <pax.base.version>1.5.0</pax.base.version>
         <pax.swissbox.version>1.8.3</pax.swissbox.version>
         <pax.url.version>2.6.1</pax.url.version>
-        <pax.web.version>7.3.4</pax.web.version>
+        <pax.web.version>7.3.5</pax.web.version>
         <pax.web.undertow.version>2.0.23.Final</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.4.3</pax.jdbc.version>
