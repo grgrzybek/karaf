@@ -83,6 +83,7 @@ setupClassPath() {
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/jline/jline-terminal/@@jline.version@@/jline-terminal-@@jline.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/jline/jline-jansi/@@jline.version@@/jline-jansi-@@jline.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/jline/jline/@@jline.version@@/jline-@@jline.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/boot/osgi.core-@@osgi.version@@.jar"
 }
 
 init() {
