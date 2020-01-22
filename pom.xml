@@ -158,7 +158,8 @@
         <cglib2.version>2.2.0</cglib2.version>
         
         <jna.version>5.5.0</jna.version>
-        <jaxb.version>2.3.2</jaxb.version> 
+        <jakarta.jaxb.version>2.3.2</jakarta.jaxb.version>
+        <glassfish.jaxb.version>2.3.2</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00001</commons-beanutils.version>
         <commons-codec.version>1.13</commons-codec.version>
         <commons-compress.version>1.18</commons-compress.version>
@@ -1916,17 +1917,17 @@
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${jakarta.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${glassfish.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>txw2</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${glassfish.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.istack</groupId>
