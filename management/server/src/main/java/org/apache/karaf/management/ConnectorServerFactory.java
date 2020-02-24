@@ -70,6 +70,7 @@ public class ConnectorServerFactory {
     private String algorithm;
     private String secureProtocol;
     private String[] enabledProtocols;
+    private String[] enabledCipherSuites;
     private String keyStore;
     private String trustStore;
     private String keyAlias;
@@ -314,7 +315,8 @@ public class ConnectorServerFactory {
 
     private void setupSsl() throws GeneralSecurityException {
         SSLServerSocketFactory sssf = keystoreManager.createSSLServerFactory(null, secureProtocol, algorithm, keyStore, keyAlias, trustStore,keyStoreAvailabilityTimeout);
-        RMIServerSocketFactory rssf = new KarafSslRMIServerSocketFactory(sssf, isClientAuth(), getRmiServerHost(), getEnabledProtocols());
+        RMIServerSocketFactory rssf = new KarafSslRMIServerSocketFactory(sssf, isClientAuth(), getRmiServerHost(), getEnabledProtocols(),
+                                                                         getEnabledCipherSuites());
         RMIClientSocketFactory rcsf = new SslRMIClientSocketFactory();
         environment.put(RMIConnectorServer.RMI_SERVER_SOCKET_FACTORY_ATTRIBUTE, rssf);
         environment.put(RMIConnectorServer.RMI_CLIENT_SOCKET_FACTORY_ATTRIBUTE, rcsf);
@@ -332,12 +334,16 @@ public class ConnectorServerFactory {
         private boolean clientAuth;
         private String rmiServerHost;
         private String[] enabledProtocols;
+        private String[] enabledCipherSuites;
 
-        public KarafSslRMIServerSocketFactory(SSLServerSocketFactory sssf, boolean clientAuth, String rmiServerHost, String[] enabledProtocols) {
+        public KarafSslRMIServerSocketFactory(SSLServerSocketFactory sssf, boolean clientAuth, String rmiServerHost, 
+                                              String[] enabledProtocols,
+                                              String[] enabledCipherSuites) {
             this.sssf = sssf;
             this.clientAuth = clientAuth;
             this.rmiServerHost = rmiServerHost;
             this.enabledProtocols = enabledProtocols;
+            this.enabledCipherSuites = enabledCipherSuites;
         }
 
         public ServerSocket createServerSocket(int port) throws IOException {
@@ -348,12 +354,18 @@ public class ConnectorServerFactory {
                 if (this.enabledProtocols != null && this.enabledProtocols.length > 0) {
                     ss.setEnabledProtocols(this.enabledProtocols);
                 }
+                if (this.enabledCipherSuites != null && this.enabledCipherSuites.length > 0) {
+                    ss.setEnabledCipherSuites(this.enabledCipherSuites);
+                }
                 return new LocalOnlySSLServerSocket(ss);
             } else {
                 final SSLServerSocket ss = (SSLServerSocket) sssf.createServerSocket(port, 50, InetAddress.getByName(rmiServerHost));
                 ss.setNeedClientAuth(clientAuth);
                 if (this.enabledProtocols != null && this.enabledProtocols.length > 0) {
                     ss.setEnabledProtocols(this.enabledProtocols);
+                }
+                if (this.enabledCipherSuites != null && this.enabledCipherSuites.length > 0) {
+                    ss.setEnabledCipherSuites(this.enabledCipherSuites);
                 }
                 return ss;
             }
@@ -677,6 +689,14 @@ public class ConnectorServerFactory {
 
     public void setEnabledProtocols(String[] enabledProtocols) {
         this.enabledProtocols = enabledProtocols;
+    }
+
+    public String[] getEnabledCipherSuites() {
+        return enabledCipherSuites;
+    }
+
+    public void setEnabledCipherSuites(String[] enabledCipherSuites) {
+        this.enabledCipherSuites = enabledCipherSuites;
     }
 
 }
