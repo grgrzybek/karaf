@@ -18,6 +18,9 @@ package org.apache.karaf.jaas.modules.properties;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Map;
 import javax.security.auth.Subject;
@@ -63,7 +66,13 @@ public class PropertiesLoginModule extends AbstractKarafLoginModule {
         }
         File f = new File(usersFile);
         if (!f.exists()) {
-            throw new LoginException("Users file not found at " + f);
+            try {
+                f = new File(new URL(usersFile).toURI());
+            } catch (MalformedURLException | URISyntaxException ignore) {
+            }
+            if (!f.exists()) {
+                throw new LoginException("Users file not found at " + f);
+            }
         }
 
         Properties users;

@@ -21,7 +21,10 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileSystems;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
@@ -82,7 +85,16 @@ public class AutoEncryptionSupport implements Runnable, Closeable {
                 dir = Paths.get(System.getProperty("karaf.etc"));
                 file = dir.resolve("users.properties");
             } else {
-                file = new File(usersFileName).toPath();
+                try {
+                    file = new File(usersFileName).toPath();
+                } catch (InvalidPathException e) {
+                    // ENTESB-13135: could be an URL
+                    try {
+                        file = new File(new URL(usersFileName).toURI()).toPath();
+                    } catch (URISyntaxException ex) {
+                        throw new RuntimeException("Can't access file " + usersFileName + ": " + ex.getMessage(), ex);
+                    }
+                }
                 dir = file.getParent();
             }
             dir.register(watchService, ENTRY_MODIFY);
