@@ -145,7 +145,7 @@
     </developers>
 
     <properties>
-        <activemq.version>5.11.0.redhat-630434</activemq.version>
+        <activemq.version>5.11.0.redhat-630446</activemq.version>
         <aopalliance.bundle.version>1.0_6</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.4_1</aspectj.bundle.version>
         <ant.bundle.version>1.10.6_1</ant.bundle.version>
@@ -171,7 +171,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-pool.version>1.6</commons-pool.version>
-        <commons-pool2.version>2.6.2</commons-pool2.version>
+        <commons-pool2.version>2.8.0</commons-pool2.version>
         <commons-io.version>2.6</commons-io.version>
 
         <dom4j.bundle.version>2.1.1_1</dom4j.bundle.version>
@@ -258,22 +258,23 @@
         <openjpa.version>3.0.0</openjpa.version>
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>25.0.0.redhat-1</guava.version>
-        <narayana.version>5.9.6.Final-redhat-00001</narayana.version>
-        <hibernate.annotations.common.version>5.0.4.Final-redhat-00001</hibernate.annotations.common.version>
+        <narayana.version>5.9.8.Final-redhat-00002</narayana.version>
+        <hibernate.annotations.common.version>5.0.5.Final-redhat-00002</hibernate.annotations.common.version>
         <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.17.Final</hibernate52.version>
-        <hibernate.version>5.3.13.Final-redhat-00001</hibernate.version>
+        <hibernate.version>5.3.15.Final-redhat-00001</hibernate.version>
         <hibernate.validator.version>5.3.5.Final-redhat-2</hibernate.validator.version>
         <httpclient.version>4.5.5</httpclient.version>
         <jansi.version>1.18</jansi.version>
         <javassist.version>3.24.1-GA</javassist.version>
+        <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
         <jackson.version>2.9.10</jackson.version>
-        <jackson.databind.version>2.9.10.1</jackson.databind.version>
+        <jackson.databind.version>2.9.10.4-redhat-00001</jackson.databind.version>
         <jboss.logging.version>3.4.0.Final-redhat-00001</jboss.logging.version>
         <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
-        <jetty.version>9.4.25.v20191220</jetty.version>
+        <jetty.version>9.4.28.v20200408</jetty.version>
         <jline.version>3.12.0</jline.version>
         <junit.version>4.12</junit.version>
         <jsw.version>3.2.3</jsw.version>
@@ -289,7 +290,7 @@
 
         <pax.cdi.version>1.1.2</pax.cdi.version>
         <pax.exam.version>4.13.1</pax.exam.version>
-        <pax.logging.version>1.11.4</pax.logging.version>
+        <pax.logging.version>1.11.6</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.3</pax.swissbox.version>
         <pax.url.version>2.6.2</pax.url.version>
@@ -297,7 +298,7 @@
         <pax.web.undertow.version>2.0.30.SP1-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.4.5</pax.jdbc.version>
-        <pax.jms.version>1.0.6</pax.jms.version>
+        <pax.jms.version>1.0.7</pax.jms.version>
         <pax.transx.version>0.4.4</pax.transx.version>
 
         <portlet-api.version>2.0</portlet-api.version>
