@@ -32,7 +32,7 @@ import java.lang.management.ManagementFactory;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 @Ignore("ENTESB-9825: instance:* commands are not supported")
-public class InstanceTest extends KarafTestSupport {
+public class InstanceTest extends BaseTest {
 
     @Test
     public void createDestroyCommand() throws Exception {

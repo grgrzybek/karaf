@@ -28,7 +28,6 @@ import org.apache.karaf.management.ConnectorServerFactory;
 import org.apache.karaf.management.JaasAuthenticator;
 import org.apache.karaf.management.KarafMBeanServerGuard;
 import org.apache.karaf.management.MBeanServerFactory;
-import org.apache.karaf.management.RmiRegistryFactory;
 import org.apache.karaf.util.tracker.BaseActivator;
 import org.apache.karaf.util.tracker.annotation.Managed;
 import org.apache.karaf.util.tracker.annotation.ProvideService;
@@ -51,13 +50,12 @@ import org.slf4j.LoggerFactory;
 )
 @Managed("org.apache.karaf.management")
 public class Activator extends BaseActivator implements ManagedService {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(Activator.class); 
+
+    private static final Logger LOG = LoggerFactory.getLogger(Activator.class);
 
     private ConnectorServerFactory connectorServerFactory;
-    private RmiRegistryFactory rmiRegistryFactory;
     private MBeanServerFactory mbeanServerFactory;
-    
+
     private ServiceTracker<KeystoreInstance, KeystoreInstance> keystoreInstanceServiceTracker;
 
     private EventAdminLogger eventAdminLogger;
@@ -67,6 +65,10 @@ public class Activator extends BaseActivator implements ManagedService {
         ConfigurationAdmin configurationAdmin = getTrackedService(ConfigurationAdmin.class);
         KeystoreManager keystoreManager = getTrackedService(KeystoreManager.class);
         if (configurationAdmin == null || keystoreManager == null) {
+            return;
+        }
+
+        if (!ensureStartupConfiguration("org.apache.karaf.management")) {
             return;
         }
 
@@ -98,10 +100,14 @@ public class Activator extends BaseActivator implements ManagedService {
         String jmxRealm = getString("jmxRealm", "karaf");
         String serviceUrl = getString("serviceUrl",
                 "service:jmx:rmi://" + rmiServerHost + ":" + rmiServerPort + "/jndi/rmi://" + rmiRegistryHost + ":" + rmiRegistryPort + "/karaf-" + System.getProperty("karaf.name"));
-
+        boolean jmxmpEnabled = getBoolean("jmxmpEnabled", false);
+        String jmxmpHost = getString("jmxmpHost", "0.0.0.0");
+        int jmxmpPort = getInt("jmxmpPort", 9999);
+        String jmxmpServiceUrl = getString("jmxmpServiceUrl", "service:jmx:jmxmp://" + jmxmpHost + ":" + jmxmpPort);
         boolean daemon = getBoolean("daemon", true);
         boolean threaded = getBoolean("threaded", true);
         ObjectName objectName = new ObjectName(getString("objectName", "connector:name=rmi"));
+        ObjectName jmxmpObjectName = new ObjectName(getString("jmxmpObjectName", "connector:name=jmxmp"));
         long keyStoreAvailabilityTimeout = getLong("keyStoreAvailabilityTimeout", 5000);
         String authenticatorType = getString("authenticatorType", "password");
         final boolean secured = getBoolean("secured", false);
@@ -120,14 +126,6 @@ public class Activator extends BaseActivator implements ManagedService {
         guard.setLogger(eventAdminLogger);
         guard.setConfigAdmin(configurationAdmin);
 
-        rmiRegistryFactory = new RmiRegistryFactory();
-        rmiRegistryFactory.setCreate(createRmiRegistry);
-        rmiRegistryFactory.setLocate(locateRmiRegistry);
-        rmiRegistryFactory.setHost(rmiRegistryHost);
-        rmiRegistryFactory.setPort(rmiRegistryPort);
-        rmiRegistryFactory.setBundleContext(bundleContext);
-        rmiRegistryFactory.init();
-
         mbeanServerFactory = new MBeanServerFactory();
         mbeanServerFactory.setLocateExistingServerIfPossible(locateExistingMBeanServerIfPossible);
         mbeanServerFactory.init();
@@ -139,6 +137,12 @@ public class Activator extends BaseActivator implements ManagedService {
         jaasAuthenticator.setRealm(jmxRealm);
 
         connectorServerFactory = new ConnectorServerFactory();
+        connectorServerFactory.setCreate(createRmiRegistry);
+        connectorServerFactory.setLocate(locateRmiRegistry);
+        connectorServerFactory.setHost(rmiRegistryHost);
+        connectorServerFactory.setPort(rmiRegistryPort);
+        connectorServerFactory.setBundleContext(bundleContext);
+
         connectorServerFactory.setServer(mbeanServer);
         connectorServerFactory.setServiceUrl(serviceUrl);
         connectorServerFactory.setGuard(guard);
@@ -146,10 +150,17 @@ public class Activator extends BaseActivator implements ManagedService {
         connectorServerFactory.setDaemon(daemon);
         connectorServerFactory.setThreaded(threaded);
         connectorServerFactory.setObjectName(objectName);
+        connectorServerFactory.setJmxmpEnabled(jmxmpEnabled);
+        connectorServerFactory.setJmxmpServiceUrl(jmxmpServiceUrl);
+        connectorServerFactory.setJmxmpObjectName(jmxmpObjectName);
+        Map<String, Object> jmxmpEnvironment = new HashMap<>();
+        jmxmpEnvironment.put("jmx.remote.profiles", "SASL/PLAIN");
+        jmxmpEnvironment.put("jmx.remote.sasl.callback.handler", jaasAuthenticator);
         Map<String, Object> environment = new HashMap<>();
         environment.put("jmx.remote.authenticator", jaasAuthenticator);
         try {
             connectorServerFactory.setEnvironment(environment);
+            connectorServerFactory.setJmxmpEnvironment(jmxmpEnvironment);
             connectorServerFactory.setKeyStoreAvailabilityTimeout(keyStoreAvailabilityTimeout);
             connectorServerFactory.setAuthenticatorType(authenticatorType);
             connectorServerFactory.setSecured(secured);
@@ -220,14 +231,6 @@ public class Activator extends BaseActivator implements ManagedService {
                 logger.warn("Error destroying MBeanServerFactory", e);
             }
             mbeanServerFactory = null;
-        }
-        if (rmiRegistryFactory != null) {
-            try {
-                rmiRegistryFactory.destroy();
-            } catch (Exception e) {
-                logger.warn("Error destroying RMIRegistryFactory", e);
-            }
-            rmiRegistryFactory = null;
         }
         if (keystoreInstanceServiceTracker != null) {
             try {

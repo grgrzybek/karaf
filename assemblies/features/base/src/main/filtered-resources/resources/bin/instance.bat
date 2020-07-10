@@ -25,7 +25,9 @@ set PROGNAME=%~nx0%
 set ARGS=%*
 
 rem Sourcing environment settings for karaf similar to tomcats setenv
-SET KARAF_SCRIPT="instance.bat"
+if "%KARAF_SCRIPT%" == "" (
+	SET KARAF_SCRIPT="instance.bat"
+)
 if exist "%DIRNAME%setenv.bat" (
   call "%DIRNAME%setenv.bat"
 )
@@ -153,6 +155,7 @@ set CLASSPATH=%KARAF_HOME%\system\org\apache\karaf\instance\org.apache.karaf.ins
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\karaf\shell\org.apache.karaf.shell.core\@@project.version@@\org.apache.karaf.shell.core-@@project.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\ops4j\pax\logging\pax-logging-api\@@pax.logging.version@@\pax-logging-api-@@pax.logging.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\jline\jline\@@jline.version@@\jline-@@jline.version@@.jar
+set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\boot\osgi.core-@@osgi.version@@.jar
 
 :EXECUTE
     if "%SHIFT%" == "true" SET ARGS=%2 %3 %4 %5 %6 %7 %8

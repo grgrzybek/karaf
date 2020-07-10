@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -67,7 +67,8 @@ public class InstanceServiceImplTest {
             p.store(os, "Test comment");
         }
 
-        InstanceSettings s = new InstanceSettings(8122, 1122, 44444, null, null, null, Arrays.asList("test"));
+        InstanceSettings s = new InstanceSettings(8122, 1122, 44444, null, null, null,
+            Collections.singletonList("test"));
         as.addFeaturesFromSettings(f, s);
 
         Properties p2 = new Properties();
@@ -155,6 +156,23 @@ public class InstanceServiceImplTest {
         saveStorage(storage, storageFile, "testToSimulateRenameInstanceByExternalProcess");
         
         assertNotNull(service.getInstance(getName() + "b"));
+    }
+
+    @Test
+    public void testSshPortChange() throws Exception {
+        InstanceServiceImpl service = new InstanceServiceImpl();
+        File storageLocation = tempFolder.newFolder("instances");
+        service.setStorageLocation(storageLocation);
+
+        InstanceSettings settings = new InstanceSettings(8122, 1122, 44444, getName(), null, null, null);
+        service.createInstance(getName(), settings, true);
+
+        service.changeInstanceSshPort(getName(), 9999);
+
+        File shellCfg = new File(new File(new File(storageLocation, getName()), "etc"), "org.apache.karaf.shell.cfg");
+        Properties props = new Properties();
+        props.load(new FileInputStream(shellCfg));
+        assertEquals("9999", props.get("sshPort"));
     }
 
     private String getName() {

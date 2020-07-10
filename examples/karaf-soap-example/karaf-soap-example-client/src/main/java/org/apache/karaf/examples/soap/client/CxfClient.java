@@ -18,7 +18,7 @@ package org.apache.karaf.examples.soap.client;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.karaf.examples.soap.api.Booking;
-import org.apache.karaf.examples.soap.provider.BookingServiceSoap;
+import org.apache.karaf.examples.soap.blueprint.BookingServiceSoap;
 
 import java.util.Collection;
 

@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
-        <version>21</version>
+        <version>23</version>
         <relativePath />
     </parent>
 
@@ -92,8 +92,8 @@
         <connection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</developerConnection>
         <url>https://gitbox.apache.org/repos/asf?p=karaf.git;a=summary</url>
-        <tag>karaf-4.2.0.redhat-740-SNAPSHOT</tag>
-    </scm>
+        <tag>karaf-4.2.9</tag>
+  </scm>
 
     <issueManagement>
         <system>jira</system>
@@ -106,28 +106,28 @@
             <subscribe>dev-subscribe@karaf.apache.org</subscribe>
             <unsubscribe>dev-unsubscribe@karaf.apache.org</unsubscribe>
             <post>-</post>
-            <archive>http://www.mail-archive.com/dev%karaf.apache.org/</archive>
+            <archive>https://www.mail-archive.com/dev%40karaf.apache.org/</archive>
         </mailingList>
         <mailingList>
             <name>Karaf User</name>
             <subscribe>user-subscribe@karaf.apache.org</subscribe>
             <unsubscribe>user-unsubscribe@karaf.apache.org</unsubscribe>
             <post>-</post>
-            <archive>http://www.mail-archive.com/user%40karaf.apache.org/</archive>
+            <archive>https://www.mail-archive.com/user%40karaf.apache.org/</archive>
         </mailingList>
         <mailingList>
             <name>Karaf Commits</name>
             <subscribe>commits-subscribe@karaf.apache.org</subscribe>
             <unsubscribe>commits-unsubscribe@karaf.apache.org</unsubscribe>
             <post>-</post>
-            <archive>http://www.mail-archive.com/commits%40karaf.apache.org/</archive>
+            <archive>https://www.mail-archive.com/commits%40karaf.apache.org/</archive>
         </mailingList>
         <mailingList>
             <name>Karaf Issues</name>
             <subscribe>issues-subscribe@karaf.apache.org</subscribe>
             <unsubscribe>issues-unsubscribe@karaf.apache.org</unsubscribe>
             <post>-</post>
-            <archive>http://www.mail-archive.com/issues%40karaf.apache.org/</archive>
+            <archive>https://www.mail-archive.com/issues%40karaf.apache.org/</archive>
         </mailingList>
     </mailingLists>
 
@@ -147,35 +147,37 @@
     <properties>
         <activemq.version>5.11.0.redhat-630446</activemq.version>
         <aopalliance.bundle.version>1.0_6</aopalliance.bundle.version>
-        <aspectj.bundle.version>1.9.4_1</aspectj.bundle.version>
-        <ant.bundle.version>1.10.6_1</ant.bundle.version>
+        <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
+        <ant.bundle.version>1.10.7_1</ant.bundle.version>
         <antlr.bundle.version>2.7.7_5</antlr.bundle.version>
         <asm6.version>6.2.1</asm6.version>
-        <asm.version>7.2</asm.version>
+        <asm.version>8.0.1</asm.version>
         <javax.annotation.version>1.3.1</javax.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
+        <camel.version>2.24.3</camel.version>
         <cglib.bundle.version>3.2.9_1</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
-        
+        <cxf.version>3.3.5</cxf.version>
         <jna.version>5.5.0</jna.version>
-        <jakarta.jaxb.version>2.3.2</jakarta.jaxb.version>
+        <jakarta.jaxb.version>2.3.3</jakarta.jaxb.version>
+        <jaxb.version>2.3.3</jaxb.version> 
         <glassfish.jaxb.version>2.3.2</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
-        <commons-codec.version>1.13</commons-codec.version>
-        <commons-compress.version>1.18</commons-compress.version>
+        <commons-codec.version>1.14</commons-codec.version>
+        <commons-compress.version>1.20</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
-        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-lang3.version>3.10</commons-lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-pool.version>1.6</commons-pool.version>
         <commons-pool2.version>2.8.0</commons-pool2.version>
         <commons-io.version>2.6</commons-io.version>
 
         <dom4j.bundle.version>2.1.1_1</dom4j.bundle.version>
-        <eclipselink.version>2.7.4</eclipselink.version>
+        <eclipselink.version>2.7.7</eclipselink.version>
         <jasypt.bundle.version>1.9.3.redhat_3</jasypt.bundle.version>
         <jolokia.version>1.6.2.redhat-00002</jolokia.version>
         <serp.bundle.version>1.15.1_1</serp.bundle.version>
@@ -188,7 +190,7 @@
 
         <servicemix-spec.version>2.9.0</servicemix-spec.version>
 
-        <easymock.version>4.0.2</easymock.version>
+        <easymock.version>4.2</easymock.version>
         <objenesis.version>2.6</objenesis.version>
         <equinox.version>3.12.100</equinox.version>
         <bndlib.version>3.5.0</bndlib.version>
@@ -203,20 +205,20 @@
         <felix.framework.version>5.6.12</felix.framework.version>
         <felix.framework.security.version>2.6.1</felix.framework.security.version>
         <felix.gogo.runtime.version>1.1.2</felix.gogo.runtime.version>
-        <felix.gogo.jline.version>1.1.4</felix.gogo.jline.version>
+        <felix.gogo.jline.version>1.1.6</felix.gogo.jline.version>
         <felix.httplite.version>0.1.6</felix.httplite.version>
-        <felix.http.version>4.0.10</felix.http.version>
-        <felix.inventory.version>1.0.4</felix.inventory.version>
-        <felix.plugin.version>4.2.0</felix.plugin.version>
+        <felix.http.version>4.0.18</felix.http.version>
+        <felix.inventory.version>1.0.6</felix.inventory.version>
+        <felix.plugin.version>4.2.1</felix.plugin.version>
         <felix.utils.version>1.11.2</felix.utils.version>
-        <felix.webconsole.version>4.3.12</felix.webconsole.version>
-        <felix.webconsole.api.version>3.1.2</felix.webconsole.api.version>
+        <felix.webconsole.version>4.5.2</felix.webconsole.version>
+        <felix.webconsole.api.version>3.3.0</felix.webconsole.api.version>
         <felix.memoryusage.webconsole.plugin.version>1.0.10</felix.memoryusage.webconsole.plugin.version>
         <felix.metatype.version>1.2.2</felix.metatype.version>
         <felix.eventadmin.version>1.5.0</felix.eventadmin.version>
         <felix.eventadmin.webconsole.plugin.version>1.1.8</felix.eventadmin.webconsole.plugin.version>
         <felix.obr.version>1.0.2</felix.obr.version>
-        <felix.scr.version>2.1.16</felix.scr.version>
+        <felix.scr.version>2.1.20</felix.scr.version>
         <felix.scr.webconsole.plugin.version>2.1.0</felix.scr.webconsole.plugin.version>
         <felix.scr.annotation.version>1.12.0</felix.scr.annotation.version>
         <felix.resolver.version>1.16.0</felix.resolver.version>
@@ -255,7 +257,7 @@
         <aries.util.version>1.1.3</aries.util.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <openjpa.version>3.0.0</openjpa.version>
+        <openjpa.version>3.1.1</openjpa.version>
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>25.0.0.redhat-1</guava.version>
         <narayana.version>5.9.8.Final-redhat-00002</narayana.version>
@@ -263,10 +265,10 @@
         <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
-        <hibernate52.version>5.2.17.Final</hibernate52.version>
+        <hibernate52.version>5.2.18.Final</hibernate52.version>
         <hibernate.version>5.3.15.Final-redhat-00001</hibernate.version>
         <hibernate.validator.version>5.3.5.Final-redhat-2</hibernate.validator.version>
-        <httpclient.version>4.5.5</httpclient.version>
+        <httpclient.version>4.5.6</httpclient.version>
         <jansi.version>1.18</jansi.version>
         <javassist.version>3.24.1-GA</javassist.version>
         <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
@@ -276,10 +278,10 @@
         <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
         <jetty.version>9.4.28.v20200408</jetty.version>
         <jline.version>3.12.0</jline.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13</junit.version>
         <jsw.version>3.2.3</jsw.version>
         <log4j.version>1.2.17</log4j.version>
-        <maven.version>3.6.1</maven.version>
+        <maven.version>3.6.3</maven.version>
         <maven.wagon.version>3.2.0</maven.wagon.version>
         <maven-plugin-annotations.version>3.6.0</maven-plugin-annotations.version>
         <maven.resolver.version>1.3.1</maven.resolver.version>
@@ -288,8 +290,8 @@
         <osgi.version>6.0.0</osgi.version>
         <osgi.compendium.version>6.0.0</osgi.compendium.version>
 
-        <pax.cdi.version>1.1.2</pax.cdi.version>
-        <pax.exam.version>4.13.1</pax.exam.version>
+        <pax.cdi.version>1.1.3</pax.cdi.version>
+        <pax.exam.version>4.13.3</pax.exam.version>
         <pax.logging.version>1.11.6</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.3</pax.swissbox.version>
@@ -312,17 +314,19 @@
         <spring41.version>4.1.9.RELEASE_1</spring41.version>
         <spring42.version>4.2.9.RELEASE_1</spring42.version>
         <spring43.version>4.3.25.RELEASE_1</spring43.version>
-        <spring50.version>5.0.14.RELEASE_1</spring50.version>
-        <spring51.version>5.1.8.RELEASE_1</spring51.version>
+        <spring50.version>5.0.15.RELEASE_1</spring50.version>
+        <spring51.version>5.1.14.RELEASE_1</spring51.version>
+        <spring52.version>5.2.5.RELEASE_1</spring52.version>
         <spring.security31.version>3.1.4.RELEASE</spring.security31.version>
         <spring.security42.version>4.2.4.RELEASE_1</spring.security42.version>
         <spring.security51.version>5.1.5.RELEASE_1</spring.security51.version>
+        <spring.security53.version>5.3.1.RELEASE_1</spring.security53.version>
 
         <sshd.version>1.7.0</sshd.version>
-        <derby-version>10.12.1.1</derby-version>
+        <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
         <struts.bundle.version>1.3.10_1</struts.bundle.version>
-        <xbean.version>4.15</xbean.version>
+        <xbean.version>4.17</xbean.version>
         <xerces.bundle.version>2.12.0_1</xerces.bundle.version>
         <xalan.bundle.version>2.7.2_3</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2_1</xalan-serializer.bundle.version>
@@ -1933,7 +1937,7 @@
             <dependency>
                 <groupId>com.sun.istack</groupId>
                 <artifactId>istack-commons-runtime</artifactId>
-                <version>3.0.8</version>
+                <version>3.0.10</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1963,7 +1967,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.8.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1983,17 +1987,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>1.7.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2034,7 +2038,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.1</version>
+                    <version>2.22.2</version>
                     <configuration>
                             <forkMode>once</forkMode>
                             <argLine>${surefire.argLine}</argLine>
@@ -2053,17 +2057,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.2.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.8</version>
+                    <version>3.0.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>ant-contrib</groupId>
@@ -2101,22 +2105,22 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.1.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.9.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
@@ -2296,22 +2300,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>2.22.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -2340,7 +2344,7 @@
                     <plugin>
                         <groupId>org.apache.rat</groupId>
                         <artifactId>apache-rat-plugin</artifactId>
-                        <version>0.12</version>
+                        <version>0.13</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -2383,7 +2387,7 @@
                                 <!-- test json files -->
                                 <exclude>**/*.json</exclude>
                                 <!-- test wiring resource files -->
-                                <exclude>**/src/test/resources/wirings/1</exclude>
+                                <exclude>**/src/test/resources/wirings/*</exclude>
                                 <!-- SSH keys -->
 				                <exclude>**/*.key</exclude>
                                 <exclude>**/*.id_rsa</exclude>
@@ -2425,6 +2429,12 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                  <gpgArguments>
+                                    <arg>--pinentry-mode</arg>
+                                    <arg>loopback</arg>
+                                  </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

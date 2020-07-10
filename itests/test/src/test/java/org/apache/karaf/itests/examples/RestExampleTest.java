@@ -16,8 +16,8 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.itests.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class RestExampleTest extends KarafTestSupport {
+public class RestExampleTest extends BaseTest {
 
     private void setup() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-rest-example-features/" + System.getProperty("karaf.version") + "/xml");
@@ -52,10 +52,10 @@ public class RestExampleTest extends KarafTestSupport {
     }
 
     @Test
-    public void testWithHttpClient() throws Exception {
+    public void testBlueprintWithHttpClient() throws Exception {
         setup();
 
-        installAndAssertFeature("karaf-rest-example-provider");
+        installAndAssertFeature("karaf-rest-example-blueprint");
 
         installAndAssertFeature("karaf-rest-example-client-http");
 
@@ -63,10 +63,32 @@ public class RestExampleTest extends KarafTestSupport {
     }
 
     @Test
-    public void testWithCxfClient() throws Exception {
+    public void testBlueprintWithCxfClient() throws Exception {
         setup();
 
-        installAndAssertFeature("karaf-rest-example-provider");
+        installAndAssertFeature("karaf-rest-example-blueprint");
+
+        installAndAssertFeature("karaf-rest-example-client-cxf");
+
+        verify();
+    }
+
+    @Test
+    public void testScrWithHttpClient() throws Exception {
+        setup();
+
+        installAndAssertFeature("karaf-rest-example-scr");
+
+        installAndAssertFeature("karaf-rest-example-client-http");
+
+        verify();
+    }
+
+    @Test
+    public void testScrWithCxfClient() throws Exception {
+        setup();
+
+        installAndAssertFeature("karaf-rest-example-scr");
 
         installAndAssertFeature("karaf-rest-example-client-cxf");
 

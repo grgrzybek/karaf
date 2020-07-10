@@ -34,13 +34,10 @@
 
     <modules>
         <module>karaf-soap-example-api</module>
-        <module>karaf-soap-example-provider</module>
+        <module>karaf-soap-example-blueprint</module>
+        <module>karaf-soap-example-scr</module>
         <module>karaf-soap-example-client</module>
         <module>karaf-soap-example-features</module>
     </modules>
     
-    <properties>
-        <cxf.version>3.2.8</cxf.version>
-    </properties>
-
 </project>

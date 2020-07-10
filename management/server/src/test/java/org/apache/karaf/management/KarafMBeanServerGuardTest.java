@@ -164,9 +164,9 @@ public class KarafMBeanServerGuardTest extends TestCase {
 
         ObjectName on = ObjectName.getInstance("foo.bar:type=Test");
         assertEquals(Collections.singletonList("editor"),
-                guard.getRequiredRoles(on, "bar", new Object[]{new Integer(17)}, new String[]{"int"}));
+                guard.getRequiredRoles(on, "bar", new Object[]{Integer.valueOf(17)}, new String[]{"int"}));
         assertEquals(Collections.singletonList("viewer"),
-                guard.getRequiredRoles(on, "bar", new Object[]{new Integer(18)}, new String[]{"int"}));
+                guard.getRequiredRoles(on, "bar", new Object[]{Integer.valueOf(18)}, new String[]{"int"}));
     }
 
     public void testRequiredRolesExactNobody() throws Exception {
@@ -369,7 +369,7 @@ public class KarafMBeanServerGuardTest extends TestCase {
         assertEquals(Arrays.asList("tester", "editor", "manager"),
                 guard.getRequiredRoles(on, "getBar", new Object[]{}, new String[]{}));
         assertEquals(Collections.singletonList("admin"),
-                guard.getRequiredRoles(on, "test", new Object[]{new Long(17)}, new String[]{"java.lang.Long"}));
+                guard.getRequiredRoles(on, "test", new Object[]{Long.valueOf(17)}, new String[]{"java.lang.Long"}));
     }
 
     public void testRequiredRolesMethodNameWildcard2() throws Exception {
@@ -428,7 +428,7 @@ public class KarafMBeanServerGuardTest extends TestCase {
         assertEquals(Collections.emptyList(),
                 guard.getRequiredRoles(on, "getBar", new Object[]{}, new String[]{}));
         assertEquals(Collections.singletonList("admin"),
-                guard.getRequiredRoles(on, "test", new Object[]{new Long(17)}, new String[]{"java.lang.Long"}));
+                guard.getRequiredRoles(on, "test", new Object[]{Long.valueOf(17)}, new String[]{"java.lang.Long"}));
     }
 
     @SuppressWarnings("unchecked")
@@ -749,7 +749,7 @@ public class KarafMBeanServerGuardTest extends TestCase {
                 // The following operations should not throw an exception
                 Attribute a1 = new Attribute("Something", "v1");
                 Attribute a2 = new Attribute("Value", 42L);
-                guard.invoke(mbs, im, new Object[]{on, new AttributeList(Arrays.asList(a1))});
+                guard.invoke(mbs, im, new Object[]{on, new AttributeList(Collections.singletonList(a1))});
                 guard.invoke(mbs, im, new Object[]{on, new AttributeList(Arrays.asList(a2, a1))});
 
                 Attribute a3 = new Attribute("Other", Boolean.TRUE);
@@ -762,7 +762,7 @@ public class KarafMBeanServerGuardTest extends TestCase {
 
                 try {
                     Attribute a4 = new Attribute("NonExistent", "v4");
-                    guard.invoke(mbs, im, new Object[]{on, new AttributeList(Arrays.asList(a4))});
+                    guard.invoke(mbs, im, new Object[]{on, new AttributeList(Collections.singletonList(a4))});
                     fail("Should not have found the MBean Declaration");
                 } catch (IllegalStateException ise) {
                     // good

@@ -16,26 +16,26 @@
 
 The examples provides different kind of bundles and services definition:
 
-* [https://github.com/apache/karaf/tree/master/examples/karaf-bundle-example]
-* [https://github.com/apache/karaf/tree/master/examples/karaf-blueprint-example]
-* [https://github.com/apache/karaf/tree/master/examples/karaf-scr-example]
+* https://github.com/apache/karaf/blob/master/examples/karaf-bundle-example/README.md
+* https://github.com/apache/karaf/blob/master/examples/karaf-blueprint-example/README.md
+* https://github.com/apache/karaf/blob/master/examples/karaf-scr-example/README.md
 
 ==== Add extended information to bundles
 
 Karaf supports a OSGI-INF/bundle.info file in a bundle.
-This file is extended description of the bundle.
+This file is an extended description of the bundle.
 It supports ASCII character declarations (for adding color, formatting, etc) and some simple Wiki syntax.
 
 Simply add a `src/main/resources/OSGI-INF/bundle.info` file containing, for instance:
 
 ----
-== SYNOPSIS
+h1. SYNOPSIS
     ${project.description}
 
-== DESCRIPTION
+h1. DESCRIPTION
     Long description of your bundle, including usage, etc.
 
-==SEE ALSO
+h1. SEE ALSO
     [http://yourside\]
     [http://yourside/docs\]
 ----
@@ -51,9 +51,10 @@ root@karaf> bundles:info
 Karaf supports some simple wiki syntax in bundle info files:
 
 ----
-==, ===, ... : Headings
+h1., h2., ... : Headings
 * : Enumerations
-[http://....] : links
+[ http://.... ] : links (there must be a space after the opening bracket)
+**text** : bold text
 ----
 
 === Creating bundles for non OSGi third party dependencies
@@ -68,7 +69,7 @@ It allows for directly deploying third party dependencies, like Apache Commons L
 root@karaf> bundles:install wrap:mvn:commons-lang/commons-lang/2.4
 ----
 
-The wrap protocol creates a bundle dynamically using the bnd. Confiugurations can be added in the wrap URL:
+The wrap protocol creates a bundle dynamically using the bnd. Configurations can be added in the wrap URL:
 
 * from the shell
 

@@ -36,7 +36,7 @@ import javax.management.ObjectName;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 @Ignore("ENTESB-10164 activemq-karaf/5.11.0.redhat-630xxx needs gogo [0.12,1)")
-public class JmsTest extends KarafTestSupport {
+public class JmsTest extends BaseTest {
 
     @Configuration
     public Option[] config() {

@@ -34,7 +34,7 @@ import org.osgi.framework.BundleContext;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class JaasTest extends KarafTestSupport {
+public class JaasTest extends BaseTest {
 
     @Test
     public void realmListCommand() throws Exception {

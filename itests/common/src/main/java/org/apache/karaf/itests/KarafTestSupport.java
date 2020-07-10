@@ -58,6 +58,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import org.ops4j.pax.exam.*;
+import org.ops4j.pax.exam.container.remote.RBCRemoteTargetOptions;
 import org.ops4j.pax.exam.karaf.container.internal.JavaVersionUtil;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
@@ -89,9 +90,9 @@ public class KarafTestSupport {
     public static final String MIN_SSH_PORT = "8101";
     public static final String MAX_SSH_PORT = "8888";
 
-    static final Long COMMAND_TIMEOUT = 30000L;
-    static final Long SERVICE_TIMEOUT = 30000L;
-    static final long BUNDLE_TIMEOUT = 30000L;
+    static final Long COMMAND_TIMEOUT = 360000L;
+    static final Long SERVICE_TIMEOUT = 360000L;
+    static final long BUNDLE_TIMEOUT = 360000L;
 
     private static Logger LOG = LoggerFactory.getLogger(KarafTestSupport.class);
 
@@ -171,9 +172,15 @@ public class KarafTestSupport {
         return new File(res.getFile());
     }
 
+    /**
+     * Override this method if you want to change the Karaf distribution in use.
+     */
+    public MavenArtifactUrlReference getKarafDistribution() {
+        return CoreOptions.maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("tar.gz");
+    }
+
     @Configuration
     public Option[] config() {
-        MavenArtifactUrlReference karafUrl = CoreOptions.maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("tar.gz");
         String httpPort = Integer.toString(getAvailablePort(Integer.parseInt(MIN_HTTP_PORT), Integer.parseInt(MAX_HTTP_PORT)));
         String rmiRegistryPort = Integer.toString(getAvailablePort(Integer.parseInt(MIN_RMI_REG_PORT), Integer.parseInt(MAX_RMI_REG_PORT)));
         String rmiServerPort = Integer.toString(getAvailablePort(Integer.parseInt(MIN_RMI_SERVER_PORT), Integer.parseInt(MAX_RMI_SERVER_PORT)));
@@ -182,22 +189,21 @@ public class KarafTestSupport {
         if (localRepository == null) {
             localRepository = "";
         }
-
         if (JavaVersionUtil.getMajorVersion() >= 9) {
-            
             return new Option[]{
-                //debugConfiguration("8889", true),
-                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(karafUrl).name("Apache Karaf").unpackDirectory(new File("target/exam")),
+                // debugConfiguration("8889", true),
+                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
                 // enable JMX RBAC security, thanks to the KarafMBeanServerBuilder
                 KarafDistributionOption.configureSecurity().disableKarafMBeanServerBuilder(),
                 KarafDistributionOption.configureConsole().ignoreLocalConsole(),
                 KarafDistributionOption.keepRuntimeFolder(),
                 KarafDistributionOption.logLevel(LogLevel.INFO),
+                CoreOptions.systemTimeout(3600000),
+                RBCRemoteTargetOptions.waitForRBCFor(3600000),
                 CoreOptions.mavenBundle().groupId("org.awaitility").artifactId("awaitility").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.servicemix.bundles").artifactId("org.apache.servicemix.bundles.hamcrest").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.karaf.itests").artifactId("common").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("javax.annotation").artifactId("javax.annotation-api").versionAsInProject(),
-                KarafDistributionOption.replaceConfigurationFile("etc/org.ops4j.pax.logging.cfg", getConfigFile("/etc/org.ops4j.pax.logging.cfg")),
                 //replaceConfigurationFile("etc/host.key", getConfigFile("/etc/host.key")),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "updateSnapshots", "none"),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", httpPort),
@@ -206,18 +212,6 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.shell.cfg", "sshPort", sshPort),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.url.mvn.cfg", "org.ops4j.pax.url.mvn.localRepository", localRepository),
                 KarafDistributionOption.editConfigurationFileExtend("etc/org.ops4j.pax.url.mvn.cfg", "org.ops4j.pax.url.mvn.repositories", "https://maven.repository.redhat.com/ga@id=redhat.ga.repo"),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring31.version", System.getProperty("spring31.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring32.version", System.getProperty("spring32.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring40.version", System.getProperty("spring40.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring41.version", System.getProperty("spring41.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring42.version", System.getProperty("spring42.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring43.version", System.getProperty("spring43.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring50.version", System.getProperty("spring50.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring51.version", System.getProperty("spring51.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring.security31.version", System.getProperty("spring.security31.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring.security42.version", System.getProperty("spring.security42.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "spring.security51.version", System.getProperty("spring.security51.version")),
-                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "activemq.version", System.getProperty("activemq.version")),
                 KarafDistributionOption.editConfigurationFilePut("etc/branding.properties", "welcome", ""), // No welcome banner
                 KarafDistributionOption.editConfigurationFilePut("etc/branding-ssh.properties", "welcome", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
@@ -251,19 +245,19 @@ public class KarafTestSupport {
                 
             };
         } else {
-                
             return new Option[]{
-//                debugConfiguration("8889", true),
-                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(karafUrl).name("Apache Karaf").unpackDirectory(new File("target/exam")),
+                //debugConfiguration("8889", true),
+                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
                 // enable JMX RBAC security, thanks to the KarafMBeanServerBuilder
                 KarafDistributionOption.configureSecurity().disableKarafMBeanServerBuilder(),
                 KarafDistributionOption.configureConsole().ignoreLocalConsole(),
                 KarafDistributionOption.keepRuntimeFolder(),
                 KarafDistributionOption.logLevel(LogLevel.INFO),
+                CoreOptions.systemTimeout(3600000),
+                RBCRemoteTargetOptions.waitForRBCFor(3600000),
                 CoreOptions.mavenBundle().groupId("org.awaitility").artifactId("awaitility").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.servicemix.bundles").artifactId("org.apache.servicemix.bundles.hamcrest").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.karaf.itests").artifactId("common").versionAsInProject(),
-                KarafDistributionOption.replaceConfigurationFile("etc/org.ops4j.pax.logging.cfg", getConfigFile("/etc/org.ops4j.pax.logging.cfg")),
                 //replaceConfigurationFile("etc/host.key", getConfigFile("/etc/host.key")),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "updateSnapshots", "none"),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", httpPort),
@@ -289,7 +283,6 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/config.properties", "felix.fileinstall.subdir.mode", "recurse")
             };
-                                
         }
     }
 
@@ -307,7 +300,6 @@ public class KarafTestSupport {
 
     /**
      * Executes a shell command and returns output as a String.
-     * Commands have a default timeout of 10 seconds.
      *
      * @param command The command to execute
      * @param principals The principals (e.g. RolePrincipal objects) to run the command under
@@ -319,7 +311,6 @@ public class KarafTestSupport {
 
     /**
      * Executes a shell command and returns output as a String.
-     * Commands have a default timeout of 10 seconds.
      *
      * @param command    The command to execute.
      * @param timeout    The amount of time in millis to wait for the command to execute.

@@ -37,6 +37,7 @@ import org.apache.karaf.jaas.boot.principal.GroupPrincipal;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.karaf.jaas.boot.principal.UserPrincipal;
 import org.apache.karaf.jaas.modules.AbstractKarafLoginModule;
+import org.apache.karaf.jaas.modules.JAASUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,11 +51,11 @@ public class PropertiesLoginModule extends AbstractKarafLoginModule {
     static final String USER_FILE = "users";
 
     private String usersFile;
-    
+
 
     public void initialize(Subject sub, CallbackHandler handler, Map<String, ?> sharedState, Map<String, ?> options) {
         super.initialize(sub,handler,options);
-        usersFile = (String) options.get(USER_FILE);
+        usersFile = JAASUtils.getString(options, USER_FILE);
         if (debug) {
             LOGGER.debug("Initialized debug={} usersFile={}", debug, usersFile);
         }
@@ -126,11 +127,11 @@ public class PropertiesLoginModule extends AbstractKarafLoginModule {
         		throw new FailedLoginException("User " + user + " does not exist");
         	}
         }
-        
+
         // the password is in the first position
         String[] infos = userInfos.split(",");
         String storedPassword = infos[0];
-        
+
         // check the provided password
         if (!checkPassword(password, storedPassword)) {
         	if (!this.detailedLoginExcepion) {

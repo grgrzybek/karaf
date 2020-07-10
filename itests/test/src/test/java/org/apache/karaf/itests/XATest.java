@@ -41,7 +41,7 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceCo
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class XATest extends KarafTestSupport {
+public class XATest extends BaseTest {
 
     private static final EnumSet<FeaturesService.Option> NO_AUTO_REFRESH = EnumSet.of(FeaturesService.Option.NoAutoRefreshBundles);
 
@@ -94,7 +94,7 @@ public class XATest extends KarafTestSupport {
         Bundle bundle = bundleContext.installBundle("blueprint:file:etc/xa-test-camel.xml");
         bundle.start();
 
-        Thread.sleep(5000);
+        Thread.sleep(20000);
 
         System.out.println(executeCommand("camel:route-list", new RolePrincipal("admin")));
 
@@ -104,7 +104,7 @@ public class XATest extends KarafTestSupport {
         System.out.println("== Sending a message in Artemis broker that should be consumed by Camel route and inserted into the Derby database");
         System.out.println(executeCommand("jms:send artemis MyQueue 'the-message'"));
 
-        Thread.sleep(5000);
+        Thread.sleep(15000);
 
         String output = executeCommand("jdbc:query derby select * from messages");
         System.err.println(output);

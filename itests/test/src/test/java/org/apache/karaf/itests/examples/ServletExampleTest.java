@@ -16,8 +16,9 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.itests.BaseTest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -25,13 +26,20 @@ import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class ServletExampleTest extends KarafTestSupport {
+public class ServletExampleTest extends BaseTest {
 
     private void setup() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-servlet-example-features/" + System.getProperty("karaf.version") + "/xml");
@@ -96,6 +104,61 @@ public class ServletExampleTest extends KarafTestSupport {
         installAndAssertFeature("karaf-servlet-example-scr");
 
         verify();
+    }
+
+    @Test
+    public void testUploadServlet() throws Exception {
+        setup();
+
+        installAndAssertFeature("karaf-servlet-example-upload");
+
+        String command = executeCommand("http:list");
+        while (!command.contains("upload-example")) {
+            Thread.sleep(200);
+            command = executeCommand("http:list");
+        }
+        System.out.println(command);
+
+        File file = new File(System.getProperty("karaf.data"), "test.txt");
+        FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write("test");
+        fileWriter.flush();
+        fileWriter.close();
+
+        URL url = new URL("http://localhost:" + getHttpPort() + "/upload-example");
+        String boundary = "===" + System.currentTimeMillis() + "===";
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setUseCaches(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+        OutputStream outputStream = connection.getOutputStream();
+
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream), true);
+        writer.append("--" + boundary).append("\r\n");
+        writer.append("Content-Disposition: form-data; name=\"test\"; filename=\"test.txt\"").append("\r\n");
+        writer.append("Content-Type: text/plain; charset=UTF-8").append("\r\n");
+        writer.append("Content-Transfer-Encoding: binary").append("\r\n");
+        writer.append("\r\n");
+        writer.flush();
+
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] buffer = new byte[1024];
+        int bytesRead = -1;
+        while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        outputStream.flush();
+        fileInputStream.close();
+        writer.append("\r\n");
+        writer.append("\r\n");
+        writer.append("--" + boundary + "--").append("\r\n");
+        writer.flush();
+        writer.close();
+
+        Assert.assertEquals(200, connection.getResponseCode());
     }
 
 }

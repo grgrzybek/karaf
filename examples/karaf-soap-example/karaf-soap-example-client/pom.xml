@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.examples</groupId>
-            <artifactId>karaf-soap-example-provider</artifactId>
+            <artifactId>karaf-soap-example-blueprint</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

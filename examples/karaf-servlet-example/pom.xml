@@ -37,6 +37,7 @@
         <module>karaf-servlet-example-registration</module>
         <module>karaf-servlet-example-blueprint</module>
         <module>karaf-servlet-example-scr</module>
+        <module>karaf-servlet-example-upload</module>
         <module>karaf-servlet-example-features</module>
     </modules>
 

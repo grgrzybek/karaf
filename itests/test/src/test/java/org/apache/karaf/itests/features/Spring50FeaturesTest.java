@@ -13,7 +13,7 @@
  */
 package org.apache.karaf.itests.features;
 
-import org.apache.karaf.itests.KarafTestSupport;
+import org.apache.karaf.itests.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -31,7 +31,21 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfi
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class Spring50FeaturesTest extends KarafTestSupport {
+public class Spring50FeaturesTest extends BaseTest {
+
+    @Configuration
+    public Option[] config() {
+        String version = MavenUtils.getArtifactVersion("org.apache.karaf", "apache-karaf");
+        List<Option> result = new LinkedList<>(Arrays.asList(super.config()));
+        result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
+                "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/enterprise-legacy/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/standard/" + version + "/xml/features"));
+        return result.toArray(new Option[result.size()]);
+    }
 
     @Configuration
     public Option[] config() {

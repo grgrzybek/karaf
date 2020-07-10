@@ -25,7 +25,10 @@ set PROGNAME=%~nx0%
 set ARGS=%*
 
 rem Sourcing environment settings for karaf similar to tomcats setenv
-SET KARAF_SCRIPT="karaf.bat"
+
+if "%KARAF_SCRIPT%" == "" (
+	SET KARAF_SCRIPT="karaf.bat"
+)
 if exist "%DIRNAME%setenv.bat" (
   call "%DIRNAME%setenv.bat"
 )
@@ -103,6 +106,11 @@ if not "%KARAF_LOG%" == "" (
 )
 if "%KARAF_LOG%" == "" (
     set "KARAF_LOG=%KARAF_DATA%\log"
+)
+if not exist "%KARAF_LOG%" (
+    call :warn KARAF_LOG doesn't exist: "%KARAF_LOG%"
+    call :warn Creating "%KARAF_LOG%"
+    mkdir "%KARAF_LOG%"
 )
 
 set LOCAL_CLASSPATH=%CLASSPATH%
@@ -229,6 +237,12 @@ for /f tokens^=2-5^ delims^=.-_+^" %%j in ('"%JAVA%" -fullversion 2^>^&1') do (
     if %%j==1 (set JAVA_VERSION=%%k) else (set JAVA_VERSION=%%j)
 )
 
+if %JAVA_VERSION% GTR 8 (
+   pushd "%KARAF_HOME%\lib\jdk9plus"
+       for %%G in (*.jar) do call:APPEND_TO_JDK9PLUS_CLASSPATH %%G
+   popd
+)
+
 :CheckRootInstance
     set ROOT_INSTANCE_RUNNING=false
     if exist "%KARAF_HOME%\instances\instance.properties" (
@@ -340,6 +354,10 @@ if "%KARAF_PROFILER%" == "" goto :RUN
 :EXECUTE_STOP
     SET MAIN=org.apache.karaf.main.Stop
     SET CHECK_ROOT_INSTANCE_RUNNING=false
+    rem not needed when stopping
+    SET JAVA_OPTS=
+    SET KARAF_SYSTEM_OPTS=
+    SET KARAF_OPTS=
     shift
     goto :RUN_LOOP
 

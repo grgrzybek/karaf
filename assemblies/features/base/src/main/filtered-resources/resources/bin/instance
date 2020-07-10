@@ -68,8 +68,10 @@ PROGNAME=`basename "${REALNAME}"`
 #
 # Sourcing environment settings for karaf similar to tomcats setenv
 #
-KARAF_SCRIPT="${PROGNAME}"
-export KARAF_SCRIPT
+if [ "x${KARAF_SCRIPT}" = "x" ]; then
+    KARAF_SCRIPT="${PROGNAME}"
+    export KARAF_SCRIPT
+fi
 if [ -f "${DIRNAME}/setenv" ]; then
   . "${DIRNAME}/setenv"
 fi
@@ -80,6 +82,7 @@ setupClassPath() {
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/apache/karaf/shell/org.apache.karaf.shell.core/@@project.version@@/org.apache.karaf.shell.core-@@project.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/ops4j/pax/logging/pax-logging-api/@@pax.logging.version@@/pax-logging-api-@@pax.logging.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/jline/jline/@@jline.version@@/jline-@@jline.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/boot/osgi.core-@@osgi.version@@.jar"
 }
 
 init() {

@@ -16,8 +16,8 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.itests.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -33,7 +33,7 @@ import java.util.List;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class ScrExampleWithEquinoxTest extends KarafTestSupport {
+public class ScrExampleWithEquinoxTest extends BaseTest {
 
     private static final RolePrincipal[] ADMIN_ROLES = {
             new RolePrincipal("admin")
