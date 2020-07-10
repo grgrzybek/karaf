@@ -939,8 +939,6 @@ public class ConnectorServerFactory {
         this.enabledCipherSuites = enabledCipherSuites;
     }
 
-<<<<<<< HEAD
-=======
     /*
      * Better to use the internal API than re-invent the wheel.
      */
@@ -976,5 +974,4 @@ public class ConnectorServerFactory {
         }
     }
 
->>>>>>> karaf-4.2.9-merge-start
 }

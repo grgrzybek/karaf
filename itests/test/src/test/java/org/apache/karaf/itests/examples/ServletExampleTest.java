@@ -112,10 +112,10 @@ public class ServletExampleTest extends BaseTest {
 
         installAndAssertFeature("karaf-servlet-example-upload");
 
-        String command = executeCommand("http:list");
+        String command = executeCommand("http:list", new RolePrincipal("viewer"));
         while (!command.contains("upload-example")) {
             Thread.sleep(200);
-            command = executeCommand("http:list");
+            command = executeCommand("http:list", new RolePrincipal("viewer"));
         }
         System.out.println(command);
 

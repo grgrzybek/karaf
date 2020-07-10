@@ -403,6 +403,10 @@ dump-create = admin, manager, viewer
 #   org.apache.karaf.command.acl.bundle.cfg
 #
 list = admin, manager, viewer
+proxy-add = admin, manager
+proxy-list = admin, manager, viewer
+proxy-remove = admin, manager
+proxy-balancing-list = admin, manager, viewer
         </config>
 	    <config name="org.apache.karaf.command.acl.jndi">
 #

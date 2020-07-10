@@ -57,14 +57,14 @@ public class HttpTest extends BaseTest {
 
     @Test
     public void testProxy() throws Exception {
-        executeCommand("http:proxy-add /test1 http://karaf.apache.org");
+        executeCommand("http:proxy-add /test1 http://karaf.apache.org", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin"));
 
-        String output = executeCommand("http:proxy-balancing-list");
+        String output = executeCommand("http:proxy-balancing-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(output);
         assertContains("random", output);
         assertContains("round-robin", output);
 
-        output = executeCommand("http:proxy-list");
+        output = executeCommand("http:proxy-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(output);
         assertContains("/test1", output);
     }

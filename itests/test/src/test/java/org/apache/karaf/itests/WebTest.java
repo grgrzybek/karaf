@@ -83,7 +83,7 @@ public class WebTest extends BaseTest {
         System.out.println(buffer.toString());
         assertContains("Hello World!", buffer.toString());
 
-        System.out.println(executeCommand("web:uninstall 126", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
+        System.out.println(executeCommand("web:uninstall 101", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
         listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(listOutput);
         while (listOutput.contains("/test")) {

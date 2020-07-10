@@ -39,7 +39,7 @@ public class JpaExampleTest extends BaseTest {
 
         // install the karaf-jpa-example-datasource & karaf-jpa-example-common
         executeCommand("feature:install karaf-jpa-example-datasource", ADMIN_ROLES);
-        executeCommand("feature:install karaf-jpa-example-common", ADMIN_ROLES);
+        executeCommand("feature:install -v karaf-jpa-example-common", ADMIN_ROLES);
 
         // declarative service EclipseLink
         executeCommand("feature:install karaf-jpa-example-provider-ds-eclipselink", ADMIN_ROLES);

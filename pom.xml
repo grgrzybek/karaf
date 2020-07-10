@@ -154,9 +154,11 @@
         <asm.version>8.0.1</asm.version>
         <javax.annotation.version>1.3.1</javax.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
+        <bytebuddy.version>1.9.11.redhat-00002</bytebuddy.version>
         <camel.version>2.24.3</camel.version>
         <cglib.bundle.version>3.2.9_1</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
+        <classmate.version>1.3.4</classmate.version>
         <cxf.version>3.3.5</cxf.version>
         <jna.version>5.5.0</jna.version>
         <jakarta.jaxb.version>2.3.3</jakarta.jaxb.version>
@@ -267,8 +269,10 @@
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
         <hibernate.version>5.3.15.Final-redhat-00001</hibernate.version>
+        <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
         <hibernate.validator.version>5.3.5.Final-redhat-2</hibernate.validator.version>
         <httpclient.version>4.5.6</httpclient.version>
+        <jandex.version>2.0.5.Final-redhat-1</jandex.version>
         <jansi.version>1.18</jansi.version>
         <javassist.version>3.24.1-GA</javassist.version>
         <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
@@ -331,6 +335,7 @@
         <xalan.bundle.version>2.7.2_3</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2_1</xalan-serializer.bundle.version>
         <javax.mail.version>1.6.1.redhat-1</javax.mail.version>
+        <javax.persistence.version>2.2</javax.persistence.version>
 
         <websocket.version>1.1</websocket.version>
         <winsw.version>2.3.0</winsw.version>
