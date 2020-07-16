@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<featuresProcessing xmlns="http://karaf.apache.org/xmlns/features-processing/v1.0.0"
+        xmlns:f="http://karaf.apache.org/xmlns/features/v1.6.0">
+
+    <!--
+
+        Licensed to the Apache Software Foundation (ASF) under one or more
+        contributor license agreements.  See the NOTICE file distributed with
+        this work for additional information regarding copyright ownership.
+        The ASF licenses this file to You under the Apache License, Version 2.0
+        (the "License"); you may not use this file except in compliance with
+        the License.  You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
+
+    <bundleReplacements>
+        <bundle originalUri="mvn:javax.servlet/javax.servlet-api/[3,4)"
+                replacement="mvn:javax.servlet/javax.servlet-api/@@servlet.spec.version@@" mode="maven" />
+    </bundleReplacements>
+
+    <blacklistedRepositories>
+        <repository>mvn:org.apache.karaf.features/framework/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/standard/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/enterprise/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/enterprise-legacy/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/spring/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/spring-legacy/4.3.0-SNAPSHOT/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/framework/4.3.0.RC1/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/standard/4.3.0.RC1/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/enterprise/4.3.0.RC1/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/enterprise-legacy/4.3.0.RC1/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/spring/4.3.0.RC1/xml/features</repository>
+        <repository>mvn:org.apache.karaf.features/spring-legacy/4.3.0.RC1/xml/features</repository>
+    </blacklistedRepositories>
+
+    <!-- A list of feature replacements that allows changing external feature definitions -->
+    <featureReplacements>
+        <replacement>
+            <feature name="hibernate-orm" version="@@hibernate.version@@" description="Combines all Hibernate core dependencies and required modules into a single feature">
+                <f:feature prerequisite="true">wrap</f:feature>
+                <f:feature>transaction-api</f:feature>
+                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/@@antlr.bundle.version@@</f:bundle>
+                <f:bundle>mvn:org.jboss.logging/jboss-logging/@@jboss.logging.version@@</f:bundle>
+                <f:bundle>mvn:javax.persistence/javax.persistence-api/@@javax.persistence.version@@</f:bundle>
+                <f:bundle>mvn:org.javassist/javassist/@@javassist.version@@</f:bundle>
+                <f:bundle>mvn:net.bytebuddy/byte-buddy/@@bytebuddy.version@@</f:bundle>
+                <f:bundle>mvn:org.jboss/jandex/@@jandex.version@@</f:bundle>
+                <f:bundle>mvn:com.fasterxml/classmate/@@classmate.version@@</f:bundle>
+                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/@@dom4j.bundle.version@@</f:bundle>
+                <f:bundle>mvn:org.hibernate.common/hibernate-commons-annotations/@@hibernate.common.version@@</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-core/@@hibernate.version@@</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-osgi/@@hibernate.version@@</f:bundle>
+            </feature>
+        </replacement>
+    </featureReplacements>
+
+</featuresProcessing>

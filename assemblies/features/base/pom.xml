@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.assemblies.features</groupId>
         <artifactId>features</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -108,7 +108,12 @@
             <artifactId>org.apache.felix.framework</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.glassfish.external</groupId>
+            <artifactId>opendmk_jmxremote_optional_jar</artifactId>
+            <version>1.0-b01-ea</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -221,6 +226,11 @@
                                     <outputDirectory>target/classes/resources/lib/boot</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
+                                    <groupId>org.glassfish.external</groupId>
+                                    <artifactId>opendmk_jmxremote_optional_jar</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/boot</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
                                     <groupId>org.apache.karaf</groupId>
                                     <artifactId>org.apache.karaf.client</artifactId>
                                     <outputDirectory>target/classes/resources/system/org/apache/karaf/org.apache.karaf.client/${project.version}</outputDirectory>
@@ -229,7 +239,8 @@
                                     <groupId>org.apache.felix</groupId>
                                     <artifactId>org.apache.felix.framework</artifactId>
                                     <outputDirectory>target/classes/resources/system/org/apache/felix/org.apache.felix.framework/${felix.framework.version}</outputDirectory>
-                                    <destFileName>org.apache.felix.framework-${felix.framework.version}.jar</destFileName>
+                                    <destFileName>org.apache.felix.framework-${felix.framework.version}.jar
+                                    </destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.eclipse.platform</groupId>

@@ -14,8 +14,7 @@
 package org.apache.karaf.itests.examples;
 
 import org.apache.karaf.bundle.core.BundleService;
-import org.apache.karaf.examples.jpa.BookingService;
-import org.apache.karaf.itests.KarafTestSupport;
+import org.apache.karaf.itests.BaseTest;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +24,7 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class JpaExampleTest extends KarafTestSupport {
+public class JpaExampleTest extends BaseTest {
 
     private static final RolePrincipal[] ADMIN_ROLES = {
             new RolePrincipal(BundleService.SYSTEM_BUNDLES_ROLE),
@@ -40,7 +39,7 @@ public class JpaExampleTest extends KarafTestSupport {
 
         // install the karaf-jpa-example-datasource & karaf-jpa-example-common
         executeCommand("feature:install karaf-jpa-example-datasource", ADMIN_ROLES);
-        executeCommand("feature:install karaf-jpa-example-common", ADMIN_ROLES);
+        executeCommand("feature:install -v karaf-jpa-example-common", ADMIN_ROLES);
 
         // declarative service EclipseLink
         executeCommand("feature:install karaf-jpa-example-provider-ds-eclipselink", ADMIN_ROLES);

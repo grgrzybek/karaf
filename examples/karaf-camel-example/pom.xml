@@ -24,17 +24,13 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>apache-karaf-examples</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>karaf-camel-example</artifactId>
     <packaging>pom</packaging>
     <name>Apache Karaf :: Examples :: Camel</name>
-
-    <properties>
-        <camel.version>2.23.0</camel.version>
-    </properties>
 
     <modules>
         <module>karaf-camel-example-java</module>

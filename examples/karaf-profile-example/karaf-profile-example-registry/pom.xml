@@ -24,18 +24,12 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-profile-example</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>karaf-profile-example-registry</artifactId>
     <name>Apache Karaf :: Examples :: Profile :: Registry</name>
-
-    <properties>
-        <activemq.version>5.14.3</activemq.version>
-        <camel.version>2.18.1</camel.version>
-        <cxf.version>3.2.8</cxf.version>
-    </properties>
 
     <build>
         <resources>

@@ -33,10 +33,11 @@ import java.lang.management.ManagementFactory;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class HttpTest extends KarafTestSupport {
+public class HttpTest extends BaseTest {
 
     @Before
     public void installHttpFeature() throws Exception {
+        installAndAssertFeature("http");
         installAndAssertFeature("webconsole");
     }
     
@@ -52,6 +53,20 @@ public class HttpTest extends KarafTestSupport {
         ObjectName name = new ObjectName("org.apache.karaf:type=http,name=root");
         TabularData servlets = (TabularData) mbeanServer.getAttribute(name, "Servlets");
         assertTrue(servlets.size() > 0);
+    }
+
+    @Test
+    public void testProxy() throws Exception {
+        executeCommand("http:proxy-add /test1 http://karaf.apache.org", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin"));
+
+        String output = executeCommand("http:proxy-balancing-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+        System.out.println(output);
+        assertContains("random", output);
+        assertContains("round-robin", output);
+
+        output = executeCommand("http:proxy-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+        System.out.println(output);
+        assertContains("/test1", output);
     }
 
 }

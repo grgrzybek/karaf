@@ -32,7 +32,7 @@ import java.net.URL;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 @Ignore("Karaf for Fuse 7.4+ uses only servlet-api 4")
-public class FelixHttpTest extends KarafTestSupport {
+public class FelixHttpTest extends BaseTest {
 
     @Before
     public void setup() throws Exception {

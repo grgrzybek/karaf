@@ -16,13 +16,13 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.itests.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.ops4j.pax.exam.spi.reactors.PerClass;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,18 +30,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @RunWith(PaxExam.class)
-@ExamReactorStrategy(PerMethod.class)
-public class HttpResourceExampleTest extends KarafTestSupport {
+@ExamReactorStrategy(PerClass.class)
+public class HttpResourceExampleTest extends BaseTest {
 
-    @Test
+    @Test(timeout = 60000L)
     public void test() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-http-resource-example-features/" + System.getProperty("karaf.version") + "/xml");
 
         installAndAssertFeature("karaf-http-resource-example-whiteboard");
 
         String command = executeCommand("http:list", new RolePrincipal("viewer"));
-        System.out.println(command);
+        while (!command.contains("Deployed")) {
+            Thread.sleep(200);
+            command = executeCommand("http:list", new RolePrincipal("viewer"));
+            System.out.println(command);
+        }
         assertContains("ResourceServlet", command);
+        assertContains("Deployed", command);
 
         URL url = new URL("http://localhost:" + getHttpPort() + "/example/index.html");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

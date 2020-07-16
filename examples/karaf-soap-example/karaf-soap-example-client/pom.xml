@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-soap-example</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.examples</groupId>
-            <artifactId>karaf-soap-example-provider</artifactId>
+            <artifactId>karaf-soap-example-blueprint</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

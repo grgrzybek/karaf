@@ -44,7 +44,6 @@ import java.util.TreeMap;
 
 import org.apache.felix.utils.properties.InterpolationHelper;
 import org.apache.felix.utils.properties.Properties;
-import org.apache.felix.utils.properties.TypedProperties;
 import org.apache.karaf.instance.core.Instance;
 import org.apache.karaf.instance.core.InstanceService;
 import org.apache.karaf.instance.core.InstanceSettings;
@@ -112,10 +111,10 @@ public class InstanceServiceImpl implements InstanceService {
         public State() {
             //read port start value from the root instance configuration
             try {
-                TypedProperties shellProperty = new TypedProperties();
+                Properties shellProperty = new Properties();
                 shellProperty.load(new File(System.getProperty("karaf.etc"), "org.apache.karaf.shell.cfg"));
                 defaultSshPortStart = getInt(shellProperty,"sshPort", 8101);
-                TypedProperties managementProperty = new TypedProperties();
+                Properties managementProperty = new Properties();
                 managementProperty.load(new File(System.getProperty("karaf.etc"), "org.apache.karaf.management.cfg"));
                 defaultRmiRegistryPortStart = getInt(managementProperty, "rmiRegistryPort", 1099);
                 defaultRmiServerPortStart = getInt(managementProperty, "rmiServerPort", 1099);
@@ -123,8 +122,8 @@ public class InstanceServiceImpl implements InstanceService {
                 LOGGER.debug("Could not read port start value from the root instance configuration.", e);
             }
         }
-        
-        
+
+
     }
 
     public InstanceServiceImpl() {
@@ -150,7 +149,7 @@ public class InstanceServiceImpl implements InstanceService {
         this.stopTimeout = stopTimeout;
     }
 
-    private State loadData(TypedProperties storage) {
+    private State loadData(Properties storage) {
         State state = new State();
         int count = getInt(storage, "count", 0);
         state.defaultSshPortStart = getInt(storage, "ssh.port", state.defaultSshPortStart);
@@ -182,7 +181,7 @@ public class InstanceServiceImpl implements InstanceService {
         return state;
     }
 
-    private void saveData(State state, TypedProperties storage) {
+    private void saveData(State state, Properties storage) {
         storage.put("ssh.port", Integer.toString(state.defaultSshPortStart));
         storage.put("rmi.registry.port", Integer.toString(state.defaultRmiRegistryPortStart));
         storage.put("rmi.server.port", Integer.toString(state.defaultRmiServerPortStart));
@@ -206,7 +205,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
     }
 
-    private static boolean getBool(TypedProperties storage, String name, boolean def) {
+    private static boolean getBool(Properties storage, String name, boolean def) {
         Object value = storage.get(name);
         if (value instanceof Boolean) {
             return (Boolean) value;
@@ -217,7 +216,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
     }
 
-    private static int getInt(TypedProperties storage, String name, int def) {
+    private static int getInt(Properties storage, String name, int def) {
         Object value = storage.get(name);
         if (value instanceof Number) {
             return ((Number) value).intValue();
@@ -228,7 +227,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
     }
 
-    private static String getString(TypedProperties storage, String name, String def) {
+    private static String getString(Properties storage, String name, String def) {
         Object value = storage.get(name);
         return value != null ? value.toString() : def;
     }
@@ -277,7 +276,7 @@ public class InstanceServiceImpl implements InstanceService {
             }
         }
     }
-    
+
     private static void logDebug(String message, boolean printOutput, Object... args) {
         if (LOGGER.isDebugEnabled() || printOutput) {
             String formatted = String.format(message, args);
@@ -449,11 +448,11 @@ public class InstanceServiceImpl implements InstanceService {
         }, true);
     }
 
-    private static void appendToPropList(TypedProperties p, String key, List<String> elements) {
+    private static void appendToPropList(Properties p, String key, List<String> elements) {
         if (elements == null) {
             return;
         }
-        StringBuilder sb = new StringBuilder(p.get(key).toString().trim());
+        StringBuilder sb = new StringBuilder(p.get(key).trim());
         for (String f : elements) {
             if (sb.length() > 0) {
                 sb.append(',');
@@ -678,7 +677,7 @@ public class InstanceServiceImpl implements InstanceService {
             Process process;
             try {
                 process = new ProcessBuilderFactoryImpl().newBuilder().attach(pid);
-                process.destroy(); 
+                process.destroy();
             } catch (IOException e) {
                 LOGGER.debug("Unable to cleanly shutdown root instance ", e);
             }
@@ -847,10 +846,10 @@ public class InstanceServiceImpl implements InstanceService {
             String portFile = props.getProperty(KARAF_SHUTDOWN_PORT_FILE);
             String shutdown = props.getProperty(KARAF_SHUTDOWN_COMMAND, DEFAULT_SHUTDOWN_COMMAND);
             if (port == 0 && portFile != null) {
-                BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(portFile)));
-                String portStr = r.readLine();
-                port = Integer.parseInt(portStr);
-                r.close();
+                try (BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(portFile)))) {
+                    String portStr = r.readLine();
+                    port = Integer.parseInt(portStr);
+                }
             }
             // We found the port, try to send the command
             if (port > 0) {
@@ -939,7 +938,7 @@ public class InstanceServiceImpl implements InstanceService {
             }
             File f = new File(instance.loc, path);
             FileLockUtils.execute(f, properties -> {
-                properties.put(key, port);
+                properties.put(key, String.valueOf(port));
             }, true);
             return null;
         }, true);
@@ -956,7 +955,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
         File f = new File(instance.loc, path);
         try {
-            return FileLockUtils.execute(f, (TypedProperties properties) -> properties.get(key).toString(), false);
+            return FileLockUtils.execute(f, (Properties properties) -> properties.get(key).toString(), false);
         } catch (IOException e) {
             return "0.0.0.0";
         }
@@ -1071,7 +1070,7 @@ public class InstanceServiceImpl implements InstanceService {
         result &= fileToDelete.delete();
         return result;
     }
-    
+
     private void copyResourcesToDir(String[] resourcesToCopy, File target, Map<String, URL> resources, boolean printOutput) throws IOException {
         for (String resource : resourcesToCopy) {
             copyResourceToDir(resource, target, resources, printOutput);
@@ -1097,8 +1096,8 @@ public class InstanceServiceImpl implements InstanceService {
     }
 
     private InputStream getResourceStream(String resource, Map<String, URL> resources) throws IOException {
-        return resources.containsKey(resource) 
-                ? resources.remove(resource).openStream() 
+        return resources.containsKey(resource)
+                ? resources.remove(resource).openStream()
                 : getClass().getClassLoader().getResourceAsStream(RESOURCE_BASE + resource);
     }
 
@@ -1120,7 +1119,7 @@ public class InstanceServiceImpl implements InstanceService {
             return null;
         }
     }
-    
+
     /**
      * Read stream one line at a time so that we can use the platform
      * line ending when we write it out.
@@ -1156,7 +1155,7 @@ public class InstanceServiceImpl implements InstanceService {
             copyFilteredResourceToDir(resource, target, resources, props, printOutput);
         }
     }
-    
+
     private void copyFilteredResourceToDir(String resource, File target, Map<String, URL> resources, Map<String, String> props, boolean printOutput) throws IOException {
         File outFile = new File(target, resource);
         if (!outFile.exists()) {
@@ -1270,7 +1269,7 @@ public class InstanceServiceImpl implements InstanceService {
     }
 
     public void changeInstanceSshHost(String name, String host) throws Exception {
-        setKarafHost(name, "etc/org.apache.karaf.shell.cfg", "sshHost", host);      
+        setKarafHost(name, "etc/org.apache.karaf.shell.cfg", "sshHost", host);
     }
 
     private void setKarafHost(final String name, final String path, final String key, final String host) throws IOException {
@@ -1288,7 +1287,7 @@ public class InstanceServiceImpl implements InstanceService {
             return null;
         }, true);
     }
-    
+
     private boolean isInstancePidNeedUpdate(final String name) {
         return execute(state -> {
             InstanceState instance = state.instances.get(name);

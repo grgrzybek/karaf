@@ -16,8 +16,8 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.itests.BaseTest;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.StatusCode;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -45,7 +45,7 @@ import static junit.framework.TestCase.assertTrue;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class WebSocketExampleTest extends KarafTestSupport {
+public class WebSocketExampleTest extends BaseTest {
 
     @Test(timeout = 60000)
     @Ignore("ENTESB-9734: Jetty doesn't work with servlet API 4.0")

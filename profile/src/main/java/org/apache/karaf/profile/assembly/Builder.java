@@ -73,6 +73,7 @@ import org.apache.karaf.features.internal.download.DownloadCallback;
 import org.apache.karaf.features.internal.download.DownloadManager;
 import org.apache.karaf.features.internal.download.Downloader;
 import org.apache.karaf.features.internal.download.StreamProvider;
+import org.apache.karaf.features.internal.download.impl.DownloadManagerHelper;
 import org.apache.karaf.features.internal.model.Bundle;
 import org.apache.karaf.features.internal.model.Conditional;
 import org.apache.karaf.features.internal.model.ConfigFile;
@@ -109,6 +110,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Collections.singletonList;
+import static java.util.Comparator.comparing;
 import static java.util.jar.JarFile.MANIFEST_NAME;
 import static org.apache.karaf.profile.assembly.Builder.Stage.Startup;
 
@@ -745,6 +747,13 @@ public class Builder {
         this.blacklistedBundleURIs.addAll(bundles);
         return this;
     }
+
+
+    public Builder extraProtocols(Collection<String> protocols) {
+        DownloadManagerHelper.setExtraProtocols(protocols);
+        return this;
+    }
+
 
     /**
      * Configure a list of blacklisted features XML repository URIs (see {@link LocationPattern})
@@ -1661,6 +1670,7 @@ public class Builder {
             }
             LOGGER.info("   Feature {} is defined as an installed feature", feature.getId());
             for (Bundle bundle : feature.getBundle()) {
+
                 if (!ignoreDependencyFlag || !bundle.isDependency()) {
                     installer.installArtifact(bundle);
                 }
@@ -1731,7 +1741,7 @@ public class Builder {
                 if (level.startsWith("\"")) {
                     level = level.substring(1, level.length() - 1);
                 }
-                intLevel = Integer.valueOf(level);
+                intLevel = Integer.parseInt(level);
                 LOGGER.debug("bundle start-level: " + level);
                 location = location.substring(0, location.indexOf(START_LEVEL) - 1);
                 LOGGER.debug("new bundle location after strip start-level: " + location);
@@ -1965,7 +1975,10 @@ public class Builder {
         Map<Integer, Set<String>> invertedStartupBundles = MapUtils.invert(bundles);
         for (Map.Entry<Integer, Set<String>> entry : new TreeMap<>(invertedStartupBundles).entrySet()) {
             String startLevel = Integer.toString(entry.getKey());
-            for (String location : new TreeSet<>(entry.getValue())) {
+            // ensure input order is respected whatever hashmap/set was in the middle of the processing
+            final List<String> value = new ArrayList<>(entry.getValue());
+            value.sort(comparing(bnd -> startupEffective.getBundles().indexOf(bnd)));
+            for (String location : value) {
                 if (useReferenceUrls) {
                     if (location.startsWith("mvn:")) {
                         location = "file:" + Parser.pathFromMaven(location);

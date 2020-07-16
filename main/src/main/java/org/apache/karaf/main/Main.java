@@ -540,7 +540,7 @@ public class Main {
                 BundleInfo bi = new BundleInfo();
                 bi.uri = new URI(key);
                 String startlevelSt = startupProps.getProperty(key).trim();
-                bi.startLevel = new Integer(startlevelSt);
+                bi.startLevel = Integer.valueOf(startlevelSt);
                 bundeList.add(bi);
             } catch (Exception e) {
                 throw new RuntimeException("Error loading startup bundle list from " + startupPropsFile + " at " + key, e);
@@ -550,14 +550,21 @@ public class Main {
     }
 
     private void installAndStartBundles(ArtifactResolver resolver, BundleContext context, List<BundleInfo> bundles) {
+        final URI home = !bundles.isEmpty() ? config.karafHome.toURI() : null;
+        final URI base = !bundles.isEmpty() ? config.karafBase.toURI() : null;
         for (BundleInfo bundleInfo : bundles) {
             try {
                 Bundle b;
                 if (bundleInfo.uri.toString().startsWith("reference:file:")) {
                     URI temp = URI.create(bundleInfo.uri.toString().substring("reference:file:".length()));
                     URI resolvedURI = resolver.resolve(temp);
-                    URI finalUri = URI.create("reference:file:" + config.karafBase.toURI().relativize(resolvedURI));
-                    b = context.installBundle(finalUri.toString());
+                    final String asciiString = resolvedURI.toASCIIString();
+                    if (asciiString.startsWith(home.toASCIIString()) ||
+                        asciiString.startsWith(base.toASCIIString())) {
+                        b = context.installBundle(URI.create("reference:" + asciiString).toString());
+                    } else {
+                        throw new IllegalArgumentException("Can't resolve bundle '" + bundleInfo.uri + "'");
+                    }
                 } else {
                     URI resolvedURI = resolver.resolve(bundleInfo.uri);
                     b = context.installBundle(bundleInfo.uri.toString(), resolvedURI.toURL().openStream());

@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-maven-example</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -47,7 +47,9 @@
                             <host>localhost</host>
                             <port>8101</port>
                             <commands>
-                                <command>bundle:list -t 0</command>
+                                <command>
+                                    <command>bundle:list -t 0</command>
+                                </command>
                             </commands>
                         </configuration>
                     </execution>

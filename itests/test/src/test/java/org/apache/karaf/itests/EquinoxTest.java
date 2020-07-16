@@ -32,7 +32,7 @@ import java.util.List;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class EquinoxTest extends KarafTestSupport {
+public class EquinoxTest extends BaseTest {
 
     @Configuration
     public Option[] config() {

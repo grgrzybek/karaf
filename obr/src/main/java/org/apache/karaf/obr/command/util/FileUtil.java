@@ -80,10 +80,10 @@ public class FileUtil
 
             if (extract)
             {
-                JarInputStream jis = new JarInputStream(new FileInputStream(file));
-                out.println("Extracting...");
-                unjar(jis, dir);
-                jis.close();
+                try (JarInputStream jis = new JarInputStream(new FileInputStream(file))) {
+                    out.println("Extracting...");
+                    unjar(jis, dir);
+                }
                 file.delete();
             }
         }
@@ -110,6 +110,9 @@ public class FileUtil
             }
 
             File target = new File(dir, je.getName());
+            if (!target.getCanonicalPath().startsWith(dir.getCanonicalPath())) {
+                throw new IOException("JAR resource cannot contain paths with .. characters");
+            }
 
             // Check to see if the JAR entry is a directory.
             if (je.isDirectory())

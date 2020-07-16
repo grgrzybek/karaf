@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>apache-karaf-examples</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -37,6 +37,7 @@
         <module>karaf-servlet-example-registration</module>
         <module>karaf-servlet-example-blueprint</module>
         <module>karaf-servlet-example-scr</module>
+        <module>karaf-servlet-example-upload</module>
         <module>karaf-servlet-example-features</module>
     </modules>
 

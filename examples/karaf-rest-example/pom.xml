@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>apache-karaf-examples</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -34,14 +34,11 @@
 
     <modules>
         <module>karaf-rest-example-api</module>
-        <module>karaf-rest-example-provider</module>
+        <module>karaf-rest-example-blueprint</module>
+        <module>karaf-rest-example-scr</module>
         <module>karaf-rest-example-client</module>
-        <module>karaf-rest-example-features</module>
         <module>karaf-rest-example-whiteboard</module>
+        <module>karaf-rest-example-features</module>
     </modules>
     
-    <properties>
-        <cxf.version>3.2.8</cxf.version>
-    </properties>
-
 </project>

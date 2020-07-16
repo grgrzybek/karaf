@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.itests</groupId>
         <artifactId>itests</artifactId>
-        <version>4.2.6.redhat-SNAPSHOT</version>
+        <version>4.2.9.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -313,9 +313,11 @@
                         <spring43.version>${spring43.version}</spring43.version>
                         <spring50.version>${spring50.version}</spring50.version>
                         <spring51.version>${spring51.version}</spring51.version>
+                        <spring52.version>${spring52.version}</spring52.version>
                         <spring.security31.version>${spring.security31.version}</spring.security31.version>
                         <spring.security42.version>${spring.security42.version}</spring.security42.version>
                         <spring.security51.version>${spring.security51.version}</spring.security51.version>
+                        <spring.security53.version>${spring.security53.version}</spring.security53.version>
                         <activemq.version>${activemq.version}</activemq.version>
                     </systemPropertyVariables>
                     <excludes>
@@ -376,9 +378,11 @@
                                 <spring43.version>${spring43.version}</spring43.version>
                                 <spring50.version>${spring50.version}</spring50.version>
                                 <spring51.version>${spring51.version}</spring51.version>
+                                <spring52.version>${spring52.version}</spring52.version>
                                 <spring.security31.version>${spring.security31.version}</spring.security31.version>
                                 <spring.security42.version>${spring.security42.version}</spring.security42.version>
                                 <spring.security51.version>${spring.security51.version}</spring.security51.version>
+                                <spring.security53.version>${spring.security53.version}</spring.security53.version>
                                 <activemq.version>${activemq.version}</activemq.version>
                     		</systemPropertyVariables>
                         </configuration>

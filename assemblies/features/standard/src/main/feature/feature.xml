@@ -403,6 +403,10 @@ dump-create = admin, manager, viewer
 #   org.apache.karaf.command.acl.bundle.cfg
 #
 list = admin, manager, viewer
+proxy-add = admin, manager
+proxy-list = admin, manager, viewer
+proxy-remove = admin, manager
+proxy-balancing-list = admin, manager, viewer
         </config>
 	    <config name="org.apache.karaf.command.acl.jndi">
 #
@@ -1339,7 +1343,11 @@ list = admin, manager, viewer
 #
 ################################################################################
 
+# The JAAS realm name to use for authentication
 realm=karaf
+
+# The role required to access the WebConsole
+role=admin
         </config>
         <feature>http</feature>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
@@ -2116,12 +2124,12 @@ rmiRegistryPort = 1099
 rmiRegistryHost = 127.0.0.1
 
 #
-# Port number for RMI server connection
+# Port number for RMI connector server connection
 #
 rmiServerPort = 44444
 
 #
-# Host for RMI server
+# Host for RMI connector server
 #
 rmiServerHost = 127.0.0.1
 
@@ -2131,9 +2139,29 @@ rmiServerHost = 127.0.0.1
 jmxRealm = karaf
 
 #
-# The service URL for the JMXConnectorServer
+# The service URL for the JMX RMI connector
 #
 serviceUrl = service:jmx:rmi://${rmiServerHost}:${rmiServerPort}/jndi/rmi://${rmiRegistryHost}:${rmiRegistryPort}/karaf-${karaf.name}
+
+#
+# JMXMP connector enabled
+#
+jmxmpEnabled = false
+
+#
+# JMXMP connector host name
+#
+jmxmpHost = 127.0.0.1
+
+#
+# JMXMP connector port number
+#
+jmxmpPort = 9999
+
+#
+# JMXMP connector service URL
+#
+jmxmpServiceUrl = service:jmx:jmxmp://${jmxmpHost}:${jmxmpPort}
 
 #
 # Whether any threads started for the JMXConnectorServer should be started as daemon threads
@@ -2146,9 +2174,14 @@ daemon = true
 threaded = true
 
 #
-# The ObjectName used to register the JMXConnectorServer
+# The ObjectName used to register the JMX RMI connector
 #
 objectName = connector:name=rmi
+
+#
+# The ObjectName used to register the JMXMP connector
+#
+jmxmpObjectName = connector:name=jmxmp
 
 #
 # Timeout to lookup for the keystore in case of SSL authentication usage
@@ -2365,7 +2398,7 @@ disable = admin, manager
     </feature>
 
     <feature name="wrap" description="Wrap URL handler" version="${pax.url.version}">
-        <bundle start-level="5">mvn:org.ops4j.pax.url/pax-url-wrap/${pax.url.version}/jar/uber</bundle>
+        <bundle start-level="10">mvn:org.ops4j.pax.url/pax-url-wrap/${pax.url.version}/jar/uber</bundle>
     </feature>
 
     <feature name="profile" description="Profiles support" version="${project.version}">

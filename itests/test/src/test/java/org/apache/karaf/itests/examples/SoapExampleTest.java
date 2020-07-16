@@ -16,24 +16,30 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.itests.KarafTestSupport;
 import org.junit.Ignore;
+import org.apache.karaf.itests.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.spi.reactors.PerMethod;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 @Ignore("CXF-7970: Waiting for better cxf-rt-transports-http-undertow import range for Undertow")
-public class SoapExampleTest extends KarafTestSupport {
+public class SoapExampleTest extends BaseTest {
 
     @Test
-    public void test() throws Exception {
+    public void testBlueprint() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-soap-example-features/" + System.getProperty("karaf.version") + "/xml");
 
-        installAndAssertFeature("karaf-soap-example-provider");
+        installAndAssertFeature("karaf-soap-example-blueprint");
         installAndAssertFeature("karaf-soap-example-client");
 
         String url = "http://localhost:" + getHttpPort() + "/cxf/example";
@@ -42,6 +48,25 @@ public class SoapExampleTest extends KarafTestSupport {
         String output = executeCommand("booking:list --url " + url);
         System.out.println(output);
         assertContains("TST001", output);
+    }
+
+    @Test
+    public void testScr() throws Exception {
+        addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-soap-example-features/" + System.getProperty("karaf.version") + "/xml");
+
+        installAndAssertFeature("karaf-soap-example-scr");
+
+        URL url = new URL("http://localhost:" + getHttpPort() + "/cxf");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line).append("\n");
+            }
+        }
+
+        assertContains("BookingServiceSoap", builder.toString());
     }
 
 }

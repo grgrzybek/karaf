@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class WebTest extends KarafTestSupport {
+public class WebTest extends BaseTest {
 
     @Before
     public void installWarFeature() throws Exception {
@@ -83,7 +83,7 @@ public class WebTest extends KarafTestSupport {
         System.out.println(buffer.toString());
         assertContains("Hello World!", buffer.toString());
 
-        System.out.println(executeCommand("web:uninstall 100", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
+        System.out.println(executeCommand("web:uninstall 101", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
         listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(listOutput);
         while (listOutput.contains("/test")) {
