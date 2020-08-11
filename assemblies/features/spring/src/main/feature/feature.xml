@@ -133,7 +133,7 @@
 
     <!-- Aries Blueprint Spring 5.0.x support -->
 
-    <feature name="aries-blueprint-spring" version="${spring50.version}">
+    <feature name="aries-blueprint-spring" version="${spring52.version}">
         <feature>aries-blueprint</feature>
         <feature>spring</feature>
         <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.spring/${aries.blueprint.spring.version}</bundle>
