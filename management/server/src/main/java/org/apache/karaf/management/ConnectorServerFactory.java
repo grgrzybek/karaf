@@ -393,7 +393,9 @@ public class ConnectorServerFactory {
         MBeanInvocationHandler handler = new MBeanInvocationHandler(server, guard);
         MBeanServer guardedServer = (MBeanServer) Proxy.newProxyInstance(server.getClass().getClassLoader(), new Class[]{ MBeanServer.class }, handler);
 
-        rmiServer = new RMIJRMPServerImpl(getServerPort(serviceUrl), null, null, environment);
+        rmiServer = new RMIJRMPServerImpl(url.getPort(), 
+                                          (RMIClientSocketFactory)environment.get(RMIConnectorServer.RMI_CLIENT_SOCKET_FACTORY_ATTRIBUTE), 
+                                          (RMIServerSocketFactory)environment.get(RMIConnectorServer.RMI_SERVER_SOCKET_FACTORY_ATTRIBUTE), environment);
 
         // Create the connector server now.
         this.connectorServer = new RMIConnectorServer(url, environment, rmiServer, guardedServer);
@@ -469,30 +471,6 @@ public class ConnectorServerFactory {
         }
 
         return "jmxrmi"; // use the default
-    }
-
-    static int getServerPort(final String url) {
-        int portStart = url.indexOf("localhost") + 10;
-        int portEnd;
-        int port = 0;
-        if (portStart > 0) {
-            portEnd = indexNotOfNumber(url, portStart);
-            if (portEnd > portStart) {
-                final String portString = url.substring(portStart, portEnd);
-                port = Integer.parseInt(portString);
-            }
-        }
-        return port;
-    }
-
-    private static int indexNotOfNumber(String str, int index) {
-        int i = 0;
-        for (i = index; i < str.length(); i++) {
-            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public void destroy() throws Exception {
