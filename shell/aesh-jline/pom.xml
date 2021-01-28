@@ -71,8 +71,10 @@
                             org.jline.reader.impl.*
                         </Private-Package>
                         <Export-Package>
-                            org.jline.reader;
-                            org.jline.reader.impl;
+                            org.jline.reader,
+                            org.jline.reader.impl,
+                            org.jline.reader.impl.completer,
+                            org.jline.reader.impl.history,
                             org.jline.keymap
                         </Export-Package>
                     </instructions>
