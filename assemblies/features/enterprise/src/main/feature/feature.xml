@@ -172,8 +172,20 @@ com.atomikos.icatch.log_base_dir=${karaf.data}/atomikos
     <feature name="hibernate" description="Hibernate JPA engine support" version="${hibernate.version}">
         <!-- hibernate-orm feature installs osgi.core and osgi.compendium bundle (it should not), causing huge refresh -->
         <feature prerequisite="true">wrap</feature>
-        <feature version="${hibernate.version}">hibernate-orm</feature>
-        <bundle dependency="true">mvn:net.bytebuddy/byte-buddy/1.9.5.redhat-00001</bundle>
+        <feature>transaction-api</feature>
+        <bundle>mvn:org.jboss.logging/jboss-logging/${jboss.logging.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${antlr.bundle.version}</bundle>
+        <bundle>mvn:javax.persistence/javax.persistence-api/${javax.persistence.version}</bundle>
+        <bundle>mvn:org.javassist/javassist/${javassist.version}</bundle>
+        <bundle>mvn:net.bytebuddy/byte-buddy/${bytebuddy.version}</bundle>
+        <bundle>mvn:org.jboss/jandex/${jandex.version}</bundle>
+        <bundle>mvn:com.fasterxml/classmate/${classmate.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${dom4j.bundle.version}</bundle>
+        <bundle>mvn:org.hibernate.common/hibernate-commons-annotations/${hibernate.common.version}</bundle>
+        <bundle>mvn:org.hibernate/hibernate-core/${hibernate.version}</bundle>
+        <bundle>mvn:org.hibernate/hibernate-osgi/${hibernate.version}</bundle>
+        <bundle>mvn:javax.interceptor/javax.interceptor-api/${javax.interceptor.version}</bundle>
+
         <capability>
             osgi.service;objectClass=javax.persistence.spi.PersistenceProvider;effective:=active;javax.persistence.provider=org.hibernate.jpa.HibernatePersistenceProvider
         </capability>
@@ -252,11 +264,11 @@ com.atomikos.icatch.log_base_dir=${karaf.data}/atomikos
         <details>Support for Aries OSGi subsystems</details>
         <bundle dependency="true" start-level="30">mvn:org.apache.aries/org.apache.aries.util/${aries.util.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.apache.karaf.services/org.apache.karaf.services.coordinator/${project.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.aries.subsystem/org.apache.aries.subsystem.api/${aries.subsystem.api.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.aries.subsystem/org.apache.aries.subsystem.core/${aries.subsystem.core.version}</bundle>
+        <bundle>mvn:org.apache.aries.subsystem/org.apache.aries.subsystem.api/${aries.subsystem.api.version}</bundle>
+        <bundle>mvn:org.apache.aries.subsystem/org.apache.aries.subsystem.core/${aries.subsystem.core.version}</bundle>
         <conditional>
             <condition>shell</condition>
-            <bundle start-level="30">mvn:org.apache.karaf.subsystem/org.apache.karaf.subsystem.core/${project.version}</bundle>
+            <bundle>mvn:org.apache.karaf.subsystem/org.apache.karaf.subsystem.core/${project.version}</bundle>
         </conditional>
     </feature>
 

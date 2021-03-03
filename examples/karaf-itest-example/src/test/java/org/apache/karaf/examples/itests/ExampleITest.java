@@ -16,6 +16,7 @@ package org.apache.karaf.examples.itests;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.itests.KarafTestSupport;
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,11 +131,11 @@ public class ExampleITest extends KarafTestSupport {
         installAndAssertFeature("scr");
 
         // testing a command execution
-        String bundles = executeCommand("bundle:list -t 0");
+        String bundles = executeCommand("bundle:list -t 0", new RolePrincipal("admin"));
         System.out.println(bundles);
         assertContains("junit", bundles);
 
-        String features = executeCommand("feature:list -i");
+        String features = executeCommand("feature:list -i", new RolePrincipal("admin"));
         System.out.print(features);
         assertContains("scr", features);
 

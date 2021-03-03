@@ -445,6 +445,10 @@ public class DefaultHistory implements History {
         return items.spliterator();
     }
 
+    public void resetIndex() {
+        index = index > items.size() ? items.size() : index;
+    }
+
     protected static class EntryImpl implements Entry {
 
         private final int index;

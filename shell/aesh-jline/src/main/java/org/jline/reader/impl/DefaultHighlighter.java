@@ -8,15 +8,29 @@
  */
 package org.jline.reader.impl;
 
+import java.util.regex.Pattern;
+
 import org.jline.reader.Highlighter;
 import org.jline.reader.LineReader;
 import org.jline.utils.AttributedString;
 
 public class DefaultHighlighter implements Highlighter {
+    private Pattern errorPattern;
+    private int errorIndex = -1;
 
     @Override
     public AttributedString highlight(LineReader reader, String buffer) {
         return AttributedString.fromAnsi(buffer);
+    }
+
+    @Override
+    public void setErrorPattern(Pattern errorPattern) {
+        this.errorPattern = errorPattern;
+    }
+
+    @Override
+    public void setErrorIndex(int errorIndex) {
+        this.errorIndex = errorIndex;
     }
 
 }

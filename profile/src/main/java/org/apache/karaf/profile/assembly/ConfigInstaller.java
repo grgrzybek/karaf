@@ -72,6 +72,7 @@ public class ConfigInstaller {
                         configFile.getParent().toFile().mkdirs();
                     }
                     final Path finalConfigFile = configFile;
+                    boolean configFileExist = Files.exists(configFile);
                     if (Files.exists(configFile) && !config.isAppend()) {
                         LOGGER.info("      not changing existing config file: {}", homeDirectory.relativize(configFile));
                         continue;
@@ -91,8 +92,13 @@ public class ConfigInstaller {
                         });
                     } else {
                         if (config.isAppend()) {
-                            LOGGER.info("      appending to config file: {}", homeDirectory.relativize(configFile));
-                            Files.write(configFile, config.getValue().getBytes(), StandardOpenOption.APPEND);
+                            if (configFileExist) {
+                                LOGGER.info("      appending to config file: {}", homeDirectory.relativize(configFile));
+                                Files.write(configFile, config.getValue().getBytes(), StandardOpenOption.APPEND);
+                            }
+                            else
+                                LOGGER.warn("      Could not append, because config file does not exist: {}", homeDirectory.relativize(configFile));
+                            
                         } else {
                             LOGGER.info("      adding config file: {}", homeDirectory.relativize(configFile));
                             Files.write(configFile, config.getValue().getBytes());

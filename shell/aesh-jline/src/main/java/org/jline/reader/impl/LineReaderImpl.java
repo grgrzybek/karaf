@@ -30,11 +30,13 @@ import org.aesh.readline.editing.EditMode;
 import org.aesh.readline.editing.EditModeBuilder;
 import org.aesh.readline.terminal.Key;
 import org.aesh.utils.Config;
+import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.Binding;
 import org.jline.reader.Buffer;
 import org.jline.reader.Completer;
 import org.jline.reader.EOFError;
+import org.jline.reader.Editor;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.Expander;
 import org.jline.reader.Highlighter;
@@ -52,10 +54,18 @@ import org.jline.terminal.MouseEvent;
 import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedString;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -85,6 +95,16 @@ public class LineReaderImpl implements LineReader {
     private Prompt prompt;
     private ParsedLine parsedLine;
 
+    /*
+     * execute commands from commandsBuffer
+     */
+    protected List<String> commandsBuffer = new ArrayList<>();
+    // Reading buffers
+    protected final BindingReader bindingReader;
+
+    protected String tailTip = "";
+    protected SuggestionType autosuggestion = SuggestionType.NONE;
+
     public LineReaderImpl(Terminal terminal,
                           String appName,
                           Map<String, Object> variables) {
@@ -105,6 +125,7 @@ public class LineReaderImpl implements LineReader {
         this.editMode.addAction(Key.ENTER, enter);
         this.editMode.addAction(Key.ENTER_2, enter);
 
+        bindingReader = new BindingReader(terminal.reader());
     }
 
     public void setParser(Parser parser) {
@@ -322,6 +343,27 @@ public class LineReaderImpl implements LineReader {
     }
 
     @Override
+    public void addCommandsInBuffer(Collection<String> commands) {
+        commandsBuffer.addAll(commands);
+    }
+
+    @Override
+    public void editAndAddInBuffer(File file) throws Exception {
+        Constructor<?> ctor = Class.forName("org.jline.builtins.Nano").getConstructor(Terminal.class, File.class);
+        Editor editor = (Editor) ctor.newInstance(terminal, new File(file.getParent()));
+        editor.setRestricted(true);
+        editor.open(Arrays.asList(file.getName()));
+        editor.run();
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+        commandsBuffer.clear();
+        while ((line = br.readLine()) != null) {
+            commandsBuffer.add(line);
+        }
+        br.close();
+    }
+
+    @Override
     public Terminal getTerminal() {
         return terminal;
     }
@@ -329,6 +371,11 @@ public class LineReaderImpl implements LineReader {
     @Override
     public ParsedLine getParsedLine() {
         return parsedLine;
+    }
+
+    @Override
+    public String getLastBinding() {
+        return bindingReader.getLastBinding();
     }
 
     @Override
@@ -358,6 +405,26 @@ public class LineReaderImpl implements LineReader {
     @Override
     public Buffer getBuffer() {
         return null;
+    }
+
+    @Override
+    public void setAutosuggestion(SuggestionType type) {
+        this.autosuggestion = type;
+    }
+
+    @Override
+    public SuggestionType getAutosuggestion() {
+        return autosuggestion;
+    }
+
+    @Override
+    public String getTailTip() {
+        return tailTip;
+    }
+
+    @Override
+    public void setTailTip(String tailTip) {
+        this.tailTip = tailTip;
     }
 
     @Override

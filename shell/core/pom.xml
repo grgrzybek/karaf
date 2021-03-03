@@ -37,6 +37,18 @@
         <appendedResourcesDirectory>${basedir}/../../etc/appended-resources</appendedResourcesDirectory>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.karaf</groupId>
+                <artifactId>karaf-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -84,7 +96,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.sshd</groupId>
-            <artifactId>sshd-core</artifactId>
+            <artifactId>sshd-osgi</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.service</groupId>
@@ -170,6 +182,8 @@
                             org.apache.felix.utils.manifest,
                             org.apache.felix.gogo.jline,
                             org.apache.felix.gogo.runtime,
+                            org.apache.felix.gogo.runtime.util,
+                            org.apache.felix.gogo.runtime.util.function,
                             org.apache.felix.gogo.runtime.threadio,
                             org.apache.felix.service.command,
                             org.apache.felix.service.threadio,

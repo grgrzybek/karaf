@@ -87,7 +87,7 @@ public class InstanceServiceImpl implements InstanceService {
 
     private static final String DEFAULT_SHUTDOWN_COMMAND = "SHUTDOWN";
 
-    public static final String DEFAULT_JAVA_OPTS = "-Xmx512M -Dcom.sun.management.jmxremote -XX:+UnlockDiagnosticVMOptions";
+    public static final String DEFAULT_JAVA_OPTS = "-Xmx512m -XX:+UnlockDiagnosticVMOptions";
 
     private LinkedHashMap<String, InstanceImpl> proxies = new LinkedHashMap<>();
 
@@ -528,9 +528,12 @@ public class InstanceServiceImpl implements InstanceService {
                       " --add-opens java.base/java.util=ALL-UNNAMED" +
                       " --add-opens java.naming/javax.naming.spi=ALL-UNNAMED" +
                       " --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED" +
+                      " --add-exports=java.base/sun.net.www.protocol.file=ALL-UNNAMED" +
+                      " --add-exports=java.base/sun.net.www.protocol.ftp=ALL-UNNAMED" +
                       " --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED" +
                       " --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED" +
                       " --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED" +
+                      " --add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED" +
                       " --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED" +
                       " --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED";
         } else {
