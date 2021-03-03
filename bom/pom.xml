@@ -1001,8 +1001,8 @@
                 <classifier>uber</classifier>
             </dependency>
             <dependency>
-                <groupId>${servlet.spec.groupId}</groupId>
-                <artifactId>${servlet.spec.artifactId}</artifactId>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.spec.version}</version>
             </dependency>
             <dependency>
@@ -1092,8 +1092,8 @@
                 <version>${pax.tinybundle.version}</version>
             </dependency>
             <dependency>
-                <groupId>${equinox.groupId}</groupId>
-                <artifactId>${equinox.artifactId}</artifactId>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
                 <version>${equinox.version}</version>
             </dependency>
 

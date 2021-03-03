@@ -72,6 +72,7 @@ public class ConfigInstaller {
                         configFile.getParent().toFile().mkdirs();
                     }
                     final Path finalConfigFile = configFile;
+                    boolean configFileExist = Files.exists(configFile);
                     if (Files.exists(configFile) && !config.isAppend()) {
                         LOGGER.info("      not changing existing config file: {}", homeDirectory.relativize(configFile));
                         continue;
