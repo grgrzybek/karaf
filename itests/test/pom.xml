@@ -37,6 +37,18 @@
         <appendedResourcesDirectory>${basedir}/../etc/appended-resources</appendedResourcesDirectory>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.karaf</groupId>
+                <artifactId>karaf-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.karaf.itests</groupId>
@@ -314,6 +326,7 @@
                         <spring50.version>${spring50.version}</spring50.version>
                         <spring51.version>${spring51.version}</spring51.version>
                         <spring52.version>${spring52.version}</spring52.version>
+                        <spring53.version>${spring53.version}</spring53.version>
                         <spring.security31.version>${spring.security31.version}</spring.security31.version>
                         <spring.security42.version>${spring.security42.version}</spring.security42.version>
                         <spring.security51.version>${spring.security51.version}</spring.security51.version>
@@ -379,6 +392,7 @@
                                 <spring50.version>${spring50.version}</spring50.version>
                                 <spring51.version>${spring51.version}</spring51.version>
                                 <spring52.version>${spring52.version}</spring52.version>
+                                <spring53.version>${spring53.version}</spring53.version>
                                 <spring.security31.version>${spring.security31.version}</spring.security31.version>
                                 <spring.security42.version>${spring.security42.version}</spring.security42.version>
                                 <spring.security51.version>${spring.security51.version}</spring.security51.version>

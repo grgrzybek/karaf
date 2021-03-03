@@ -17,6 +17,67 @@
     under the License.
 -->
 
+## Apache Karaf 4.2.10
+
+Apache Karaf 4.2.9 is an update on the 4.2.x series, bringing fixes and improvements.
+
+### ChangeLog
+
+#### Bug
+    * [KARAF-6624] - Error starting on JDK 13 & JDK 14
+    * [KARAF-6764] - Compilation with OpenJDK 11 failed because of Unit tests with JPM
+    * [KARAF-6776] - scheduler doesn't work in featuresBoot
+    * [KARAF-6784] - Karaf docker images not stopped correctly
+    * [KARAF-6822] - “NoSuchMethodErrors” due to multiple versions of org.codehaus.plexus:plexus-utils:jar
+    * [KARAF-6836] - Restart issue with subsystem runtime
+    * [KARAF-6852] - RmiServerPort (44444) does not rise at startup
+
+#### Improvement
+    * [KARAF-6634] - Prevent JMX rebinding
+    * [KARAF-6795] - Add feature:upgrade alias
+    * [KARAF-6816] - Add activation-api bundle in the static-framework feature
+
+#### Task
+    * [KARAF-6826] - update to aries.spi 1.2.4
+    * [KARAF-6828] - Ensure karaf:run (maven goal) can find a pre-built artifact
+    * [KARAF-6829] - JDK15 support
+    * [KARAF-6832] - Upgrade to Aries Proxy 1.1.8
+    * [KARAF-6838] - bin\start.bat  doesn't work if no data directory in Karaf kit
+    * [KARAF-6855] - JMX over SSL doesn't work anymore
+
+#### Dependency upgrade
+    * [KARAF-5823] - Upgrade to sshd 2.5.1
+    * [KARAF-6547] - Upgrade to Felix Utils 1.11.4
+    * [KARAF-6785] - Upgrade to Pax Web 7.2.18
+    * [KARAF-6788] - Upgrade to Felix FileInstall 3.6.8
+    * [KARAF-6798] - Upgrade to commons-io 2.7
+    * [KARAF-6799] - Upgrade to JNA 5.6.0
+    * [KARAF-6800] - Upgrade to commons-lang 3.11
+    * [KARAF-6801] - Upgrade to Felix ConfigAdmin 1.9.18
+    * [KARAF-6802] - Upgrade to Felix HTTP Jetty 4.0.20
+    * [KARAF-6803] - Upgrade to Felix WebConsole 4.5.4
+    * [KARAF-6804] - Upgrade to geronimo-atinject_1.0_spec 1.2
+    * [KARAF-6805] - Upgrade to Jetty 9.4.30.v20200611
+    * [KARAF-6806] - Upgrade to Jackson Databind 2.10.5
+    * [KARAF-6811] - Upgrade to Pax Logging 1.11.7
+    * [KARAF-6815] - Upgrade to maven-bundle-plugin
+    * [KARAF-6818] - Upgrade to narayana 5.10.5.Final
+    * [KARAF-6819] - Upgrade to jline 3.16.0
+    * [KARAF-6825] - Upgrade to bouncycastle 1.66
+    * [KARAF-6827] - Upgrade to Pax Web 7.2.19 & Jetty 9.4.31.v20200723
+    * [KARAF-6841] - Upgrade to ant 1.10.8
+    * [KARAF-6843] - Upgrade to SCR 2.1.24
+    * [KARAF-6844] - Upgrade to Camel 3.5.0
+    * [KARAF-6857] - Upgrade to Spring 5.2.9.RELEASE
+    * [KARAF-6858] - Upgrade to Spring 5.1.18.RELEASE
+    * [KARAF-6859] - Upgrade to Spring 4.3.29.RELEASE
+    * [KARAF-6860] - Upgrade to Pax Exam 4.13.4
+
+#### Documentation
+    * [KARAF-6821] - Command jdbc:ds-factories is not documented
+    * [KARAF-6850] - Type-o in JDNI vs JNDI in datasource description of JDBCLoginModule
+    * [KARAF-6861] - README has broken links in tarfile
+
 ## Apache Karaf 4.2.9
 
 Apache Karaf 4.2.9 is an update on the 4.2.x series, bringing fixes and improvements.
@@ -31,6 +92,7 @@ Apache Karaf 4.2.9 is an update on the 4.2.x series, bringing fixes and improvem
     * [KARAF-6649] - Documentation uses wrong markup in section 5.9.1. and 5.9.2.
     * [KARAF-6650] - Error parsing the bundle.info file, if 'h' is last character in line
     * [KARAF-6715] - Wrong exports of javax.transaction package from jre.properties
+    * [KARAF-6731] - Align hibernate bundle version with feature version and upgrade to hibernate 5.4.17.Final
 
 #### Improvement
     * [KARAF-6580] - Provide Spring Security 5.3.x feature
@@ -39,6 +101,7 @@ Apache Karaf 4.2.9 is an update on the 4.2.x series, bringing fixes and improvem
     * [KARAF-6672] - Update to Commons Compress 1.20
     * [KARAF-6675] - Upgrade Apache RAT plugin to 0.13
     * [KARAF-6698] - VerifyMojo performance improvement
+    * [KARAF-6737] - Disallow calling getMBeansFromURL
 
 #### Dependency upgrade
     * [KARAF-6423] - Upgrade JAXB to 2.3.3
@@ -78,6 +141,9 @@ Apache Karaf 4.2.9 is an update on the 4.2.x series, bringing fixes and improvem
     * [KARAF-6724] - Upgrade to hibernate-validator 6.1.5.Final
     * [KARAF-6725] - Upgrade to Hibernate 5.4.15.Final
     * [KARAF-6726] - Upgrade to eclipselink 2.7.7
+    * [KARAF-6728] - Upgrade to Aries Proxy API 1.1.1 & Aries Proxy 1.1.7
+    * [KARAF-6729] - Upgrade to Pax Web 7.2.16
+    * [KARAF-6730] - Upgrade to Hibernate 5.4.16.Final
 
 ## Apache Karaf 4.2.8
 

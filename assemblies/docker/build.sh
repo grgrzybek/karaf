@@ -21,11 +21,14 @@
 usage() {
   cat <<HERE
 Usage:
-  build.sh --from-local-dist [--archive <archive>] [--image-name <image>]
-  build.sh --from-release --karaf-version <x.x.x> [--image-name <image>]
+  build.sh --from-local-dist [--archive <archive>] [--image-name <image>] [--build-multi-platform <comma-separated platforms>]
+  build.sh --from-release --karaf-version <x.x.x> [--image-name <image>] [--build-multi-platform <comma-separated platforms>]
   build.sh --help
 
   If the --image-name flag is not used the built image name will be 'karaf'.
+  Check the supported build platforms; you can verify with this command: docker buildx ls
+  The supported platforms (OS/Arch) depend on the build's base image, in this case [adoptopenjdk:11-jre-hotspot](https://hub.docker.com/_/adoptopenjdk?tab=tags&page=1&name=11-jre-hotspot).
+  
 HERE
   exit 1
 }
@@ -50,6 +53,10 @@ key="$1"
     ;;
     --karaf-version)
     KARAF_VERSION="$2"
+    shift
+    ;;
+    --build-multi-platform)
+    BUILD_MULTI_PLATFORM="$2"
     shift
     ;;
     --help)
@@ -79,12 +86,12 @@ if [ -n "${FROM_RELEASE}" ]; then
 
   [ -n "${KARAF_VERSION}" ] || usage
 
-  KARAF_BASE_URL="$(curl -s https://www.apache.org/dyn/closer.cgi\?preferred\=true)karaf/${KARAF_VERSION}/"
+  KARAF_BASE_URL="$(curl -s https://www.apache.org/dyn/closer.cgi\?preferred=true)karaf/${KARAF_VERSION}/"
   KARAF_DIST_FILE_NAME="apache-karaf-${KARAF_VERSION}.tar.gz"
   CURL_OUTPUT="${TMPDIR}/${KARAF_DIST_FILE_NAME}"
 
   echo "Downloading ${KARAF_DIST_FILE_NAME} from ${KARAF_BASE_URL}"
-  curl -s ${KARAF_BASE_URL}${KARAF_DIST_FILE_NAME} --output ${CURL_OUTPUT}
+  curl -s "${KARAF_BASE_URL}${KARAF_DIST_FILE_NAME}" --output "${CURL_OUTPUT}"
 
   KARAF_DIST="${CURL_OUTPUT}"
 
@@ -93,7 +100,7 @@ elif [ -n "${FROM_LOCAL}" ]; then
   if [ -n "${ARCHIVE}" ]; then
      DIST_DIR=${ARCHIVE}
   else 
-     DIST_DIR=../apache-karaf/target/apache-karaf-*.tar.gz
+     DIST_DIR="../apache-karaf/target/apache-karaf-*.tar.gz"
   fi
   KARAF_DIST=${TMPDIR}/apache-karaf.tar.gz
   echo "Using karaf dist: ${DIST_DIR}"
@@ -105,4 +112,22 @@ else
 
 fi
 
-docker build --build-arg karaf_dist="${KARAF_DIST}" -t "${IMAGE_NAME}" .
+if [ -n "${BUILD_MULTI_PLATFORM}" ]; then
+  echo "Checking if buildx installed..."
+  VERSION_BUILD_X=$(docker buildx version) > /dev/null 2>&1
+
+  if [ $? -eq 0 ]; then
+    echo "Found buildx {${VERSION_BUILD_X}} on your docker system"
+    echo "Starting build of the docker image for the platform ${BUILD_MULTI_PLATFORM}"
+    
+    BUILD_X="buildx"
+    BUILD_X_FLAG="--push"
+    BUILD_X_PLATFORM="--platform ${BUILD_MULTI_PLATFORM}"
+  else
+    echo "Error: buildx not installed with your docker system"
+    exit 2
+  fi
+
+fi
+
+docker ${BUILD_X} build ${BUILD_X_PLATFORM} --build-arg karaf_dist="${KARAF_DIST}" ${BUILD_X_FLAG} -t "${IMAGE_NAME}" .

@@ -59,14 +59,19 @@ It's a lightweight, powered, and enterprise ready runtime powered by OSGi.
 
 ## Getting Started
 
-For an Apache Karaf source distribution, please read [BUILDING.md](https://github.com/apache/karaf/BUILDING.md) for instructions on building Apache Karaf.
+For an Apache Karaf source distribution, please read [BUILDING.md](https://github.com/apache/karaf/blob/karaf-4.2.x/BUILDING.md) for instructions on building Apache Karaf.
 
-For an Apache Karaf binary distribution, please read [RELEASE-NOTES.md](https://github.com/apache/karaf/RELEASE-NOTES.md) for installation instructions and list of supported
+For an Apache Karaf binary distribution, please read [RELEASE-NOTES.md](https://github.com/apache/karaf/blob/karaf-4.2.x/RELEASE-NOTES.md) for installation instructions and list of supported
 and unsupported features.
 
 The PDF manual is the right place to find any information about Karaf.
 
 The [examples](http://github.com/apache/karaf/examples) provide a bunch of turnkey minimal applications that you can deploy in Apache Karaf and extend/template as you want.
+
+[NOTE]
+====
+Windows users should use 7zip or other unzip tool to support files longer than 255 characters.
+====
 
 ## Contact Us
 

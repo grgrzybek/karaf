@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
@@ -61,6 +63,8 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.aether.repository.WorkspaceReader;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.FrameworkFactory;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Creates a customized Karaf distribution by installing features and setting up
@@ -423,6 +427,9 @@ public class AssemblyMojo extends MojoSupport {
     @Parameter(defaultValue = "${project.basedir}/src/main/karaf/assembly-property-edits.xml")
     protected String propertyFileEdits;
 
+    @Parameter
+    protected KarafPropertyEdits propertyEdits;
+
     /**
      * Glob specifying which configuration PIDs in the selected boot features
      * should be extracted to <code>${karaf.etc}</code> directory. By default all PIDs are extracted.
@@ -449,6 +456,14 @@ public class AssemblyMojo extends MojoSupport {
      */
     @Parameter
     protected Map<String, String> system;
+
+
+    /**
+     * List of files to delete from the source assembly.
+     * Note that it is done after the target assembly is done so it can also remove side effects of the configuration.
+     */
+    @Parameter
+    protected List<String> filesToRemove;
 
     @Component(role = WorkspaceReader.class, hint = "reactor")
     protected WorkspaceReader reactor;
@@ -582,6 +597,49 @@ public class AssemblyMojo extends MojoSupport {
                     }
                 }
             }
+        }
+
+        if (filesToRemove != null) {
+            final Path base = workDirectory.toPath();
+            filesToRemove.forEach(toDrop -> {
+                final int lastSep = Math.max(toDrop.lastIndexOf('/'), toDrop.lastIndexOf(File.separatorChar));
+                final boolean startsWithDir = toDrop.contains(File.separator) || toDrop.contains("/");
+                final String name = !startsWithDir ? toDrop : toDrop.substring(lastSep + 1);
+                final Path dir = !startsWithDir ? base : base.resolve(toDrop.substring(0, lastSep));
+                final int wildcard = name.lastIndexOf('*');
+                final Predicate<String> matcher;
+                if (wildcard >= 0) {
+                    final String suffix = name.substring(wildcard + 1);
+                    final String prefix = name.substring(0, wildcard);
+                    matcher = n -> n.startsWith(prefix) && n.endsWith(suffix);
+                } else {
+                    // we likely bet this case will not happen often (to ignore the version at least)
+                    // so we don't optimize this branch by deleting directly the file
+                    matcher = name::equals;
+                }
+                try {
+                    final List<Path> toDelete = Files.list(dir)
+                            .filter(it -> matcher.test(it.getFileName().toString()))
+                            .collect(toList());
+                    if (toDelete.isEmpty()) {
+                        getLog().info("File deletion '" + toDrop + "' ignored (not found)");
+                    } else {
+                        toDelete.stream().peek(it -> getLog().info("Deleting '" + base.relativize(it) + "'")).forEach(it -> {
+                            try {
+                                if (Files.isDirectory(it)) {
+                                    IoUtils.deleteRecursive(it.toFile());
+                                } else {
+                                    Files.delete(it);
+                                }
+                            } catch (final IOException e) {
+                                throw new IllegalStateException(e);
+                            }
+                        });
+                    }
+                } catch (final IOException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
         }
     }
 
@@ -721,6 +779,11 @@ public class AssemblyMojo extends MojoSupport {
                 }
             }
         }
+        if (edits == null && propertyEdits != null) {
+            edits = propertyEdits;
+        } else if (edits != null && propertyEdits != null && !propertyEdits.getEdits().isEmpty()) {
+            edits.getEdits().addAll(propertyEdits.getEdits());
+        }
         return edits;
     }
 
@@ -760,6 +823,8 @@ public class AssemblyMojo extends MojoSupport {
             try (InputStream is = new FileInputStream(artifact.getFile())) {
                 XMLInputFactory xif = XMLInputFactory.newFactory();
                 xif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, true);
+                xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+                xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
                 XMLStreamReader r = xif.createXMLStreamReader(is);
                 r.nextTag();
                 QName name = r.getName();

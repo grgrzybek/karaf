@@ -16,17 +16,7 @@
  */
 package org.apache.karaf.client;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.Closeable;
-import java.io.Console;
-import java.io.FileInputStream;
-import java.io.IOError;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.Reader;
+import java.io.*;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -99,7 +89,7 @@ public class Main {
             FilePasswordProvider passwordProvider = null;
             final Console console = System.console();
             if (console != null) {
-                passwordProvider = resourceKey -> {
+                passwordProvider = (session, resourceKey, retryIndex) -> {
                     char[] pwd = console.readPassword("Enter password for " + resourceKey + ": ");
                     return new String(pwd);
                 };
@@ -167,7 +157,7 @@ public class Main {
             client.getProperties().put(ClientFactoryManager.NIO2_READ_TIMEOUT, String.valueOf(config.getIdleTimeout()));
 
             // TODO: remove the line below when SSHD-732 is fixed
-            client.setKeyPairProvider(new FileKeyPairProvider());
+            // client.setKeyPairProvider(new FileKeyPairProvider());
             client.start();
             ClientSession session = connectWithRetries(client, config);
             if (config.getPassword() != null) {
@@ -393,8 +383,8 @@ public class Main {
             if (keyFile != null) {
                 FileKeyPairProvider fileKeyPairProvider = new FileKeyPairProvider(Paths.get(keyFile));
                 fileKeyPairProvider.setPasswordFinder(passwordProvider);
-                for (KeyPair key : fileKeyPairProvider.loadKeys()) {
-                    agent.addIdentity(key, user);                
+                for (KeyPair key : fileKeyPairProvider.loadKeys(null)) {
+                    agent.addIdentity(key, user);
                 }
             }
             return agent;
