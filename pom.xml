@@ -286,7 +286,7 @@
         <jackson.databind.version>2.9.10.4-redhat-00001</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00001</jboss.logging.version>
         <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
-        <jetty.version>9.4.36.v20210114</jetty.version>
+        <jetty.version>9.4.38.v20210224</jetty.version>
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
@@ -306,7 +306,7 @@
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.3</pax.swissbox.version>
         <pax.url.version>2.6.7</pax.url.version>
-        <pax.web.version>7.3.12</pax.web.version>
+        <pax.web.version>7.3.13</pax.web.version>
         <pax.web.undertow.version>2.0.30.SP4-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.0</pax.jdbc.version>
