@@ -29,7 +29,7 @@ import org.aesh.readline.completion.CompletionHandler;
 import org.aesh.readline.editing.EditMode;
 import org.aesh.readline.editing.EditModeBuilder;
 import org.aesh.readline.terminal.Key;
-import org.aesh.utils.Config;
+import org.aesh.terminal.utils.Config;
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.Binding;

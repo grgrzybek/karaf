@@ -24,7 +24,7 @@ import org.aesh.readline.ConsoleBuffer;
 import org.aesh.readline.InputProcessor;
 import org.aesh.readline.completion.Completion;
 import org.aesh.readline.completion.SimpleCompletionHandler;
-import org.aesh.utils.Config;
+import org.aesh.terminal.utils.Config;
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.Expander;

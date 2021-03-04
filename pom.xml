@@ -285,7 +285,7 @@
         <jackson.version>2.9.10</jackson.version>
         <jackson.databind.version>2.9.10.4-redhat-00001</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00001</jboss.logging.version>
-        <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
+        <aesh.version>2.0.0.redhat-00001</aesh.version>
         <jetty.version>9.4.38.v20210224</jetty.version>
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
@@ -1327,13 +1327,8 @@
             </dependency>
             <dependency>
                 <groupId>org.aesh</groupId>
-                <artifactId>aesh-readline</artifactId>
-                <version>${aesh.readline.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aesh</groupId>
-                <artifactId>aesh-terminal-api</artifactId>
-                <version>${aesh.readline.version}</version>
+                <artifactId>readline</artifactId>
+                <version>${aesh.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.artifact</groupId>
