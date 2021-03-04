@@ -61,7 +61,7 @@ public class XATest extends BaseTest {
                 "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
                 "mvn:org.apache.karaf.features/standard/" + version + "/xml/features, " +
                 "mvn:org.apache.activemq/artemis-features/2.9.0.redhat-00005/xml/features, " +
-                "mvn:org.apache.camel.karaf/apache-camel/2.20.1/xml/features"
+                "mvn:org.apache.camel.karaf/apache-camel/2.23.4/xml/features"
             ));
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
                 "instance,package,log,ssh,framework,system,eventadmin,feature,shell,management,service,jaas,deployer,diagnostic,wrap,bundle,config,kar,aries-blueprint,artemis,jms,pax-jms-core"));
@@ -74,10 +74,10 @@ public class XATest extends BaseTest {
     @Test
     public void test() throws Exception {
         System.out.println("== Starting Artemis broker == ");
-        String logDisplay = executeCommand("log:display");
+        String logDisplay = executeCommand("log:display", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         while (!logDisplay.contains("AMQ221007: Server is now live")) {
             Thread.sleep(500);
-            logDisplay = executeCommand("log:display");
+            logDisplay = executeCommand("log:display", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         }
         System.out.println("AMQ221007: Server is now live");
         System.out.println(executeCommand("jms:info artemis"));
