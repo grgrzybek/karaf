@@ -156,7 +156,7 @@
         <javax.interceptor.version>1.2.2</javax.interceptor.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.9.11.redhat-00002</bytebuddy.version>
-        <camel.version>2.24.3</camel.version>
+        <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.9_1</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
         <classmate.version>1.3.4</classmate.version>
@@ -304,10 +304,10 @@
         <pax.exam.version>4.13.4</pax.exam.version>
         <pax.logging.version>1.11.9</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
-        <pax.swissbox.version>1.8.3</pax.swissbox.version>
+        <pax.swissbox.version>1.8.4</pax.swissbox.version>
         <pax.url.version>2.6.7</pax.url.version>
         <pax.web.version>7.3.13</pax.web.version>
-        <pax.web.undertow.version>2.0.30.SP4-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.0.34.SP1-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.0</pax.jdbc.version>
         <pax.jms.version>1.1.0</pax.jms.version>
