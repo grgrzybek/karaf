@@ -335,6 +335,7 @@
         <!-- Spring Boot 2.3.9 uses Spring Securoty 5.3.8, but there's no such SMX version -->
         <spring.security53.version>5.3.3.RELEASE_2</spring.security53.version>
 
+        <bouncycastle.version>1.68</bouncycastle.version>
         <sshd.version>2.5.1</sshd.version>
         <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
