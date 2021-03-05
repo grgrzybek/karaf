@@ -146,17 +146,17 @@
     </developers>
 
     <properties>
-        <activemq.version>5.11.0.redhat-630475</activemq.version>
+        <activemq.version>5.11.0.redhat-630495</activemq.version>
         <aopalliance.bundle.version>1.0_6</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
         <antlr.bundle.version>2.7.7_5</antlr.bundle.version>
         <asm6.version>6.2.1</asm6.version>
         <asm.version>9.1</asm.version>
         <javax.annotation.version>1.3.1</javax.annotation.version>
-        <javax.interceptor.version>1.2</javax.interceptor.version>
+        <javax.interceptor.version>1.2.2</javax.interceptor.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.9.11.redhat-00002</bytebuddy.version>
-        <camel.version>2.24.3</camel.version>
+        <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.9_1</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
         <classmate.version>1.3.4</classmate.version>
@@ -174,7 +174,7 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
-        <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-pool.version>1.6.0.redhat-9</commons-pool.version>
         <commons-dbcp2.version>2.8.0</commons-dbcp2.version>
@@ -182,7 +182,7 @@
         <commons-io.version>2.8.0</commons-io.version>
 
         <dom4j.bundle.version>2.1.1_1</dom4j.bundle.version>
-        <eclipselink.version>2.7.7</eclipselink.version>
+        <eclipselink.version>2.7.8</eclipselink.version>
         <jasypt.bundle.version>1.9.3_1</jasypt.bundle.version>
         <jolokia.version>1.6.2.redhat-00002</jolokia.version>
         <serp.bundle.version>1.15.1_1</serp.bundle.version>
@@ -262,21 +262,21 @@
         <aries.transaction.blueprint.version>1.1.1</aries.transaction.blueprint.version>
         <aries.transaction.blueprint.version2>2.2.0</aries.transaction.blueprint.version2>
         <aries.util.version>1.1.3</aries.util.version>
-        <atomikos.version>4.0.4</atomikos.version>
+        <atomikos.version>5.0.8</atomikos.version>
 
         <openjpa.version>3.1.1</openjpa.version>
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>27.1-jre</guava.version>
         <guava.failureaccess.version>1.0.1</guava.failureaccess.version>
-        <narayana.version>5.10.6.Final</narayana.version>
+        <narayana.version>5.10.6.Final-redhat-00001</narayana.version>
         <hibernate.annotations.common.version>5.0.5.Final-redhat-00002</hibernate.annotations.common.version>
         <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.17.Final-redhat-00001</hibernate.version>
+        <hibernate.version>5.3.20.Final-redhat-00001</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
-        <hibernate.validator.version>6.0.20.Final-redhat-00001</hibernate.validator.version>
+        <hibernate.validator.version>6.0.22.Final-redhat-00002</hibernate.validator.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
         <jansi.version>1.18</jansi.version>
@@ -285,7 +285,7 @@
         <jackson.version>2.9.10</jackson.version>
         <jackson.databind.version>2.9.10.4-redhat-00001</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00001</jboss.logging.version>
-        <aesh.readline.version>1.10.0.redhat-00001</aesh.readline.version>
+        <aesh.version>2.0.0.redhat-00001</aesh.version>
         <jetty.version>9.4.38.v20210224</jetty.version>
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
@@ -304,10 +304,10 @@
         <pax.exam.version>4.13.4</pax.exam.version>
         <pax.logging.version>1.11.9</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
-        <pax.swissbox.version>1.8.3</pax.swissbox.version>
+        <pax.swissbox.version>1.8.4</pax.swissbox.version>
         <pax.url.version>2.6.7</pax.url.version>
         <pax.web.version>7.3.13</pax.web.version>
-        <pax.web.undertow.version>2.0.30.SP4-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.0.34.SP1-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.0</pax.jdbc.version>
         <pax.jms.version>1.1.0</pax.jms.version>
@@ -326,13 +326,16 @@
         <spring43.version>4.3.29.RELEASE_1</spring43.version>
         <spring50.version>5.0.15.RELEASE_1</spring50.version>
         <spring51.version>5.1.18.RELEASE_1</spring51.version>
-        <spring52.version>5.2.9.RELEASE_2</spring52.version>
+        <!-- Spring Boot 2.3.9 uses Spring Framework 5.2.13, but there's no such SMX version -->
+        <spring52.version>5.2.12.RELEASE_1</spring52.version>
         <spring53.version>5.3.1_1</spring53.version>
         <spring.security31.version>3.1.4.RELEASE</spring.security31.version>
         <spring.security42.version>4.2.4.RELEASE_1</spring.security42.version>
         <spring.security51.version>5.1.10.RELEASE_1</spring.security51.version>
-        <spring.security53.version>5.3.3.RELEASE_1</spring.security53.version>
+        <!-- Spring Boot 2.3.9 uses Spring Securoty 5.3.8, but there's no such SMX version -->
+        <spring.security53.version>5.3.3.RELEASE_2</spring.security53.version>
 
+        <bouncycastle.version>1.68</bouncycastle.version>
         <sshd.version>2.5.1</sshd.version>
         <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
@@ -1327,13 +1330,8 @@
             </dependency>
             <dependency>
                 <groupId>org.aesh</groupId>
-                <artifactId>aesh-readline</artifactId>
-                <version>${aesh.readline.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aesh</groupId>
-                <artifactId>aesh-terminal-api</artifactId>
-                <version>${aesh.readline.version}</version>
+                <artifactId>readline</artifactId>
+                <version>${aesh.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.artifact</groupId>
@@ -1512,6 +1510,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.interceptor</groupId>
+                <artifactId>javax.interceptor-api</artifactId>
+                <version>${javax.interceptor.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>

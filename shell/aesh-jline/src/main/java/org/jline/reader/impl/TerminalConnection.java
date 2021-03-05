@@ -163,7 +163,7 @@ public class TerminalConnection implements Connection, Device {
                 map.bind(action, new String(cp, 0, cp.length));
                 
                 if ("BACKSPACE".equals(action.toString())
-                    && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                     //ensure map ascii 127 to backspace on windows
                    
                     int[] backspace = new int[1];
@@ -171,7 +171,7 @@ public class TerminalConnection implements Connection, Device {
                     map.bind(action, new String(backspace, 0, backspace.length));
                 }
                 if ("UP_2".equals(action.toString())
-                    && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                     //ensure map arrow UP on windows
                    
                     int[] up = new int[] {27, 91, 65};
@@ -180,7 +180,7 @@ public class TerminalConnection implements Connection, Device {
                 }
                 
                 if ("DOWN_2".equals(action.toString())
-                    && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                     //ensure map arrow DOWN on windows
                    
                     int[] down = new int[] {27, 91, 66};
@@ -195,15 +195,15 @@ public class TerminalConnection implements Connection, Device {
                     String lb = br.getLastBinding();
                   
                     if ("UP_2".equals(ka.toString()) 
-                        && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                         //ensure UP work on windows CMD
                         stdinHandler.accept(new int[]{27, 79, 65});
                     } else if ("DOWN_2".equals(ka.toString()) 
-                        && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                         //ensure DOWN work on windows CMD
                         stdinHandler.accept(new int[]{27, 79, 66});
                     } else if ("BACKSPACE".equals(ka.toString()) 
-                        && !org.aesh.utils.Config.isOSPOSIXCompatible()) {
+                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
                         //ensure BACKSPACE work on windows CMD
                         stdinHandler.accept(new int[]{8});
                     } else if (!lb.equals("[A") && !lb.equals("[B")){
