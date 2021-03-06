@@ -156,6 +156,7 @@
         <javax.interceptor.version>1.2.2</javax.interceptor.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.9.11.redhat-00002</bytebuddy.version>
+        <bouncycastle.version>1.68</bouncycastle.version>
         <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.9_1</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
@@ -334,7 +335,6 @@
         <!-- Spring Boot 2.3.9 uses Spring Securoty 5.3.8, but there's no such SMX version -->
         <spring.security53.version>5.3.3.RELEASE_2</spring.security53.version>
 
-        <bouncycastle.version>1.68</bouncycastle.version>
         <sshd.version>2.5.1</sshd.version>
         <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
