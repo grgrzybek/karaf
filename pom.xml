@@ -200,6 +200,7 @@
 
         <easymock.version>4.2</easymock.version>
         <objenesis.version>2.6</objenesis.version>
+        <bndlib.version>5.2.0</bndlib.version>
         <equinox.version>3.12.100</equinox.version>
         <equinox.region.version>1.2.101.v20150831-1342</equinox.region.version>
         <equinox.coordinator.version>1.1.0.v20120522-1841</equinox.coordinator.version>
