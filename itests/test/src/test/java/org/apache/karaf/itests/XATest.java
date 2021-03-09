@@ -53,14 +53,14 @@ public class XATest extends BaseTest {
         String version = MavenUtils.getArtifactVersion("org.apache.karaf", "apache-karaf");
         List<Option> result = new LinkedList<>(Arrays.asList(super.config()));
         // workaround https://issues.jboss.org/browse/ENTMQBR-2900
-        result.add(CoreOptions.mavenBundle().groupId("org.apache.qpid").artifactId("qpid-jms-client").version("0.42.0.redhat-00002"));
-        result.add(CoreOptions.mavenBundle().groupId("org.ops4j.pax.jms").artifactId("pax-jms-artemis").version("1.0.5"));
+        result.add(CoreOptions.mavenBundle().groupId("org.apache.qpid").artifactId("qpid-jms-client").version("0.54.0.redhat-00001"));
+        result.add(CoreOptions.mavenBundle().groupId("org.ops4j.pax.jms").artifactId("pax-jms-artemis").version("1.1.0"));
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
                 "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                 "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
-                "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
+                "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
                 "mvn:org.apache.karaf.features/standard/" + version + "/xml/features, " +
-                "mvn:org.apache.activemq/artemis-features/2.9.0.redhat-00005/xml/features, " +
+                "mvn:org.apache.activemq/artemis-features/2.16.0.redhat-00012/xml/features, " +
                 "mvn:org.apache.camel.karaf/apache-camel/2.23.4/xml/features"
             ));
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresBoot",
