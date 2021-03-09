@@ -105,4 +105,14 @@ public class Spring52FeaturesTest extends BaseTest {
         installAssertAndUninstallFeature("spring-websocket", System.getProperty("spring52.version"));
     }
 
+    @Test
+    public void installSpringSecurityFeature() throws Exception {
+        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security53.version"));
+    }
+
+    @Test
+    public void installAriesBlueprintSpringFeature() throws Exception {
+        installAssertAndUninstallFeature("aries-blueprint-spring", System.getProperty("spring52.version"));
+    }
+
 }

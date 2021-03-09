@@ -142,7 +142,6 @@
                         <profile>loanbroker-bank2</profile>
                         <profile>loanbroker-bank3</profile>
                         <profile>loanbroker-broker</profile>
-                        <profile>activemq-broker</profile>
                     </startupProfiles>
                     <blacklistedFeatures>
                         <feature>spring/[4.0,4.2)</feature>

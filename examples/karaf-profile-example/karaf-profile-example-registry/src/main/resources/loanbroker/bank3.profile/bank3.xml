@@ -21,7 +21,7 @@
 
   <camelContext xmlns="http://camel.apache.org/schema/blueprint" id="Bank3Context" trace="false">
     <route id="Bank3">
-      <from uri="activemq:LoanBroker.Bank3"/>
+      <from uri="direct:LoanBroker.Bank3"/>
       <setHeader headerName="host.bank">
          <simple>${sys.runtime.id}-${camelId}</simple>
       </setHeader>
@@ -34,11 +34,5 @@
       <log message="&gt;&gt;&gt; Bank3 loan rate: ${header.loan.rate}"/>
     </route>
   </camelContext>
-  
-  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="brokerURL" value="tcp://localhost:61616"/>
-    <property name="userName" value="karaf"/>
-    <property name="password" value="karaf"/>
-  </bean>
 
 </blueprint>

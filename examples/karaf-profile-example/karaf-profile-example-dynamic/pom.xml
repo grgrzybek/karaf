@@ -121,6 +121,16 @@
                     <profilesUris>
                         <uri>jar:mvn:org.apache.karaf.examples/karaf-profile-example-registry/${project.version}!/</uri>
                     </profilesUris>
+                    <addTransitiveFeatures>false</addTransitiveFeatures>
+                    <installAllFeaturesByDefault>false</installAllFeaturesByDefault>
+                    <blacklistedRepositories>
+                        <repository>mvn:org.apache.cxf.karaf/apache-cxf/3.2.10/xml/features</repository>
+                        <repository>mvn:org.apache.jclouds.karaf/jclouds-karaf/2.1.1/xml/features</repository>
+                        <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/1.0.0/xml/features</repository>
+                        <repository>mvn:org.hibernate.validator/hibernate-validator-osgi-karaf-features/6.0.14.Final/xml/features</repository>
+                        <repository>mvn:ca.uhn.hapi.fhir.karaf/hapi-fhir/3.5.0/xml/features</repository>
+                        <repository>mvn:org.apache.openjpa/openjpa-features/3.1.1/xml/features</repository>
+                    </blacklistedRepositories>
                     <bootFeatures>
                         <feature>deployer</feature>
                     </bootFeatures>
@@ -130,7 +140,6 @@
                         <profile>loanbroker-bank2</profile>
                         <profile>loanbroker-bank3</profile>
                         <profile>loanbroker-broker</profile>
-                        <profile>activemq-broker</profile>
                     </bootProfiles>
                 </configuration>
             </plugin>
