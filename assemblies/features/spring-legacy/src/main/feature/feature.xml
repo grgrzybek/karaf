@@ -756,24 +756,6 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security42.version}</bundle>
     </feature>
 
-    <!-- Aries Blueprint Spring 4.2.x support -->
-
-    <feature name="aries-blueprint-spring" version="${spring42.version}">
-        <feature>aries-blueprint</feature>
-        <feature version="${spring42.version}">spring</feature>
-        <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.spring/${aries.blueprint.spring.version}</bundle>
-        <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.spring.extender/${aries.blueprint.spring.extender.version}</bundle>
-    </feature>
-
-    <!-- Aries Blueprint Spring 4.3.x support -->
-
-    <feature name="aries-blueprint-spring" version="${spring43.version}">
-        <feature>aries-blueprint</feature>
-        <feature version="${spring43.version}">spring</feature>
-        <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.spring/${aries.blueprint.spring.version}</bundle>
-        <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.spring.extender/${aries.blueprint.spring.extender.version}</bundle>
-    </feature>
-
     <feature name="spring-security" description="Spring Security 5.3.x support" version="${spring.security53.version}">
         <feature>war</feature>
         <feature version="[5.1,6)">spring-jdbc</feature>

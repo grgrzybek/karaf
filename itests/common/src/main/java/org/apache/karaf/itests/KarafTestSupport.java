@@ -81,7 +81,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.debugConfiguration;
 import static org.ops4j.pax.exam.Constants.START_LEVEL_SYSTEM_BUNDLES;
 import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackage;
 import static org.ops4j.pax.exam.CoreOptions.frameworkStartLevel;
