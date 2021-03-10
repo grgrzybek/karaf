@@ -34,13 +34,13 @@
     </route>
 
     <route id="LoanBroker">
-      <from uri="activemq:LoanBroker.LoanBrokerService"/>
+      <from uri="direct:LoanBroker.LoanBrokerService"/>
       <setHeader headerName="host.loan.broker">
         <simple>${sys.runtime.id}</simple>
       </setHeader>
-      <to uri="activemq:LoanBroker.CreditBureauService"/>
+      <to uri="mock:LoanBroker.CreditBureauService"/>
       <log message="&gt;&gt;&gt; Credit score : ${header.credit.score}"/>
-      <to uri="activemq:LoanBroker.RuleBaseService"/>
+      <to uri="mock:LoanBroker.RuleBaseService"/>
       <log message="&gt;&gt;&gt; Bank list : ${header.bank.list}"/>
       <!-- call the banks and pick the winning bank with the best rate -->
       <recipientList parallelProcessing="false">
@@ -50,7 +50,7 @@
     </route>
 
     <route id="CreditBureau">
-      <from uri="activemq:LoanBroker.CreditBureauService"/>
+      <from uri="direct:LoanBroker.CreditBureauService"/>
       <setHeader headerName="host.credit.bureau">
         <simple>${sys.runtime.id}</simple>
       </setHeader>
@@ -63,7 +63,7 @@
     </route>
 
     <route id="RuleBase">
-      <from uri="activemq:LoanBroker.RuleBaseService"/>
+      <from uri="direct:LoanBroker.RuleBaseService"/>
       <setHeader headerName="host.rule.base">
         <simple>${sys.runtime.id}</simple>
       </setHeader>
@@ -75,11 +75,5 @@
       </setHeader>
     </route>
   </camelContext>
-
-  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="brokerURL" value="tcp://localhost:61616"/>
-    <property name="userName" value="karaf"/>
-    <property name="password" value="karaf"/>
-  </bean>
 
 </blueprint>

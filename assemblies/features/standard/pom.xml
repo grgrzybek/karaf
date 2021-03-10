@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.assemblies.features</groupId>
         <artifactId>features</artifactId>
-        <version>4.2.9.redhat-SNAPSHOT</version>
+        <version>4.2.11.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -259,11 +259,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>biz.aQute.bndlib</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.karaf.web</groupId>
             <artifactId>org.apache.karaf.web.core</artifactId>
             <scope>provided</scope>
@@ -393,6 +388,13 @@
         <dependency>
             <groupId>org.apache.karaf.jaas</groupId>
             <artifactId>org.apache.karaf.jaas.jasypt</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spring Security Crypto encryption deps -->
+        <dependency>
+            <groupId>org.apache.karaf.jaas</groupId>
+            <artifactId>org.apache.karaf.jaas.spring-security-crypto</artifactId>
             <scope>provided</scope>
         </dependency>
 

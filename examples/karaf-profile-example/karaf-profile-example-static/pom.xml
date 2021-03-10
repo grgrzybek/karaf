@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-profile-example</artifactId>
-        <version>4.2.9.redhat-SNAPSHOT</version>
+        <version>4.2.11.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -142,7 +142,6 @@
                         <profile>loanbroker-bank2</profile>
                         <profile>loanbroker-bank3</profile>
                         <profile>loanbroker-broker</profile>
-                        <profile>activemq-broker</profile>
                     </startupProfiles>
                     <blacklistedFeatures>
                         <feature>spring/[4.0,4.2)</feature>

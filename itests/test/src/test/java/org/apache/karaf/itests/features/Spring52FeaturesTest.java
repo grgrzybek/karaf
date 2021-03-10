@@ -40,9 +40,7 @@ public class Spring52FeaturesTest extends BaseTest {
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
                 "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/enterprise-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/standard/" + version + "/xml/features"));
         return result.toArray(new Option[result.size()]);
     }
@@ -105,6 +103,16 @@ public class Spring52FeaturesTest extends BaseTest {
     @Test
     public void installSpringWebSocketFeature() throws Exception {
         installAssertAndUninstallFeature("spring-websocket", System.getProperty("spring52.version"));
+    }
+
+    @Test
+    public void installSpringSecurityFeature() throws Exception {
+        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security53.version"));
+    }
+
+    @Test
+    public void installAriesBlueprintSpringFeature() throws Exception {
+        installAssertAndUninstallFeature("aries-blueprint-spring", System.getProperty("spring52.version"));
     }
 
 }

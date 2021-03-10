@@ -44,6 +44,7 @@ import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.GeneralSecurityException;
+import java.security.Security;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -405,6 +406,7 @@ public class ConnectorServerFactory {
         }
 
         if (jmxmpEnabled) {
+        	Security.addProvider(new PlainSaslServer.SaslPlainProvider());
             JMXServiceURL jmxmpUrl = new JMXServiceURL(this.jmxmpServiceUrl);
             this.jmxmpConnectorServer = JMXConnectorServerFactory.newJMXConnectorServer(jmxmpUrl, this.jmxmpEnvironment, guardedServer);
             if (this.jmxmpObjectName != null) {
@@ -567,7 +569,7 @@ public class ConnectorServerFactory {
         public ServerSocket createServerSocket(int port) throws IOException {
             InetAddress host = InetAddress.getByName(rmiServerHost);
             if (host.isLoopbackAddress()) {
-                final SSLServerSocket ss = (SSLServerSocket) sssf.createServerSocket(port, 50);
+                final SSLServerSocket ss = (SSLServerSocket) sssf.createServerSocket(port, 50, host);
                 ss.setNeedClientAuth(clientAuth);
                 if (this.enabledProtocols != null && this.enabledProtocols.length > 0) {
                     ss.setEnabledProtocols(this.enabledProtocols);
@@ -600,7 +602,7 @@ public class ConnectorServerFactory {
         public ServerSocket createServerSocket(int port) throws IOException {
             InetAddress host = InetAddress.getByName(rmiServerHost);
             if (host.isLoopbackAddress()) {
-                final ServerSocket ss = ServerSocketFactory.getDefault().createServerSocket(port, 50);
+                final ServerSocket ss = ServerSocketFactory.getDefault().createServerSocket(port, 50, host);
                 return new LocalOnlyServerSocket(ss);
             } else {
                 final ServerSocket ss = ServerSocketFactory.getDefault().createServerSocket(port, 50, InetAddress.getByName(rmiServerHost));
@@ -925,7 +927,7 @@ public class ConnectorServerFactory {
         private final String lookupName;
 
         JmxRegistry(final int port, final String lookupName) throws RemoteException {
-            super(port);
+            super(port, null, new KarafRMIServerSocketFactory(getHost()));
             this.lookupName = lookupName;
         }
 

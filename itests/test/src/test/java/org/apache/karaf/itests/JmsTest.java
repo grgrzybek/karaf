@@ -45,9 +45,7 @@ public class JmsTest extends BaseTest {
         options.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
                 "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/enterprise-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/standard/" + version + "/xml/features, " +
                         "mvn:org.apache.activemq/activemq-karaf/" + System.getProperty("activemq.version") + "/xml/features"));
         return options.toArray(new Option[options.size()]);

@@ -21,7 +21,6 @@
     <!-- NB: this file is not the one really used. This file is used by the karaf-maven-plugin to define the start-level of bundles in the generated feature.xml -->
 
     <repository>mvn:org.hibernate.validator/hibernate-validator-osgi-karaf-features/${hibernate.validator.version}/xml/features</repository>
-    <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
     <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/${pax.cdi.version}/xml/features</repository>
     <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax.jdbc.version}/xml/features</repository>
     <repository>mvn:org.ops4j.pax.jms/pax-jms-features/${pax.jms.version}/xml/features</repository>
@@ -169,6 +168,11 @@ com.atomikos.icatch.log_base_dir=${karaf.data}/atomikos
         </capability>
     </feature>
 
+    <feature name="hibernate-orm" description="Hibernate JPA engine support" version="${hibernate.version}">
+        <!-- We no longer use mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf, but let's keep hibernate-orm feature name -->
+        <feature>hibernate</feature>
+    </feature>
+
     <feature name="hibernate" description="Hibernate JPA engine support" version="${hibernate.version}">
         <!-- hibernate-orm feature installs osgi.core and osgi.compendium bundle (it should not), causing huge refresh -->
         <feature prerequisite="true">wrap</feature>
@@ -189,6 +193,12 @@ com.atomikos.icatch.log_base_dir=${karaf.data}/atomikos
         <capability>
             osgi.service;objectClass=javax.persistence.spi.PersistenceProvider;effective:=active;javax.persistence.provider=org.hibernate.jpa.HibernatePersistenceProvider
         </capability>
+    </feature>
+
+    <feature name="hibernate-envers" version="${hibernate.version}" description="Feature for easily adding Envers support to hibernate">
+        <feature version="${hibernate.version}">hibernate</feature>
+        <bundle>mvn:org.jboss/jandex/${jandex.version}</bundle>
+        <bundle>mvn:org.hibernate/hibernate-envers/${hibernate.version}</bundle>
     </feature>
 
     <feature name="eclipselink" description="Eclipselink JPA persistence engine support" version="${eclipselink.version}">

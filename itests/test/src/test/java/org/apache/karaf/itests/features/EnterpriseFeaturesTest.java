@@ -49,16 +49,9 @@ public class EnterpriseFeaturesTest extends BaseTest {
         result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
                         "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/spring-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/enterprise-legacy/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/standard/" + version + "/xml/features"));
         return result.toArray(new Option[result.size()]);
-    }
-
-    @Test
-    public void installTransaction130Feature() throws Exception {
-        installAssertAndUninstallFeature("transaction", "1.3.3");
     }
 
     @Test
@@ -78,49 +71,17 @@ public class EnterpriseFeaturesTest extends BaseTest {
     }
 
     @Test
-    public void installOpenJpa222Feature() throws Exception {
-        installAssertAndUninstallFeature("openjpa", "2.2.2");
-    }
-
-    @Test
-    @RunIfNotOnJdk8
-    public void installOpenJpa230Feature() throws Exception {
-        installAssertAndUninstallFeature("openjpa", "2.3.0");
-    }
-
-    @Test
-    public void installOpenJpa240Feature() throws Exception {
-        installAssertAndUninstallFeature("openjpa", "2.4.2");
-    }
-
-    @Test
     public void installOpenJpa3Feature() throws Exception {
         installAssertAndUninstallFeatures("openjpa3");
     }
 
     @Test
-    public void installHibernate4215FinalFeature() throws Exception {
-        installAssertAndUninstallFeature("hibernate", "4.2.15.Final");
-    }
-
-    @Test
-    public void installHibernateEnvers4215FinalFeature() throws Exception {
-        installAssertAndUninstallFeature("hibernate-envers", "4.2.15.Final");
-    }
-
-    @Test
-    public void installHibernate436FinalFeature() throws Exception {
-        installAssertAndUninstallFeature("hibernate", "4.3.6.Final");
-    }
-
-    @Test
-    public void installHibernateEnvers436FinalFeature() throws Exception {
-        installAssertAndUninstallFeature("hibernate-envers", "4.3.6.Final");
-    }
-
-    @Test
     public void installHibernateValidatorFeature() throws Exception {
         installAssertAndUninstallFeatures("hibernate-validator");
+        installAssertAndUninstallFeatures("hibernate-validator-joda-time");
+        installAssertAndUninstallFeatures("hibernate-validator-javax-money");
+        installAssertAndUninstallFeatures("hibernate-validator-groovy");
+        installAssertAndUninstallFeatures("hibernate-validator-paranamer");
     }
 
     @Test
