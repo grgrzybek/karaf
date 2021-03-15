@@ -156,6 +156,9 @@ public class Main {
             client.getProperties().put(ClientFactoryManager.IDLE_TIMEOUT, String.valueOf(config.getIdleTimeout()));
             client.getProperties().put(ClientFactoryManager.NIO2_READ_TIMEOUT, String.valueOf(config.getIdleTimeout()));
 
+            // ENTESB-15940: to prevent finding ~/.ssh/id_rsa by default
+            client.setKeyIdentityProvider(new FileKeyPairProvider());
+
             // TODO: remove the line below when SSHD-732 is fixed
             // client.setKeyPairProvider(new FileKeyPairProvider());
             client.start();
