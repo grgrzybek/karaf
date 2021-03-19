@@ -254,7 +254,6 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/config.properties", "felix.fileinstall.subdir.mode", "recurse"),
                 new VMOption("--add-reads=java.xml=java.logging"),
-                new VMOption("--add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED"),
                 new VMOption("--patch-module"),
                 new VMOption("java.base=lib/endorsed/org.apache.karaf.specs.locator-" 
                 + System.getProperty("karaf.version", "4.2.2-SNAPSHOT") + ".jar"),
@@ -281,7 +280,8 @@ public class KarafTestSupport {
                 new VMOption("--add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED"),
                 new VMOption("--add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED"),
                 new VMOption("-classpath"),
-                new VMOption("lib/jdk9plus/*" + File.pathSeparator + "lib/boot/*")
+                new VMOption("lib/jdk9plus/*" + File.pathSeparator + "lib/boot/*"
+                    + File.pathSeparator + "lib/endorsed/*")
                 
             };
         } else {
