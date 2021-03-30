@@ -17,6 +17,8 @@ rem    See the License for the specific language governing permissions and
 rem    limitations under the License.
 rem
 
+setlocal EnableDelayedExpansion
+
 if not "%ECHO%" == "" echo %ECHO%
 
 setlocal
@@ -238,8 +240,12 @@ for /f tokens^=2-5^ delims^=.-_+^" %%j in ('"%JAVA%" -fullversion 2^>^&1') do (
 )
 
 if %JAVA_VERSION% GTR 8 (
+   set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\endorsed\org.apache.karaf.specs.java.xml.ws-@@project.version@@.jar;%KARAF_HOME%\lib\endorsed\org.apache.karaf.specs.locator-@@project.version@@.jar;%KARAF_HOME%\lib\endorsed\jakarta.annotation-api-@@jakarta.annotation.version@@.jar;%KARAF_HOME%\lib\endorsed\org.apache.servicemix.bundles.xerces-@@xerces.bundle.version@@.jar;%KARAF_HOME%\lib\endorsed\org.apache.servicemix.bundles.xalan-@@xalan.bundle.version@@.jar;%KARAF_HOME%\lib\endorsed\org.apache.servicemix.bundles.xalan-serializer-@@xalan-serializer.bundle.version@@.jar
    pushd "%KARAF_HOME%\lib\jdk9plus"
        for %%G in (*.jar) do call:APPEND_TO_JDK9PLUS_CLASSPATH %%G
+   popd
+   pushd "%KARAF_HOME%\lib\ext"
+       for %%G in (*.jar) do call:APPEND_TO_EXT_CLASSPATH %%G
    popd
 )
 
@@ -319,6 +325,12 @@ goto :EOF
 set filename=%~1
 set suffix=%filename:~-4%
 if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\jdk9plus\%filename%
+goto :EOF
+
+: APPEND_TO_EXT_CLASSPATH
+set filename=%~1
+set suffix=%filename:~-4%
+if %suffix% equ .jar set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\%filename%
 goto :EOF
 
 :CLASSPATH_END
@@ -443,9 +455,9 @@ if "%KARAF_PROFILER%" == "" goto :RUN
         if %JAVA_VERSION% GTR 8 (
             "%JAVA%" %JAVA_OPTS% %OPTS% ^
                 --add-reads=java.xml=java.logging ^
-                --add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED ^
                 --patch-module java.base=lib/endorsed/org.apache.karaf.specs.locator-@@project.version@@.jar ^
                 --patch-module java.xml=lib/endorsed/org.apache.karaf.specs.java.xml-@@project.version@@.jar ^
+                --add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED ^
                 --add-opens java.base/java.security=ALL-UNNAMED ^
                 --add-opens java.base/java.net=ALL-UNNAMED ^
                 --add-opens java.base/java.lang=ALL-UNNAMED ^
@@ -460,6 +472,7 @@ if "%KARAF_PROFILER%" == "" goto :RUN
                 --add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED ^
                 --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED ^
                 --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
+                --add-exports=java.security.sasl/com.sun.security.sasl=ALL-UNNAMED ^
                 -classpath "%CLASSPATH%" ^
                 -Dkaraf.instances="%KARAF_HOME%\instances" ^
                 -Dkaraf.home="%KARAF_HOME%" ^
