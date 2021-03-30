@@ -25,7 +25,7 @@
         <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-databind/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.core/jackson-databind/@@jackson.databind.version@@" mode="maven" />
         <bundle originalUri="mvn:javax.annotation/javax.annotation-api/[1.2,1.4)"
-                replacement="mvn:javax.annotation/javax.annotation-api/@@javax.annotation.version@@" mode="maven" />
+                replacement="mvn:jakarta.annotation/jakarta.annotation-api/@@jakarta.annotation.version@@" mode="maven" />
         <bundle originalUri="mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/[1.2,2)"
                 replacement="mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/@@aries.spifly.version@@" mode="maven" />
         <bundle originalUri="mvn:org.apache.commons/commons-pool2/[2,3)"

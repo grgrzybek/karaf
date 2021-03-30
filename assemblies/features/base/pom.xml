@@ -54,11 +54,23 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>${javax.annotation.version}</version>
+            <groupId>jakarta.xml.soap</groupId>
+            <artifactId>jakarta.xml.soap-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+        </dependency>
+        <dependency>
+            <!-- can't upgrade to jakarta, see: https://github.com/eclipse-ee4j/jaf/issues/67 -->
             <groupId>com.sun.activation</groupId>
             <artifactId>javax.activation</artifactId>
             <version>1.2.0</version>
@@ -126,6 +138,20 @@
             <version>1.0-b01-ea</version>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.xerces</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.xalan</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.xalan-serializer</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -177,29 +203,73 @@
                         </goals>
                         <configuration>
                             <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.apache.karaf.specs</groupId>
-                                    <artifactId>org.apache.karaf.specs.locator</artifactId>
-                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
-                                </artifactItem>
+                                <!--
+                                    This is effectively a different way to specify <library> elements in
+                                    karaf-maven-plugin:assembly configuration, but without the ability
+                                    to export/boot-delegate the packages
+                                -->
+
+                                <!-- special libraries to be available at very high classloader -->
+
+                                <!-- this will be endorsed in JDK8 and -\-patch-module=java.xml in JDK11 -->
                                 <artifactItem>
                                     <groupId>org.apache.karaf.specs</groupId>
                                     <artifactId>org.apache.karaf.specs.java.xml</artifactId>
                                     <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
                                 </artifactItem>
+                                <!-- this will be endorsed in JDK8 and part of boot classloader in JDK11 -->
                                 <artifactItem>
                                     <groupId>org.apache.karaf.specs</groupId>
                                     <artifactId>org.apache.karaf.specs.java.xml.ws</artifactId>
                                     <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
                                 </artifactItem>
+                                <!-- this has to be endorsed as well in JD8, because it's used by the two above -->
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.specs</groupId>
+                                    <artifactId>org.apache.karaf.specs.locator</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+                                <!--
+                                    To have compatibility between JDK8 and JDK11, annotation-api will also go to
+                                    endorsed dir for JDK8 and boot classloader of JDK11 (configured in bin/karaf)
+                                -->
+                                <artifactItem>
+                                    <groupId>jakarta.annotation</groupId>
+                                    <artifactId>jakarta.annotation-api</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.servicemix.bundles</groupId>
+                                    <artifactId>org.apache.servicemix.bundles.xerces</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.servicemix.bundles</groupId>
+                                    <artifactId>org.apache.servicemix.bundles.xalan</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.servicemix.bundles</groupId>
+                                    <artifactId>org.apache.servicemix.bundles.xalan-serializer</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+
+                                <!--
+                                    These libraries are used in place of (some) java.se.ee modules removed in JDK 11:
+                                     - Annotations (mind that javax.annotation.processing package comes from java.compiler module)
+                                       which is stored in endorsed/ directory for JDK8
+                                     - JAXB API
+                                     - Activation API + Implementation
+                                     - SAAJ API
+                                     - JAXB Implementation (for Karaf feature parsing)
+                                     - JWS API (javax.jws, javax.jws.soap)
+                                     - JAX-WS API
+                                    These will be exported by system bundle and bootdelegated to ensure there's
+                                    only one source of JAXB/JAX-WS/Activation/Annotation/SAAJ packages
+                                -->
                                 <artifactItem>
                                     <groupId>jakarta.xml.bind</groupId>
                                     <artifactId>jakarta.xml.bind-api</artifactId>
-                                    <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>javax.annotation</groupId>
-                                    <artifactId>javax.annotation-api</artifactId>
                                     <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
@@ -207,6 +277,12 @@
                                     <artifactId>javax.activation</artifactId>
                                     <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.xml.soap</groupId>
+                                    <artifactId>jakarta.xml.soap-api</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
+                                </artifactItem>
+                                <!-- JAXB implementation is required for Karaf feature parsing -->
                                 <artifactItem>
                                     <groupId>org.glassfish.jaxb</groupId>
                                     <artifactId>jaxb-runtime</artifactId>
@@ -222,6 +298,18 @@
                                     <artifactId>istack-commons-runtime</artifactId>
                                     <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.jws</groupId>
+                                    <artifactId>jakarta.jws-api</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.xml.ws</groupId>
+                                    <artifactId>jakarta.xml.ws-api</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/jdk9plus</outputDirectory>
+                                </artifactItem>
+
+                                <!-- Remaining fundamental libraries -->
                                 <artifactItem>
                                     <groupId>org.apache.karaf</groupId>
                                     <artifactId>org.apache.karaf.main</artifactId>

@@ -83,7 +83,8 @@ public class BundleTest extends BaseTest {
     @Test
     public void diagCommand() throws Exception {
         String allDiagOutput = executeCommand("bundle:diag", ADMIN_ROLES);
-        assertTrue(allDiagOutput.isEmpty());
+        // special case for jboss-fuse/fuse-karaf testing
+        assertTrue(allDiagOutput.isEmpty() || allDiagOutput.contains("missing references: BackupService, PatchManagement"));
     }
 
     @Test

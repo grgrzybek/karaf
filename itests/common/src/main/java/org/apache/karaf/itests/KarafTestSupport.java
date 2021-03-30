@@ -18,6 +18,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
@@ -68,6 +69,8 @@ import org.ops4j.pax.exam.karaf.container.internal.JavaVersionUtil;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
+import org.ops4j.pax.exam.options.RawUrlReference;
+import org.ops4j.pax.exam.options.UrlReference;
 import org.ops4j.pax.exam.options.extra.VMOption;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -179,14 +182,24 @@ public class KarafTestSupport {
         if (res == null) {
             throw new RuntimeException("Config resource " + path + " not found");
         }
+        if (res.getProtocol().equals("jar")) {
+            String ext = res.toExternalForm();
+            // for fuse-karaf
+            return new File("target/test-classes/" + ext.substring(ext.indexOf("!/") + 2));
+        }
         return new File(res.getFile());
     }
 
     /**
      * Override this method if you want to change the Karaf distribution in use.
      */
-    public MavenArtifactUrlReference getKarafDistribution() {
-        return CoreOptions.maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("tar.gz");
+    public UrlReference getKarafDistribution() {
+        String customDistro = System.getProperty("custom.distribution");
+        if (customDistro != null) {
+            return new RawUrlReference(customDistro);
+        } else {
+            return CoreOptions.maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("tar.gz");
+        }
     }
 
     @Configuration
@@ -229,7 +242,7 @@ public class KarafTestSupport {
         if (JavaVersionUtil.getMajorVersion() >= 9) {
             testOptions = new Option[] {
                 // debugConfiguration("8889", true),
-                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
+                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution().getURL()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
                 // enable JMX RBAC security, thanks to the KarafMBeanServerBuilder
                 KarafDistributionOption.configureSecurity().disableKarafMBeanServerBuilder(),
                 KarafDistributionOption.configureConsole().ignoreLocalConsole(),
@@ -240,7 +253,7 @@ public class KarafTestSupport {
                 CoreOptions.mavenBundle().groupId("org.awaitility").artifactId("awaitility").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.servicemix.bundles").artifactId("org.apache.servicemix.bundles.hamcrest").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.karaf.itests").artifactId("common").versionAsInProject(),
-                CoreOptions.mavenBundle().groupId("javax.annotation").artifactId("javax.annotation-api").versionAsInProject(),
+                CoreOptions.mavenBundle().groupId("jakarta.annotation").artifactId("jakarta.annotation-api").versionAsInProject(),
                 //replaceConfigurationFile("etc/host.key", getConfigFile("/etc/host.key")),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "updateSnapshots", "none"),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", httpPort),
@@ -252,9 +265,10 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/branding.properties", "welcome", ""), // No welcome banner
                 KarafDistributionOption.editConfigurationFilePut("etc/branding-ssh.properties", "welcome", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
+                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "patching.disabled", "true"),
                 KarafDistributionOption.editConfigurationFilePut("etc/config.properties", "felix.fileinstall.subdir.mode", "recurse"),
+                new VMOption("--illegal-access=warn"),
                 new VMOption("--add-reads=java.xml=java.logging"),
-                new VMOption("--add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED"),
                 new VMOption("--patch-module"),
                 new VMOption("java.base=lib/endorsed/org.apache.karaf.specs.locator-" 
                 + System.getProperty("karaf.version", "4.2.2-SNAPSHOT") + ".jar"),
@@ -270,6 +284,8 @@ public class KarafTestSupport {
                 new VMOption("--add-opens"),
                 new VMOption("java.base/java.util=ALL-UNNAMED"),
                 new VMOption("--add-opens"),
+                new VMOption("java.base/java.io=ALL-UNNAMED"),
+                new VMOption("--add-opens"),
                 new VMOption("java.naming/javax.naming.spi=ALL-UNNAMED"),
                 new VMOption("--add-opens"),
                 new VMOption("java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED"),
@@ -281,13 +297,14 @@ public class KarafTestSupport {
                 new VMOption("--add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED"),
                 new VMOption("--add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED"),
                 new VMOption("-classpath"),
-                new VMOption("lib/jdk9plus/*" + File.pathSeparator + "lib/boot/*")
+                new VMOption("lib/jdk9plus/*" + File.pathSeparator + "lib/boot/*"
+                    + File.pathSeparator + "lib/endorsed/*")
                 
             };
         } else {
             testOptions = new Option[] {
                 //debugConfiguration("8889", true),
-                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
+                KarafDistributionOption.karafDistributionConfiguration().frameworkUrl(getKarafDistribution().getURL()).name("Apache Karaf").unpackDirectory(new File("target/exam")),
                 // enable JMX RBAC security, thanks to the KarafMBeanServerBuilder
                 KarafDistributionOption.configureSecurity().disableKarafMBeanServerBuilder(),
                 KarafDistributionOption.configureConsole().ignoreLocalConsole(),
@@ -321,6 +338,7 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/branding.properties", "welcome", ""), // No welcome banner
                 KarafDistributionOption.editConfigurationFilePut("etc/branding-ssh.properties", "welcome", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
+                KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "patching.disabled", "true"),
                 KarafDistributionOption.editConfigurationFilePut("etc/config.properties", "felix.fileinstall.subdir.mode", "recurse")
             };
         }

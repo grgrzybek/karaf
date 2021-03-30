@@ -95,7 +95,22 @@ setupClassPath() {
         fi
     done
     if [ "${VERSION}" -gt "8" ] ; then
+        CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.karaf.specs.java.xml.ws-@@project.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.karaf.specs.locator-@@project.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/jakarta.annotation-api-@@jakarta.annotation.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xerces-@@xerces.bundle.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-@@xalan.bundle.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-serializer-@@xalan-serializer.bundle.version@@.jar"
         for file in "${KARAF_HOME}"/lib/jdk9plus/*.jar
+        do
+            if [ -z "${CLASSPATH}" ]; then
+                CLASSPATH="${file}"
+            else
+                CLASSPATH="${CLASSPATH}:${file}"
+            fi
+        done
+        # also take libraries from ext dir
+        for file in "${KARAF_HOME}"/lib/ext/*.jar
         do
             if [ -z "${CLASSPATH}" ]; then
                 CLASSPATH="${file}"
@@ -320,25 +335,24 @@ run() {
             if [ "${VERSION}" -gt "8" ]; then
                 ${KARAF_EXEC} "${JAVA}" ${JAVA_OPTS} \
                     --add-reads=java.xml=java.logging \
-                    --add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED \
                     --patch-module java.base=lib/endorsed/org.apache.karaf.specs.locator-@@project.version@@.jar \
                     --patch-module java.xml=lib/endorsed/org.apache.karaf.specs.java.xml-@@project.version@@.jar \
+                    --add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED \
                     --add-opens java.base/java.security=ALL-UNNAMED \
                     --add-opens java.base/java.net=ALL-UNNAMED \
                     --add-opens java.base/java.lang=ALL-UNNAMED \
                     --add-opens java.base/java.util=ALL-UNNAMED \
+                    --add-opens java.base/java.io=ALL-UNNAMED \
                     --add-opens java.naming/javax.naming.spi=ALL-UNNAMED \
                     --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED \
-                    --add-opens java.base/sun.net.www.protocol.jrt=ALL-UNNAMED \
                     --add-exports=java.base/sun.net.www.protocol.file=ALL-UNNAMED \
+                    --add-exports=java.base/sun.net.www.protocol.ftp=ALL-UNNAMED \
                     --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                     --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED \
                     --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
                     --add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED \
-                    --add-exports=java.xml.bind/com.sun.xml.internal.bind.v2.runtime=ALL-UNNAMED \
                     --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
                     --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
-                    --add-modules=java.xml.ws.annotation,java.corba,java.transaction,java.xml.bind,java.xml.ws \
                     --add-exports=java.security.sasl/com.sun.security.sasl=ALL-UNNAMED \
                     -Dkaraf.instances="${KARAF_HOME}/instances" \
                     -Dkaraf.home="${KARAF_HOME}" \
