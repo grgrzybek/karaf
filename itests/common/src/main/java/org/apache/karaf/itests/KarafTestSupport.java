@@ -267,6 +267,7 @@ public class KarafTestSupport {
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "karaf.secured.command.compulsory.roles", ""),
                 KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "patching.disabled", "true"),
                 KarafDistributionOption.editConfigurationFilePut("etc/config.properties", "felix.fileinstall.subdir.mode", "recurse"),
+                new VMOption("--illegal-access=warn"),
                 new VMOption("--add-reads=java.xml=java.logging"),
                 new VMOption("--patch-module"),
                 new VMOption("java.base=lib/endorsed/org.apache.karaf.specs.locator-" 
@@ -282,6 +283,8 @@ public class KarafTestSupport {
                 new VMOption("java.base/java.lang=ALL-UNNAMED"),
                 new VMOption("--add-opens"),
                 new VMOption("java.base/java.util=ALL-UNNAMED"),
+                new VMOption("--add-opens"),
+                new VMOption("java.base/java.io=ALL-UNNAMED"),
                 new VMOption("--add-opens"),
                 new VMOption("java.naming/javax.naming.spi=ALL-UNNAMED"),
                 new VMOption("--add-opens"),

@@ -462,6 +462,7 @@ if "%KARAF_PROFILER%" == "" goto :RUN
                 --add-opens java.base/java.net=ALL-UNNAMED ^
                 --add-opens java.base/java.lang=ALL-UNNAMED ^
                 --add-opens java.base/java.util=ALL-UNNAMED ^
+                --add-opens java.base/java.io=ALL-UNNAMED ^
                 --add-opens java.naming/javax.naming.spi=ALL-UNNAMED ^
                 --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED ^
                 --add-exports=java.base/sun.net.www.protocol.file=ALL-UNNAMED ^
