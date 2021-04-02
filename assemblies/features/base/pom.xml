@@ -152,6 +152,11 @@
             <artifactId>org.apache.servicemix.bundles.xalan-serializer</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.i2p.crypto</groupId>
+            <artifactId>eddsa</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -328,6 +333,11 @@
                                 <artifactItem>
                                     <groupId>org.glassfish.external</groupId>
                                     <artifactId>opendmk_jmxremote_optional_jar</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/boot</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>net.i2p.crypto</groupId>
+                                    <artifactId>eddsa</artifactId>
                                     <outputDirectory>target/classes/resources/lib/boot</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>

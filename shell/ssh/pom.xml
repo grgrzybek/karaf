@@ -91,6 +91,10 @@
             <groupId>org.apache.sshd</groupId>
             <artifactId>sshd-scp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.i2p.crypto</groupId>
+            <artifactId>eddsa</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
@@ -171,6 +175,8 @@
                             com.sun.crypto.provider;resolution:=optional,
                             com.sun.net.ssl;resolution:=optional,
                             com.sun.net.ssl.internal.ssl;resolution:=optional,
+                            net.i2p.crypto.eddsa;resolution:=optional,
+                            net.i2p.crypto.eddsa.spec;resolution:=optional,
                             *
                         </Import-Package>
                         <Private-Package>
