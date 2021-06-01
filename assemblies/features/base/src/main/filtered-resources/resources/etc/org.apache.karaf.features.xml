@@ -22,8 +22,14 @@
     <bundleReplacements>
         <bundle originalUri="mvn:javax.servlet/javax.servlet-api/[3,4)"
                 replacement="mvn:javax.servlet/javax.servlet-api/@@servlet.spec.version@@" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-core/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-core/@@jackson.version@@" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-annotations/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-annotations/@@jackson.version@@" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-databind/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.core/jackson-databind/@@jackson.databind.version@@" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/@@jackson.version@@" mode="maven" />
         <bundle originalUri="mvn:javax.annotation/javax.annotation-api/[1.2,1.4)"
                 replacement="mvn:jakarta.annotation/jakarta.annotation-api/@@jakarta.annotation.version@@" mode="maven" />
         <bundle originalUri="mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/[1.2,2)"
