@@ -287,8 +287,8 @@
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
         <jansi.version>1.18</jansi.version>
         <javassist.version>3.24.1-GA</javassist.version>
-        <jackson.version>2.12.1.redhat-00001</jackson.version>
-        <jackson.databind.version>2.12.1.redhat-00001</jackson.databind.version>
+        <jackson.version>2.12.1</jackson.version>
+        <jackson.databind.version>2.12.1</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00001</jboss.logging.version>
         <aesh.version>2.0.0.redhat-00001</aesh.version>
         <jetty.version>9.4.40.v20210413</jetty.version>
