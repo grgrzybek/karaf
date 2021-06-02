@@ -203,6 +203,7 @@
         <servicemix-spec.version>2.9.0</servicemix-spec.version>
         <servicemix-spec-activation.version>1.2.1_3</servicemix-spec-activation.version>
         <servicemix-spec-jaxb.version>2.3_3</servicemix-spec-jaxb.version>
+        <servicemix-javax-inject.version>1.3.0.fuse-redhat-00001</servicemix-javax-inject.version>
 
         <easymock.version>4.2</easymock.version>
         <objenesis.version>2.6</objenesis.version>
@@ -1921,7 +1922,7 @@
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.ant</artifactId>
-                <version>1.8.4_1</version>
+                <version>${ant.bundle.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
