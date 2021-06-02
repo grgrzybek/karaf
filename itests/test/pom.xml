@@ -197,7 +197,7 @@
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.not-yet-commons-ssl</artifactId>
-            <version>0.3.11_1</version>
+            <version>${not-yet-commons-ssl.bundle.version}</version>
             <scope>test</scope>
         </dependency>
 

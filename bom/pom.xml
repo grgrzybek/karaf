@@ -1394,7 +1394,7 @@
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.ant</artifactId>
-                <version>1.8.4_1</version>
+                <version>${ant.bundle.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
