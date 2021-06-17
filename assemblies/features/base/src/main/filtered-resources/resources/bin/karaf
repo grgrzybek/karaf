@@ -102,6 +102,7 @@ setupClassPath() {
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-@@xalan.bundle.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-serializer-@@xalan-serializer.bundle.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.specs.activation-api-1.2.1-@@servicemix-spec-activation.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/validation-api-@@javax.validation.version@@.jar"
         for file in "${KARAF_HOME}"/lib/jdk9plus/*.jar
         do
             if [ -z "${CLASSPATH}" ]; then

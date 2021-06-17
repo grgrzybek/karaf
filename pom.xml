@@ -352,6 +352,7 @@
         <xalan-serializer.bundle.version>2.7.2.1-fuse-redhat-00006</xalan-serializer.bundle.version>
         <javax.mail.version>1.6.1.redhat-1</javax.mail.version>
         <javax.persistence.version>2.2</javax.persistence.version>
+        <javax.validation.version>2.0.1.Final-redhat-1</javax.validation.version>
 
         <websocket.version>1.1</websocket.version>
         <winsw.version>2.3.0</winsw.version>
@@ -1521,6 +1522,11 @@
                 <groupId>javax.interceptor</groupId>
                 <artifactId>javax.interceptor-api</artifactId>
                 <version>${javax.interceptor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax.validation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
