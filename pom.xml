@@ -175,7 +175,7 @@
         <glassfish.jaxb.version>2.3.2</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
         <commons-codec.version>1.15</commons-codec.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
