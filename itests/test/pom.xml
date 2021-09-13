@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.itests</groupId>
         <artifactId>itests</artifactId>
-        <version>4.2.11.redhat-SNAPSHOT</version>
+        <version>4.2.12.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -341,6 +341,7 @@
                         <spring.security53.version>${spring.security53.version}</spring.security53.version>
                         <spring.security54.version>${spring.security54.version}</spring.security54.version>
                         <activemq.version>${activemq.version}</activemq.version>
+                        <karaf.version>${project.version}</karaf.version>
                         <pax.exam.configuration>file:src/test/resources/controlled-exam.properties</pax.exam.configuration>
                     </systemPropertyVariables>
                     <excludes>
