@@ -36,7 +36,7 @@ pipeline {
     tools {
         // ... tell Jenkins what java version, maven version or other tools are required ...
         maven 'maven_3_latest'
-        jdk 'jdk_11_latest'
+        jdk 'adoptopenjdk_hotspot_8u282'
     }
 
     options {
@@ -79,7 +79,7 @@ pipeline {
         stage('Tests') {
             steps {
                 echo 'Running tests'
-                sh 'mvn -B -e test -Ptest'
+                sh 'mvn -B -e -fae test -Ptest'
             }
             post {
                 always {

@@ -299,7 +299,7 @@ public class ConsoleSessionImpl implements Session {
      * @return the history file
      */
     protected Path getHistoryFile() {
-        String defaultHistoryPath = new File(System.getProperty("user.home"), ".karaf/karaf41.history").toString();
+        String defaultHistoryPath = new File(System.getProperty("user.home"), ".karaf/karaf.history").toString();
         return Paths.get(System.getProperty("karaf.history", defaultHistoryPath));
     }
 
@@ -465,7 +465,7 @@ public class ConsoleSessionImpl implements Session {
     private void doExecute(CharSequence command) {
         try {
             Object result = session.execute(command);
-            if (result != null) {
+            if (result != null && !(result instanceof Integer)) {
                 session.getConsole().println(session.format(result, Converter.INSPECT));
             }
         } catch (InterruptedException e) {
