@@ -191,7 +191,7 @@ public class JtaTest extends BaseTest {
         // this set of bundles matches Karaf's transaction-api feature, but uses jakarta.transaction-api/1.3 instead
         // of javax.transaction-api/1.2
         bundleContext.installBundle("mvn:javax.interceptor/javax.interceptor-api/1.2.2");
-        bundleContext.installBundle("mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1.3.0.fuse-redhat-00005");
+        bundleContext.installBundle("mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1.3.0.fuse-redhat-00006");
         bundleContext.installBundle("mvn:javax.el/javax.el-api/3.0.0");
         bundleContext.installBundle("mvn:javax.enterprise/cdi-api/1.2");
         // this bundle doesn't have Require-Bundle: system.bundle, but javax.transaction package (the 3 exception
