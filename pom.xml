@@ -311,7 +311,6 @@
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
-        <log4j.version>1.2.17.redhat-3</log4j.version>
         <maven.version>3.6.3.redhat-00004</maven.version>
         <maven.wagon.version>3.2.0</maven.wagon.version>
         <maven-plugin-annotations.version>3.6.0.redhat-00002</maven-plugin-annotations.version>
@@ -1273,11 +1272,6 @@
                 <version>${geronimo.jms-spec.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.fusesource.jansi</groupId>
                 <artifactId>jansi</artifactId>
