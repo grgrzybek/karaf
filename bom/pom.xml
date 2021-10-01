@@ -1471,7 +1471,7 @@
             <dependency>
                 <groupId>com.sun.istack</groupId>
                 <artifactId>istack-commons-runtime</artifactId>
-                <version>3.0.10</version>
+                <version>3.0.10.redhat-00001</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
