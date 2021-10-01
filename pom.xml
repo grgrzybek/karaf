@@ -417,54 +417,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <!-- For Hibernate 5.1.10.Final-redhat-1 -->
-            <id>jb-eap-7.1-brew</id>
-            <name>jb-eap-7.1-brew</name>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Hibernate 5.3.x -->
-            <id>brew-jb-eap-7.2-maven</id>
-            <name>brew-jb-eap-7.2-maven</name>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.2-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>apache-snapshots-repository</id>
-            <name>apache-snapshots-repository</name>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-        <!-- For jolokia-osgi 1.6.1-redhat-1 -->
-        <repository>
-            <id>jboss-common</id>
-            <name>jboss-common</name>
-            <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-common-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -499,18 +451,6 @@
             </releases>
             <snapshots>
                 <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>apache-snapshots-repository</id>
-            <name>apache-snapshots-repository</name>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>interval:120</updatePolicy>
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
