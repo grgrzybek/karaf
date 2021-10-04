@@ -363,7 +363,7 @@
         <xalan.bundle.version>2.7.2.3-fuse-redhat-00006</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2.1-fuse-redhat-00006</xalan-serializer.bundle.version>
         <javax.mail.version>1.6.1.redhat-1</javax.mail.version>
-        <javax.persistence.version>2.2</javax.persistence.version>
+        <javax.persistence.version>2.2.0.redhat-1</javax.persistence.version>
         <javax.validation.version>2.0.1.Final-redhat-1</javax.validation.version>
 
         <websocket.version>1.1</websocket.version>
