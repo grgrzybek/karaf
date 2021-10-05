@@ -22,14 +22,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.sshd.common.cipher.BuiltinCiphers;
+import org.apache.sshd.common.kex.BuiltinDHFactories;
 import org.apache.sshd.common.kex.KeyExchangeFactory;
 import org.apache.sshd.server.ServerBuilder;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.cipher.Cipher;
-import org.apache.sshd.common.kex.KeyExchange;
 import org.apache.sshd.common.mac.Mac;
 
+import org.apache.sshd.server.kex.DHGServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,12 +86,24 @@ public class SshUtils {
     public static List<NamedFactory<Cipher>> buildCiphers(String[] names) {
         ServerConfig defaults = new ServerConfig();
         List<NamedFactory<Cipher>> avail = defaults.getCipherFactories();
+        // For backward compatibility, load also ciphers deprecated in SSHD-1004
+        // https://issues.apache.org/jira/browse/SSHD-1004
+        //aes128-ctr,arcfour128,aes128-cbc,3des-cbc,blowfish-cbc
+        avail.add(BuiltinCiphers.tripledescbc);
+        avail.add(BuiltinCiphers.arcfour128);
+        avail.add(BuiltinCiphers.blowfishcbc);
+
         return filter(Cipher.class, avail, names);
     }
 
     public static List<KeyExchangeFactory> buildKexAlgorithms(String[] names) {
         ServerConfig defaults = new ServerConfig();
         List<KeyExchangeFactory> avail = defaults.getKeyExchangeFactories();
+        // For backward compatibility, load also KexAlgos deprecated in SSHD-1004
+        // https://issues.apache.org/jira/browse/SSHD-1004
+        avail.add(DHGServer.newFactory(BuiltinDHFactories.dhg1));
+        avail.add(DHGServer.newFactory(BuiltinDHFactories.dhgex));
+
 
         return filter(avail, names);
     }
