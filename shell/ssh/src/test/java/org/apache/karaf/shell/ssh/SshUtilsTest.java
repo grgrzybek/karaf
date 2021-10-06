@@ -35,8 +35,7 @@ public class SshUtilsTest {
     @Test
     public void testCiphersDefault() throws IOException {
         // verify our default configuration...
-        String ciphers = "aes128-ctr,arcfour128,aes128-cbc,3des-cbc,blowfish-cbc";
-
+        String ciphers = "aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-cbc,aes192-cbc,aes256-cbc,arcfour128,3des-cbc,blowfish-cbc";
         List<NamedFactory<Cipher>> list = SshUtils.buildCiphers(ciphers.split(","));
 
         // verify that all configured ciphers are actually resolved...
@@ -81,8 +80,7 @@ public class SshUtilsTest {
     @Test
     public void testKexAlgorithmsDefault() throws IOException {
         // verify our default configuration...
-        String kexAlgorithms = "diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1";
-
+        String kexAlgorithms = "ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256,diffie-hellman-group18-sha512,diffie-hellman-group17-sha512,diffie-hellman-group16-sha512,diffie-hellman-group15-sha512,diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1";
         List<KeyExchangeFactory> list = SshUtils.buildKexAlgorithms(kexAlgorithms.split(","));
 
         // verify that all configured key exchange algorithms are actually resolved...
