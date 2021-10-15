@@ -170,7 +170,7 @@
         <jakarta.annotation.version>1.3.5.redhat-00003</jakarta.annotation.version>
         <javax.interceptor.version>1.2.2</javax.interceptor.version>
         <awaitility.version>3.1.6</awaitility.version>
-        <bytebuddy.version>1.9.11.redhat-00002</bytebuddy.version>
+        <bytebuddy.version>1.11.12.redhat-00002</bytebuddy.version>
         <bouncycastle.version>1.69</bouncycastle.version>
         <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.12.1-fuse-redhat-00002</cglib.bundle.version>
@@ -295,7 +295,7 @@
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.21.Final-redhat-00001</hibernate.version>
+        <hibernate.version>5.3.23.Final-redhat-00001</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
         <hibernate.validator.version>6.0.22.Final-redhat-00002</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
@@ -327,7 +327,7 @@
         <pax.swissbox.version>1.8.4</pax.swissbox.version>
         <pax.url.version>2.6.7</pax.url.version>
         <pax.web.version>7.4.1</pax.web.version>
-        <pax.web.undertow.version>2.2.5.Final-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.2.12.Final-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.1</pax.jdbc.version>
         <pax.jms.version>1.1.0</pax.jms.version>
