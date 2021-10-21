@@ -42,6 +42,10 @@ rem Location of Java installation
 rem SET JAVA_HOME
 rem Generic JVM options (for instance, where you can provide memory configuration)
 rem SET JAVA_OPTS
+rem Convenient way to set -Xms option
+rem set JAVA_MIN_MEM
+rem Convenient way to set -Xmx option
+rem set JAVA_MAX_MEM
 rem Additional JVM options
 rem SET JAVA_NON_DEBUG_OPTS
 rem Additional non-debug JVM options
