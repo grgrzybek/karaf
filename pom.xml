@@ -302,7 +302,7 @@
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
         <jansi.version>1.18.0.redhat-00001</jansi.version>
-        <javassist.version>3.24.1-GA</javassist.version>
+        <javassist.version>3.27.0.GA-redhat-00001</javassist.version>
         <jackson.version>2.12.1</jackson.version>
         <jackson.databind.version>2.12.1</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00002</jboss.logging.version>
