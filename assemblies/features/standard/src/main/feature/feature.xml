@@ -316,7 +316,8 @@ hostKey = ${karaf.etc}/host.key
 # keySize = 2048
 
 #
-# Specify host key algorithm, defaults to RSA
+# Specify host key algorithm, defaults to RSA. When EC is used, please change keySize to 0 (to use proper key
+# parameters for Elliptic Curves algorithm)
 #
 # algorithm = RSA
 
@@ -350,21 +351,27 @@ completionMode = ${env:ORG_APACHE_KARAF_SHELL_COMPLETIONMODE:-GLOBAL}
 
 #
 # Override allowed SSH cipher algorithms.
-# Default: aes256-ctr,aes192-ctr,aes128-ctr
+# Default: aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-cbc,aes192-cbc,aes256-cbc,arcfour128,3des-cbc,blowfish-cbc
 #
-# ciphers = aes256-ctr,aes192-ctr,aes128-ctr
+# ciphers = aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-cbc,aes192-cbc,aes256-cbc,arcfour128,3des-cbc,blowfish-cbc
 
 #
 # Override allowed SSH HMAC algorithms.
-# Default: hmac-sha2-512,hmac-sha2-256
+# Default: hmac-sha2-512,hmac-sha2-256,hmac-sha1
 #
-# macs = hmac-sha2-512,hmac-sha2-256
+# macs = hmac-sha2-512,hmac-sha2-256,hmac-sha1
 
 #
 # Override allowed SSH key exchange algorithms.
-# Default: ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+# Default: ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256,diffie-hellman-group18-sha512,diffie-hellman-group17-sha512,diffie-hellman-group16-sha512,diffie-hellman-group15-sha512,diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1
 #
-# kexAlgorithms = ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+# kexAlgorithms = ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256,diffie-hellman-group18-sha512,diffie-hellman-group17-sha512,diffie-hellman-group16-sha512,diffie-hellman-group15-sha512,diffie-hellman-group14-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1
+
+#
+# Override allowed SSH signature algorithms.
+# Default: ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa
+#
+# signatureAlgorithms = ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa,ssh-dss
 
 #
 # Override moduli-url.
