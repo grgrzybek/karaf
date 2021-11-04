@@ -25,6 +25,9 @@ import java.util.List;
 import org.apache.sshd.common.cipher.BuiltinCiphers;
 import org.apache.sshd.common.kex.BuiltinDHFactories;
 import org.apache.sshd.common.kex.KeyExchangeFactory;
+import org.apache.sshd.common.signature.BuiltinSignatures;
+import org.apache.sshd.common.signature.Signature;
+import org.apache.sshd.common.signature.SignatureFactory;
 import org.apache.sshd.server.ServerBuilder;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.common.NamedFactory;
@@ -104,8 +107,17 @@ public class SshUtils {
         avail.add(DHGServer.newFactory(BuiltinDHFactories.dhg1));
         avail.add(DHGServer.newFactory(BuiltinDHFactories.dhgex));
 
-
         return filter(avail, names);
+    }
+
+    public static List<NamedFactory<Signature>> buildSignatureAlgorithms(String[] names) {
+        ServerConfig defaults = new ServerConfig();
+        List<NamedFactory<Signature>> avail = defaults.getSignatureFactories();
+        // For backward compatibility, load also Signatures deprecated in SSHD-1004
+        // https://issues.apache.org/jira/browse/SSHD-1004
+        avail.add(BuiltinSignatures.dsa);
+
+        return filter(Signature.class, avail, names);
     }
 
     /**
@@ -152,6 +164,10 @@ public class SshUtils {
 
         public List<NamedFactory<Mac>> getMacFactories() {
             return macFactories;
+        }
+
+        public List<NamedFactory<Signature>> getSignatureFactories() {
+            return signatureFactories;
         }
     }
 

@@ -36,6 +36,7 @@ import org.apache.karaf.util.tracker.annotation.RequireService;
 import org.apache.karaf.util.tracker.annotation.Services;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
 import org.apache.sshd.common.keyprovider.KeyPairProvider;
+import org.apache.sshd.common.signature.BuiltinSignatures;
 import org.apache.sshd.core.CoreModuleProperties;
 import org.apache.sshd.scp.server.ScpCommandFactory;
 import org.apache.sshd.server.SshServer;
@@ -168,10 +169,11 @@ public class Activator extends BaseActivator implements ManagedService {
         String[] macs               = getStringArray("macs", "hmac-sha2-512,hmac-sha2-256");
         String[] ciphers            = getStringArray("ciphers", "aes256-ctr,aes192-ctr,aes128-ctr");
         String[] kexAlgorithms      = getStringArray("kexAlgorithms", "ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256");
+        String[] signAlgorithms     = getStringArray("signatureAlgorithms", "ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa,ssh-dss");
         String welcomeBanner        = getString("welcomeBanner", null);
         String moduliUrl            = getString("moduli-url", null);
         boolean sftpEnabled         = getBoolean("sftpEnabled", true);
-        
+
         Path serverPrivateKeyPath = Paths.get(privateHostKey);
         Path serverPublicKeyPath = Paths.get(publicHostKey);
         KeyPairProvider keyPairProvider = new OpenSSHKeyPairProvider(serverPrivateKeyPath, serverPublicKeyPath, algorithm, keySize);
@@ -185,6 +187,7 @@ public class Activator extends BaseActivator implements ManagedService {
         server.setMacFactories(SshUtils.buildMacs(macs));
         server.setCipherFactories(SshUtils.buildCiphers(ciphers));
         server.setKeyExchangeFactories(SshUtils.buildKexAlgorithms(kexAlgorithms));
+        server.setSignatureFactories(SshUtils.buildSignatureAlgorithms(signAlgorithms));
         server.setShellFactory(new ShellFactoryImpl(sessionFactory));
 
         if (sftpEnabled) {
