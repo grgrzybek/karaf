@@ -62,6 +62,10 @@
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.jws</groupId>
             <artifactId>jakarta.jws-api</artifactId>
         </dependency>
@@ -253,6 +257,11 @@
                                 <artifactItem>
                                     <groupId>jakarta.annotation</groupId>
                                     <artifactId>jakarta.annotation-api</artifactId>
+                                    <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.google.code.findbugs</groupId>
+                                    <artifactId>jsr305</artifactId>
                                     <outputDirectory>target/classes/resources/lib/endorsed</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
