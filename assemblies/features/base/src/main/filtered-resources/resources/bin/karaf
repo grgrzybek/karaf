@@ -98,6 +98,7 @@ setupClassPath() {
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.karaf.specs.java.xml.ws-@@project.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.karaf.specs.locator-@@project.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/jakarta.annotation-api-@@jakarta.annotation.version@@.jar"
+        CLASSPATH="${CLASSPATH}:lib/endorsed/jsr305-@@jsr305.annotation.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xerces-@@xerces.bundle.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-@@xalan.bundle.version@@.jar"
         CLASSPATH="${CLASSPATH}:lib/endorsed/org.apache.servicemix.bundles.xalan-serializer-@@xalan-serializer.bundle.version@@.jar"
