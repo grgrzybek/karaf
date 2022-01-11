@@ -17,6 +17,60 @@
     under the License.
 -->
 
+## Apache Karaf 4.2.15
+
+Apache Karaf 4.2.15 is an update for the 4.2.x series. It contains:
+- upgrade to Pax Logging 1.11.13 upgrading to log4j 2.17.1 (fixing CVE-2021-44832)
+- upgrade to Apache Felix FileInstall 3.7.4 fixing deployment issue
+We strongly invite users to update to this version.
+
+### ChangeLog
+
+#### Bug
+    * [KARAF-7306] - Hot deployment (deploy directory) does not work for provisioned blueprints
+    * [KARAF-7316] - Fallback distribution in verify mojo always fail to resolve
+    * [KARAF-7326] - Fix potential partial path traversal
+
+#### Dependency upgrade
+    * [KARAF-7310] - Upgrade to Pax Logging 1.11.13
+    * [KARAF-7315] - Upgrade to Felix FileInstall 3.7.4
+    * [KARAF-7320] - Upgrade to maven-bundle-plugin 5.1.4
+    * [KARAF-7324] - Upgrade to Aries SpiFly 1.3.4
+
+## Apache Karaf 4.2.14
+
+Apache Karaf 4.2.14 is an update on the 4.2.x series. It updates to Pax Logging 1.11.12:
+- upgrading to logback 1.2.9, addressing CVE-2021-42550
+- upgrading to log4j 2.17.0, addressing CVE-2021-45105
+We strongly invite users to update to this version.
+
+### ChangeLog
+
+#### Dependency upgrade
+    * [KARAF-7301] - Upgrade to Pax Logging 1.11.12
+
+## Apache Karaf 4.2.13
+
+Apache Karaf 4.2.13 is an update on the 4.2.x series, bringing important fixes and improvements.
+Especially, it updates to Pax Logging 1.11.11, upgrading to log42j 2.16.0 fixing CVE-2021-44228.
+
+### ChangeLog
+
+#### Bug
+    * [KARAF-7276] - LinkageError when receiving SOAP message with attachments
+    * [KARAF-7282] - global autoRefresh logic does not work as expected
+
+#### New Feature
+    * [KARAF-7070] - Add kill command to kill a running thread
+
+#### Improvement
+    * [KARAF-7290] - Set autoRefresh true by default in etc/org.apache.karaf.features.cfg file
+
+#### Dependency upgrade
+    * [KARAF-7265] - Upgrade to Felix FileInstall 3.7.2
+    * [KARAF-7291] - Upgrade to Pax Logging 1.11.11
+    * [KARAF-7294] - Upgrade to maven-bundle-plugin 5.1.3
+
 ## Apache Karaf 4.2.12
 
 Apache Karaf 4.2.12 is an update on the 4.2.x series, bringing fixes and improvements.

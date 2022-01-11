@@ -90,10 +90,10 @@
     </modules>
 
     <scm>
-        <connection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</connection>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</developerConnection>
-        <url>https://gitbox.apache.org/repos/asf?p=karaf.git;a=summary</url>
-        <tag>HEAD</tag>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>karaf-4.2.15</tag>
   </scm>
 
     <distributionManagement>
@@ -159,6 +159,19 @@
     </developers>
 
     <properties>
+        <project.build.outputTimestamp>1</project.build.outputTimestamp>        
+
+        <scm.connection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</scm.connection>
+        <scm.developerConnection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</scm.developerConnection>
+        <scm.url>https://gitbox.apache.org/repos/asf?p=karaf.git;a=summary</scm.url>
+
+        <distributionManagement.release.id>apache.releases.https</distributionManagement.release.id>
+        <distributionManagement.release.name>Apache Release Distribution Repository</distributionManagement.release.name>
+        <distributionManagement.release.url>https://repository.apache.org/service/local/staging/deploy/maven2</distributionManagement.release.url>
+        <distributionManagement.snapshot.id>apache.snapshots.https</distributionManagement.snapshot.id>
+        <distributionManagement.snapshot.name>Apache Development Snapshot Repository</distributionManagement.snapshot.name>
+        <distributionManagement.snapshot.url>https://repository.apache.org/content/repositories/snapshots</distributionManagement.snapshot.url>
+
         <activemq.version>5.11.0.redhat-630495</activemq.version>
         <aopalliance.bundle.version>1.0.6.fuse-redhat-00006</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
@@ -230,7 +243,7 @@
         <felix.configadmin.version>1.9.22</felix.configadmin.version>
         <felix.connect.version>0.2.0</felix.connect.version>
         <felix.coordinator.version>1.0.2</felix.coordinator.version>
-        <felix.fileinstall.version>3.6.8</felix.fileinstall.version>
+        <felix.fileinstall.version>3.7.4</felix.fileinstall.version>
         <felix.framework.version>5.6.12</felix.framework.version>
         <felix.framework.security.version>2.6.1</felix.framework.security.version>
         <felix.gogo.runtime.version>1.1.4</felix.gogo.runtime.version>
@@ -238,7 +251,7 @@
         <felix.httplite.version>0.1.6</felix.httplite.version>
         <felix.http.version>4.1.12</felix.http.version>
         <felix.inventory.version>1.0.6</felix.inventory.version>
-        <felix.plugin.version>5.1.2</felix.plugin.version>
+        <felix.plugin.version>5.1.4</felix.plugin.version>
         <felix.utils.version>1.11.8</felix.utils.version>
         <felix.webconsole.version>4.7.0</felix.webconsole.version>
         <felix.webconsole.api.version>3.4.0</felix.webconsole.api.version>
@@ -277,7 +290,7 @@
         <aries.jndi.url.version>1.1.0</aries.jndi.url.version>
         <aries.proxy.version>1.1.11</aries.proxy.version>
         <aries.proxy.api.version>1.1.1</aries.proxy.api.version>
-        <aries.spifly.version>1.3.2</aries.spifly.version>
+        <aries.spifly.version>1.3.4</aries.spifly.version>
         <aries.subsystem.api.version>2.0.10</aries.subsystem.api.version>
         <aries.subsystem.core.version>2.0.10</aries.subsystem.core.version>
         <aries.transaction.manager.version>1.3.3</aries.transaction.manager.version>
