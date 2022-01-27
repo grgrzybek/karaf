@@ -33,7 +33,6 @@ import org.apache.karaf.jaas.boot.principal.UserPrincipal;
 import org.apache.karaf.jaas.modules.NamePubkeyCallbackHandler;
 import static org.apache.karaf.jaas.modules.PrincipalHelper.names;
 import static org.apache.karaf.jaas.modules.ldap.LdapPropsUpdater.ldapProps;
-import org.apache.log4j.Level;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import org.junit.After;
@@ -122,16 +121,11 @@ public class LDAPPubkeyLoginModuleTest extends AbstractLdapTestUnit {
         module.initialize(subject, new NamePubkeyCallbackHandler("admin", pubkeyFile), null, options);
 
         assertEquals("Precondition", 0, subject.getPrincipals().size());
-        org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LDAPLoginModule.class);
-        Level oldLevel = logger.getLevel();
-        logger.setLevel(Level.OFF);
         try {
             module.login();
             fail("Should have thrown LoginException");
         } catch (LoginException e) {
             assertTrue(e.getMessage().startsWith("Authentication failed"));
-        } finally {
-            logger.setLevel(oldLevel);
         }
 
     }

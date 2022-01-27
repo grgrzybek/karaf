@@ -178,8 +178,8 @@ The given bundle will override all bundles in feature definitions with the same 
 of the override is greater than the version of the overridden bundle and the range matches.
 If no range is given then compatibility on the micro version level is assumed.
 
-So for example the override mvn:org.ops4j.pax.logging/pax-logging-service/1.8.5
-would overide pax-logging-service 1.8.3 but not 1.8.6 or 1.7.0.
+So for example the override mvn:org.ops4j.pax.logging/pax-logging-log4j2/1.12.1
+would overide pax-logging-log4j2 1.12.0 but not 1.12.2 or 1.13.0.
 
 ==== Feature bundles
 

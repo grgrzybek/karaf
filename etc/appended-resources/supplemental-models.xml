@@ -1015,9 +1015,9 @@
   <supplement>
     <project>
       <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-service</artifactId>
-      <name>OPS4J - Pax Logging Service</name>
-      <url>http://www.ops4j.org/projects/pax/logging/pax-logging-service</url>
+      <artifactId>pax-logging-log4j2</artifactId>
+      <name>OPS4J - Pax Logging Log4j2</name>
+      <url>http://www.ops4j.org/projects/pax/logging/pax-logging-log4j2</url>
 	  <organization>
 	    <name>OPS4J - Open Participation Software for Java</name>
 	    <url>http://www.ops4j.org/</url>
