@@ -122,13 +122,6 @@ used by the log commands (see later).
 
 Karaf supports log4j v2 backend.
 
-To enable log4j v2 support you have to:
-
-. Edit `etc/startup.properties` to replace the line `org/ops4j/pax/logging/pax-logging-service/1.8.4/pax-logging-service-1.8.4.jar=8` with `org/ops4j/pax/logging/pax-logging-log4j2/1.8.4/pax-logging-log4j2-1.8.4.jar=8`
-. Add pax-logging-log4j2 jar file in `system/org/ops4j/pax/logging/pax-logging-log4j2/x.x/pax-logging-log4j2-x.x.jar where x.x is the version as defined in `etc/startup.properties`
-. Edit `etc/org.ops4j.pax.logging.cfg` configuration file and add `org.ops4j.pax.logging.log4j2.config.file=${karaf.etc}/log4j2.xml`
-. Add the `etc/log4j2.xml` configuration file.
-
 A default configuration in `etc/log4j2.xml` could be:
 
 ----
@@ -623,7 +616,7 @@ java.lang.IllegalArgumentException: Command not found:  *:foo
 You can use your own appenders in Apache Karaf.
 
 The easiest way to do that is to package your appender as an OSGi bundle and attach it as a fragment of the
-`org.ops4j.pax.logging.pax-logging-service` bundle.
+`org.ops4j.pax.logging.pax-logging-log4j2` bundle.
 
 For instance, you create `MyAppender`:
 
@@ -638,13 +631,13 @@ You compile and package as an OSGi bundle containing a MANIFEST looking like:
 ----
 Manifest:
 Bundle-SymbolicName: org.mydomain.myappender       
-Fragment-Host: org.ops4j.pax.logging.pax-logging-service
+Fragment-Host: org.ops4j.pax.logging.pax-logging-log4j2
 ...
 ----
 
 Copy your bundle in the Apache Karaf `system` folder. The `system` folder uses a standard Maven directory layout: groupId/artifactId/version.
 
-In the `etc/startup.properties` configuration file, you define your bundle in the list before the pax-logging-service bundle.
+In the `etc/startup.properties` configuration file, you define your bundle in the list before the pax-logging-log4j2 bundle.
 
 You have to restart Apache Karaf with a clean run (purging the `data` folder) in order to reload the system bundles.
 You can now use your appender directly in `etc/org.ops4j.pax.logging.cfg` configuration file.
