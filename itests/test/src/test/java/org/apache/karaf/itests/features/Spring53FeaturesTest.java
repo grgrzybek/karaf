@@ -31,7 +31,7 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfi
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class Spring52FeaturesTest extends BaseTest {
+public class Spring53FeaturesTest extends BaseTest {
 
     @Configuration
     public Option[] config() {
@@ -47,72 +47,72 @@ public class Spring52FeaturesTest extends BaseTest {
 
     @Test
     public void installSpringFeature() throws Exception {
-        installAssertAndUninstallFeature("spring", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringAspectsFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-aspects", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-aspects", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringInstrumentFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-instrument", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-instrument", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringJdbcFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-jdbc", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-jdbc", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringJmsFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-jms", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-jms", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringMessagingFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-messaging", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-messaging", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringTestFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-test", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-test", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringOrmFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-orm", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-orm", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringOxmFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-oxm", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-oxm", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringTxFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-tx", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-tx", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringWebFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-web", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-web", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringWebSocketFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-websocket", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("spring-websocket", System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringSecurityFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security53.version"));
+        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security55.version"));
     }
 
     @Test
     public void installAriesBlueprintSpringFeature() throws Exception {
-        installAssertAndUninstallFeature("aries-blueprint-spring", System.getProperty("spring52.version"));
+        installAssertAndUninstallFeature("aries-blueprint-spring", System.getProperty("spring53.version"));
     }
 
 }

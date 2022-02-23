@@ -211,8 +211,8 @@
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
         <commons-logging.version>1.2.0.redhat-3</commons-logging.version>
         <commons-pool.version>1.6.0.redhat-10</commons-pool.version>
-        <commons-dbcp2.version>2.8.0</commons-dbcp2.version>
-        <commons-pool2.version>2.9.0</commons-pool2.version>
+        <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
         <commons-io.version>2.11.0.redhat-00001</commons-io.version>
 
         <dom4j.bundle.version>2.1.3.2-fuse-redhat-00002</dom4j.bundle.version>
@@ -309,7 +309,7 @@
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.23.Final-redhat-00001</hibernate.version>
+        <hibernate.version>5.3.25.Final-redhat-00002</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
         <hibernate.validator.version>6.0.22.Final-redhat-00002</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
@@ -339,13 +339,13 @@
         <pax.logging.version>1.12.0</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.4</pax.swissbox.version>
-        <pax.url.version>2.6.7</pax.url.version>
-        <pax.web.version>7.4.3</pax.web.version>
-        <pax.web.undertow.version>2.2.12.Final-redhat-00001</pax.web.undertow.version>
+        <pax.url.version>2.6.11</pax.url.version>
+        <pax.web.version>7.4.4</pax.web.version>
+        <pax.web.undertow.version>2.2.16.Final-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
-        <pax.jdbc.version>1.5.1</pax.jdbc.version>
-        <pax.jms.version>1.1.0</pax.jms.version>
-        <pax.transx.version>0.5.0</pax.transx.version>
+        <pax.jdbc.version>1.5.3</pax.jdbc.version>
+        <pax.jms.version>1.1.1</pax.jms.version>
+        <pax.transx.version>0.5.2</pax.transx.version>
 
         <portlet-api.version>2.0</portlet-api.version>
         <slf4j.version>1.7.32.redhat-00001</slf4j.version>
@@ -362,12 +362,13 @@
         <spring50.version>5.0.20.RELEASE_1</spring50.version>
         <spring51.version>5.1.20.RELEASE_1</spring51.version>
         <spring52.version>5.2.15.RELEASE_1-fuse-redhat-00001</spring52.version>
-        <spring53.version>5.3.9_1</spring53.version>
+        <spring53.version>5.3.15_1</spring53.version>
         <spring.security31.version>3.1.4.RELEASE</spring.security31.version>
         <spring.security42.version>4.2.4.RELEASE_1</spring.security42.version>
         <spring.security51.version>5.1.10.RELEASE_1</spring.security51.version>
         <spring.security53.version>5.3.8.RELEASE-redhat-00003</spring.security53.version>
         <spring.security54.version>5.4.6_1</spring.security54.version>
+        <spring.security55.version>5.5.3_1</spring.security55.version>
 
         <sshd.version>2.7.0.redhat-00001</sshd.version>
         <derby-version>10.14.2.0</derby-version>

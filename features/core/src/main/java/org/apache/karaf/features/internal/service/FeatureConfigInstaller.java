@@ -124,10 +124,10 @@ public class FeatureConfigInstaller {
                     cfg = createConfiguration(configAdmin, cid.pid, cid.factoryPid);
                     cfgProps.put(CONFIG_KEY, cid.fullPid);
                     props.put(CONFIG_KEY, cid.fullPid);
+                    cfg.update(cfgProps);
                     if (storage != null && configCfgStore) {
                         cfgProps.put(FILEINSTALL_FILE_NAME, cfgFile.getAbsoluteFile().toURI().toString());
                     }
-                    cfg.update(cfgProps);
                     try {
                         updateStorage(cid, props, false);
                     } catch (Exception e) {
@@ -294,7 +294,9 @@ public class FeatureConfigInstaller {
         if (storage != null && configCfgStore) {
             File cfgFile = getConfigFile(cid);
             if (!cfgFile.exists()) {
-                props.save(cfgFile);
+                File tmpCfgFile = File.createTempFile(cfgFile.getName(), ".tmp", cfgFile.getParentFile());
+                props.save(tmpCfgFile);
+                tmpCfgFile.renameTo(cfgFile);
             } else {
                 updateExistingConfig(props, append, cfgFile);
             }
