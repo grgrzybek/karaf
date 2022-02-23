@@ -211,8 +211,8 @@
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
         <commons-logging.version>1.2.0.redhat-3</commons-logging.version>
         <commons-pool.version>1.6.0.redhat-10</commons-pool.version>
-        <commons-dbcp2.version>2.8.0</commons-dbcp2.version>
-        <commons-pool2.version>2.9.0</commons-pool2.version>
+        <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
         <commons-io.version>2.11.0.redhat-00001</commons-io.version>
 
         <dom4j.bundle.version>2.1.3.2-fuse-redhat-00002</dom4j.bundle.version>
