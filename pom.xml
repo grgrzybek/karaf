@@ -375,7 +375,7 @@
         <directory-version>2.0.0-M24</directory-version>
         <struts.bundle.version>1.3.10_1</struts.bundle.version>
         <xbean.version>4.20</xbean.version>
-        <xerces.bundle.version>2.12.1.1-fuse-redhat-00006</xerces.bundle.version>
+        <xerces.bundle.version>2.12.2.1-fuse-redhat-00001</xerces.bundle.version>
         <xalan.bundle.version>2.7.2.3-fuse-redhat-00006</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2.1-fuse-redhat-00006</xalan-serializer.bundle.version>
         <javax.mail.version>1.6.1.redhat-1</javax.mail.version>
