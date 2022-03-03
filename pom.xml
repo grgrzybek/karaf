@@ -199,7 +199,7 @@
         <jakarta.jws.version>2.1.0</jakarta.jws.version>
         <jakarta.saaj.version>1.4.2</jakarta.saaj.version>
         <jaxb.version>2.3.3.redhat-00001</jaxb.version>
-        <glassfish.jaxb.version>2.3.2</glassfish.jaxb.version>
+        <glassfish.jaxb.version>2.3.3.redhat-00001</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
         <commons-codec.version>1.15.0.redhat-00001</commons-codec.version>
         <commons-compress.version>1.21.0.redhat-00001</commons-compress.version>

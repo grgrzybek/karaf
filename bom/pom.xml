@@ -1415,7 +1415,7 @@
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${jakarta.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.xml.soap</groupId>
@@ -1436,12 +1436,12 @@
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${glassfish.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>txw2</artifactId>
-                <version>${jaxb.version}</version>
+                <version>{glassfish.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.istack</groupId>
