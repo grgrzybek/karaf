@@ -89,12 +89,7 @@ public class SshUtils {
     public static List<NamedFactory<Cipher>> buildCiphers(String[] names) {
         ServerConfig defaults = new ServerConfig();
         List<NamedFactory<Cipher>> avail = defaults.getCipherFactories();
-        // For backward compatibility, load also ciphers deprecated in SSHD-1004
-        // https://issues.apache.org/jira/browse/SSHD-1004
-        //aes128-ctr,arcfour128,aes128-cbc,3des-cbc,blowfish-cbc
-        avail.add(BuiltinCiphers.tripledescbc);
-        avail.add(BuiltinCiphers.arcfour128);
-        avail.add(BuiltinCiphers.blowfishcbc);
+        // Fuse 7.11 removes the algorithms deprecated in 7.10 (SSHD-1004, ENTESB-17528)
 
         return filter(Cipher.class, avail, names);
     }
@@ -102,10 +97,7 @@ public class SshUtils {
     public static List<KeyExchangeFactory> buildKexAlgorithms(String[] names) {
         ServerConfig defaults = new ServerConfig();
         List<KeyExchangeFactory> avail = defaults.getKeyExchangeFactories();
-        // For backward compatibility, load also KexAlgos deprecated in SSHD-1004
-        // https://issues.apache.org/jira/browse/SSHD-1004
-        avail.add(DHGServer.newFactory(BuiltinDHFactories.dhg1));
-        avail.add(DHGServer.newFactory(BuiltinDHFactories.dhgex));
+        // Fuse 7.11 removes the algorithms deprecated in 7.10 (SSHD-1004, ENTESB-17528)
 
         return filter(avail, names);
     }
@@ -113,9 +105,7 @@ public class SshUtils {
     public static List<NamedFactory<Signature>> buildSignatureAlgorithms(String[] names) {
         ServerConfig defaults = new ServerConfig();
         List<NamedFactory<Signature>> avail = defaults.getSignatureFactories();
-        // For backward compatibility, load also Signatures deprecated in SSHD-1004
-        // https://issues.apache.org/jira/browse/SSHD-1004
-        avail.add(BuiltinSignatures.dsa);
+        // Fuse 7.11 removes the algorithms deprecated in 7.10 (SSHD-1004, ENTESB-17528)
 
         return filter(Signature.class, avail, names);
     }
