@@ -20,6 +20,8 @@ import org.jline.utils.Curses;
 import java.io.IOError;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -158,34 +160,26 @@ public class TerminalConnection implements Connection, Device {
             KeyMap<KeyAction> map = new KeyMap<>();
             map.setNomatch(UNKNOWN);
             map.setUnicode(UNKNOWN);
+            Map<String,int[]> windowsKeys = new HashMap<>();
+            windowsKeys.put("BACKSPACE", new int[] { 127 });
+            windowsKeys.put("UP_2", new int[] { 27, 91, 65 });
+            windowsKeys.put("DOWN_2", new int[] { 27, 91, 66 });
+            windowsKeys.put("RIGHT_2", new int[] { 27, 91, 67 });
+            windowsKeys.put("LEFT_2", new int[] { 27, 91, 68 });
+            Map<String,int[]> stdKeys = new HashMap<>();
+            stdKeys.put("BACKSPACE", new int[] { 8 });
+            stdKeys.put("UP_2", new int[] { 27, 79, 65 });
+            stdKeys.put("DOWN_2", new int[] { 27, 79, 66 });
+            stdKeys.put("RIGHT_2", new int[] { 27, 79, 67 });
+            stdKeys.put("LEFT_2", new int[] { 27, 79, 68 });
             for (KeyAction action : editMode.keys()) {
                 int[] cp = action.buffer().array();
                 map.bind(action, new String(cp, 0, cp.length));
-                
-                if ("BACKSPACE".equals(action.toString())
-                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                    //ensure map ascii 127 to backspace on windows
-                   
-                    int[] backspace = new int[1];
-                    backspace[0] = 127;
-                    map.bind(action, new String(backspace, 0, backspace.length));
-                }
-                if ("UP_2".equals(action.toString())
-                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                    //ensure map arrow UP on windows
-                   
-                    int[] up = new int[] {27, 91, 65};
-                    
-                    map.bind(action, new String(up, 0, up.length));
-                }
-                
-                if ("DOWN_2".equals(action.toString())
-                    && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                    //ensure map arrow DOWN on windows
-                   
-                    int[] down = new int[] {27, 91, 66};
-                    
-                    map.bind(action, new String(down, 0, down.length));
+                if (!org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
+                    int[] key = windowsKeys.get(action.toString());
+                    if (key != null) {
+                        map.bind(action, new String(key, 0, key.length));
+                    }
                 }
             }
             BindingReader br = new BindingReader(terminal.reader());
@@ -193,23 +187,15 @@ public class TerminalConnection implements Connection, Device {
                 KeyAction ka = br.readBinding(map);
                 if (ka != null) {
                     String lb = br.getLastBinding();
-                  
-                    if ("UP_2".equals(ka.toString()) 
-                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                        //ensure UP work on windows CMD
-                        stdinHandler.accept(new int[]{27, 79, 65});
-                    } else if ("DOWN_2".equals(ka.toString()) 
-                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                        //ensure DOWN work on windows CMD
-                        stdinHandler.accept(new int[]{27, 79, 66});
-                    } else if ("BACKSPACE".equals(ka.toString()) 
-                        && !org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
-                        //ensure BACKSPACE work on windows CMD
-                        stdinHandler.accept(new int[]{8});
-                    } else if (!lb.equals("[A") && !lb.equals("[B")){
-                        stdinHandler.accept(lb.codePoints().toArray());
+                    int[] cp = null;
+                    if (!org.aesh.terminal.utils.Config.isOSPOSIXCompatible()) {
+                        int[] key = stdKeys.get(ka.toString());
+                        if (key != null) {
+                            cp = key;
+                        }
                     }
-                } else {
+                    stdinHandler.accept(cp != null ? cp : lb.codePoints().toArray());
+               } else {
                     if (getCloseHandler() != null)
                         getCloseHandler().accept(null);
                     close();
