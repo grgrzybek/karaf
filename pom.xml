@@ -303,7 +303,7 @@
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>27.1-jre</guava.version>
         <guava.failureaccess.version>1.0.1.redhat-00002</guava.failureaccess.version>
-        <narayana.version>5.11.3.Final-redhat-00001</narayana.version>
+        <narayana.version>5.11.4.Final-redhat-00001</narayana.version>
         <hibernate.annotations.common.version>5.0.5.Final-redhat-00002</hibernate.annotations.common.version>
         <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
         <hibernate42.version>4.2.15.Final</hibernate42.version>
