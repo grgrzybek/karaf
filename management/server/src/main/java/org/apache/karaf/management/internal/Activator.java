@@ -170,6 +170,10 @@ public class Activator extends BaseActivator implements ManagedService {
         jmxmpEnvironment.put("jmx.remote.sasl.callback.handler", jaasAuthenticator);
         Map<String, Object> environment = new HashMap<>();
         environment.put("jmx.remote.authenticator", jaasAuthenticator);
+        // in JDK11, javax.management.remote.rmi.RMIConnectorServer.CREDENTIALS_FILTER_PATTERN should be used
+        // but "jmx.remote.rmi.server.credential.types" is kept for backward compatibility
+        // this is used in javax.management.remote.rmi.RMIJRMPServerImpl.RMIJRMPServerImpl
+        environment.put("jmx.remote.rmi.server.credential.types", new String[] { String.class.getName() });
         try {
             connectorServerFactory.setEnvironment(environment);
             connectorServerFactory.setJmxmpEnvironment(jmxmpEnvironment);
