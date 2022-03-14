@@ -2379,8 +2379,8 @@ encrypt = admin, manager, viewer
     </feature>
 
     <feature name="scr" description="Declarative Service support" version="${project.version}">
-        <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.function/1.1.0</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.promise/1.1.1</bundle>
+        <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.function/${org.osgi.util.function.version}</bundle>
+        <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.promise/${org.osgi.util.promise.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.scr/${felix.scr.version}</bundle>
         <conditional>
