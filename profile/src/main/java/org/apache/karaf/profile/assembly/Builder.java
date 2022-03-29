@@ -81,6 +81,7 @@ import org.apache.karaf.features.internal.model.Dependency;
 import org.apache.karaf.features.internal.model.Feature;
 import org.apache.karaf.features.internal.model.Features;
 import org.apache.karaf.features.internal.model.JaxbUtil;
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.apache.karaf.features.internal.service.Blacklist;
 import org.apache.karaf.features.internal.service.Deployer;
@@ -319,12 +320,13 @@ public class Builder {
     private Path systemDirectory;
     private Map<String, Profile> allProfiles;
     private KarafPropertyEdits propertyEdits;
-    private FeaturesProcessing featuresProcessing = new FeaturesProcessing();
     private Map<String, String> translatedUrls;
     private Blacklist blacklist;
     private String generatedBootFeatureName;
 
     private Function<MavenResolver, MavenResolver> resolverWrapper = Function.identity();
+
+    private final Map<String, BundleReplacements.OverrideBundle> patchMetadata = new LinkedHashMap<>();
 
     public static Builder newInstance() {
         return new Builder();
@@ -833,6 +835,18 @@ public class Builder {
         return this;
     }
 
+    /**
+     * <p>ENTESB-18335: This method allows passing a map with certain structure describing:<ul>
+     *     <li>CVE patch metadata from org.jboss.redhat-fuse:patch-maven-plugin point of view</li>
+     *     <li>A collection of bundle replacements from org.apache.karaf.tooling:karaf-maven-plugin point of view</li>
+     * </ul>
+     * </p>
+     * @param patchMetadata
+     */
+    public void setPatchMetadata(Map<String, BundleReplacements.OverrideBundle> patchMetadata) {
+        this.patchMetadata.putAll(patchMetadata);
+    }
+
     public List<String> getBlacklistedProfileNames() {
         return blacklistedProfileNames;
     }
@@ -970,6 +984,70 @@ public class Builder {
         Set<String> overrides = processOverrides(initialEffective.getOverrides());
         processor.addOverrides(overrides);
 
+        processor.getInstructions().getBundleReplacements().getOverrideBundles().addAll(patchMetadata.values());
+
+        // process bundles
+        LOGGER.info("Processing bundles");
+        Map<String, Stage> newBundles = new LinkedHashMap<>();
+        bundles.forEach((bundle, stage) -> {
+            final String[] newBundle = new String[] { bundle };
+            processor.getInstructions().getBundleReplacements().getOverrideBundles().forEach(ob -> {
+                Clause[] bundleClause = org.apache.felix.utils.manifest.Parser.parseClauses(new String[] { bundle });
+                String location = bundleClause[0].getName();
+                if (ob.getOriginalUriPattern().matches(location)) {
+                    String replacement = ob.getReplacement();
+                    if (ob.getOriginalUri().startsWith("mvn:") && ob.getOriginalUri().contains("*")) {
+                        // replacement comes from a patch, so only a version is needed
+                        LocationPattern replacementPattern = new LocationPattern(replacement);
+                        String newVersion = replacementPattern.getVersionString();
+                        LocationPattern originalPattern = new LocationPattern(location);
+                        replacement = bundle.replace("/" + originalPattern.getVersionString(), "/" + newVersion);
+                    } else {
+                        replacement = bundle.replace(location, replacement);
+                    }
+                    if (!bundle.equals(replacement)) {
+                        LOGGER.info("   Overriding bundle {} with {}{}", newBundle[0], replacement, ob.getCves().size() == 0 ? ""
+                                : " (CVEs: " + String.join(", ", ob.getCves()) + ")");
+                        newBundle[0] = replacement;
+                    }
+                }
+            });
+            newBundles.put(newBundle[0], stage);
+        });
+        bundles.clear();
+        bundles.putAll(newBundles);
+
+        // process libraries
+        LOGGER.info("Processing libraries");
+        List<String> newLibraries = new LinkedList<>();
+        libraries.forEach(lib -> {
+            final String[] newLib = new String[] { lib };
+            processor.getInstructions().getBundleReplacements().getOverrideBundles().forEach(ob -> {
+                Clause[] libClause = org.apache.felix.utils.manifest.Parser.parseClauses(new String[] { lib });
+                String location = libClause[0].getName();
+                if (ob.getOriginalUriPattern().matches(location)) {
+                    String replacement = ob.getReplacement();
+                    if (ob.getOriginalUri().startsWith("mvn:") && ob.getOriginalUri().contains("*")) {
+                        // replacement comes from a patch, so only a version is needed
+                        LocationPattern replacementPattern = new LocationPattern(replacement);
+                        String newVersion = replacementPattern.getVersionString();
+                        LocationPattern originalPattern = new LocationPattern(location);
+                        replacement = lib.replace("/" + originalPattern.getVersionString(), "/" + newVersion);
+                    } else {
+                        replacement = lib.replace(location, replacement);
+                    }
+                    if (!lib.equals(replacement)) {
+                        LOGGER.info("   Overriding library {} with {}{}", newLib[0], replacement, ob.getCves().size() == 0 ? ""
+                                : " (CVEs: " + String.join(", ", ob.getCves()) + ")");
+                        newLib[0] = replacement;
+                    }
+                }
+            });
+            newLibraries.add(newLib[0]);
+        });
+        libraries.clear();
+        libraries.addAll(newLibraries);
+
         //
         // Propagate feature installation from repositories
         //
@@ -1096,7 +1174,7 @@ public class Builder {
 
         if (processor.hasInstructions()) {
             Path featuresProcessingXml = etcDirectory.resolve("org.apache.karaf.features.xml");
-            if (hasOwnInstructions() || overrides.size() > 0) {
+            if (hasOwnInstructions() || overrides.size() > 0 || patchMetadata.size() > 0) {
                 // just generate new etc/org.apache.karaf.features.xml file (with external config + builder config)
                 try (FileOutputStream fos = new FileOutputStream(featuresProcessingXml.toFile())) {
                     LOGGER.info("Generating features processor configuration: {}", homeDirectory.relativize(featuresProcessingXml));

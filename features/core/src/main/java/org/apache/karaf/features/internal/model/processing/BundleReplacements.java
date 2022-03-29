@@ -65,6 +65,8 @@ public class BundleReplacements {
         private String replacement;
         @XmlAttribute
         private BundleOverrideMode mode = BundleOverrideMode.OSGI;
+        @XmlTransient
+        private final List<String> cves = new LinkedList<>();
 
         public String getOriginalUri() {
             return originalUri;
@@ -92,6 +94,10 @@ public class BundleReplacements {
 
         public LocationPattern getOriginalUriPattern() {
             return originalUriPattern;
+        }
+
+        public List<String> getCves() {
+            return cves;
         }
 
         /**
