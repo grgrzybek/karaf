@@ -237,7 +237,21 @@ public class FeaturesProcessorImpl implements FeaturesProcessor {
         } else {
             bundle.setOverriden(BundleInfo.BundleOverrideMode.OSGI);
         }
-        bundle.setLocation(bestMatch.getReplacement());
+        String replacement = bestMatch.getReplacement();
+        if (bestMatch.getOriginalUri().startsWith("mvn:") && bestMatch.getOriginalUri().contains("*")) {
+            // TODO: we don't yet handle wildcard replacement from patch-maven-plugin for wrap: URIs...
+            // original URI can be 3 things:
+            //  - most common: mvn:commons-beanutils/commons-beanutils/[1.8,2)
+            //  - quite rare: wrap:mvn:io.undertow/undertow-servlet/*
+            //  - only from patch-maven-plugin: mvn:org.ops4j.pax.logging/*/[1.10.0,1.11.13)
+            // this override comes from patch-maven-plugin without strict groupId/artifactId information
+            // we have to take original location and just change the version
+            LocationPattern replacementPattern = new LocationPattern(replacement);
+            String newVersion = replacementPattern.getVersionString();
+            LocationPattern originalPattern = new LocationPattern(bundle.getOriginalLocation());
+            replacement = bundle.getOriginalLocation().replace("/" + originalPattern.getVersionString(), "/" + newVersion);
+        }
+        bundle.setLocation(replacement);
     }
 
     @Override

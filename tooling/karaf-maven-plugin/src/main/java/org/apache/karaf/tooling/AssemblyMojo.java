@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,6 +44,7 @@ import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
 import org.apache.karaf.profile.assembly.Builder;
 import org.apache.karaf.tooling.utils.IoUtils;
 import org.apache.karaf.tooling.utils.MavenUtil;
@@ -61,6 +63,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.aether.repository.WorkspaceReader;
+import org.eclipse.aether.version.VersionRange;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.FrameworkFactory;
 
@@ -573,6 +576,74 @@ public class AssemblyMojo extends MojoSupport {
                 .features(toArray(bootFeatures))
                 .bundles(toArray(bootBundles))
                 .profiles(toArray(bootProfiles));
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> patchMetadata = (Map<String, Object>) mavenSession.getUserProperties().get("__org.jboss.redhat-fuse.patch-metadata");
+        if (patchMetadata != null) {
+            // should be something like this:
+            // patchMetaData = {java.util.LinkedHashMap@3134}  size = 2
+            //  {@3145} "cves" -> {java.util.LinkedList@3135}  size = 4
+            //   key: java.lang.String  = {@3145} "cves"
+            //   value: java.util.LinkedList  = {java.util.LinkedList@3135}  size = 4
+            //    0 = {java.util.LinkedHashMap@3148}  size = 3
+            //     {@3157} "id" -> {@3158} "CVE-2021-44228"
+            //     {@3159} "description" -> {@3160} "log4j-core: remote code execution in Log4j 2.x when logs contain an attacker-controlled string value"
+            //     {@3161} "changes" -> {java.util.LinkedList@3162}  size = 2
+            //      key: java.lang.String  = {@3161} "changes"
+            //      value: java.util.LinkedList  = {java.util.LinkedList@3162}  size = 2
+            //       0 = {java.util.LinkedHashMap@3188}  size = 4
+            //        {@3196} "groupId" -> {@3197} "org.apache.logging.log4j"
+            //        {@3198} "artifactId" -> {@3199} "*"
+            //        {@3200} "versions" -> {org.eclipse.aether.util.version.GenericVersionRange@3201} "[2.0,2.17.1)"
+            //        {@3202} "fix" -> {org.eclipse.aether.util.version.GenericVersion@3203} "2.17.1"
+            //       1 = {java.util.LinkedHashMap@3189}  size = 4
+            //        {@3196} "groupId" -> {@3212} "org.ops4j.pax.logging"
+            //        {@3198} "artifactId" -> {@3213} "*"
+            //        {@3200} "versions" -> {org.eclipse.aether.util.version.GenericVersionRange@3214} "[1.10.0,1.11.13)"
+            //        {@3202} "fix" -> {org.eclipse.aether.util.version.GenericVersion@3215} "1.11.13"
+            //    1 = {java.util.LinkedHashMap@3149}  size = 3
+            //     {@3157} "id" -> {@3184} "CVE-2021-45046"
+            //     {@3159} "description" -> {@3185} "log4j-core: DoS in log4j 2.x with thread context message pattern and context lookup pattern"
+            //     {@3161} "changes" -> {java.util.LinkedList@3186}  size = 2
+            //    2 = {java.util.LinkedHashMap@3150}  size = 3
+            //     {@3157} "id" -> {@3176} "CVE-2021-45105"
+            //     {@3159} "description" -> {@3177} "log4j-core: DoS in log4j 2.x with Thread Context Map (MDC) input data contains a recursive lookup and context lookup pattern"
+            //     {@3161} "changes" -> {java.util.LinkedList@3178}  size = 2
+            //    3 = {java.util.LinkedHashMap@3151}  size = 3
+            //     {@3157} "id" -> {@3168} "CVE-2021-44832"
+            //     {@3159} "description" -> {@3169} "log4j-core: remote code execution via JDBC Appender"
+            //     {@3161} "changes" -> {java.util.LinkedList@3170}  size = 2
+            //  {@3146} "fixes" -> {java.util.LinkedList@3136}  size = 0
+
+            if (patchMetadata.get("cves") instanceof List) {
+                Map<String, BundleReplacements.OverrideBundle> overrideToBundleOverride = new HashMap<>();
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> cves = (List<Map<String, Object>>) patchMetadata.get("cves");
+                for (Map<String, Object> cve : cves) {
+                    String cveId = (String) cve.get("id");
+//                    String cveDescription = (String) cve.get("description");
+                    @SuppressWarnings("unchecked")
+                    List<Map<String, Object>> cveOverrides = (List<Map<String, Object>>) cve.get("changes");
+                    for (Map<String, Object> override : cveOverrides) {
+                        String groupId = (String) override.get("groupId");
+                        String artifactId = (String) override.get("artifactId");
+                        VersionRange range = (VersionRange) override.get("versions");
+                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range.toString());
+                        org.eclipse.aether.version.Version fix = (org.eclipse.aether.version.Version) override.get("fix");
+                        if (!overrideToBundleOverride.containsKey(originalLocation)) {
+                            BundleReplacements.OverrideBundle repl = new BundleReplacements.OverrideBundle();
+                            repl.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
+                            repl.setOriginalUri(originalLocation);
+                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fix.toString()));
+                            repl.compile();
+                            overrideToBundleOverride.put(originalLocation, repl);
+                        }
+                        overrideToBundleOverride.get(originalLocation).getCves().add(cveId);
+                    }
+                }
+                builder.setPatchMetadata(overrideToBundleOverride);
+            }
+        }
 
         // Generate the assembly
         builder.generateAssembly();

@@ -60,7 +60,7 @@ public class ArtifactInstaller {
             LOGGER.info("      skipping blacklisted maven artifact: " + bundle.getLocation());
             return;
         }
-        if (bundle.isOverriden() != BundleInfo.BundleOverrideMode.NONE) {
+        if (bundle.isOverriden() != BundleInfo.BundleOverrideMode.NONE && !bundle.getLocation().equals(bundle.getOriginalLocation())) {
             LOGGER.info("      adding overriden maven artifact: " + bundle.getLocation() + " (original location: " + bundle.getOriginalLocation() + ")");
         } else {
             LOGGER.info("      adding maven artifact: " + bundle.getLocation());
