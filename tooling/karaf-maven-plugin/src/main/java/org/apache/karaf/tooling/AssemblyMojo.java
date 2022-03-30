@@ -577,9 +577,10 @@ public class AssemblyMojo extends MojoSupport {
                 .bundles(toArray(bootBundles))
                 .profiles(toArray(bootProfiles));
 
-        @SuppressWarnings("unchecked")
-        Map<String, Object> patchMetadata = (Map<String, Object>) mavenSession.getUserProperties().get("__org.jboss.redhat-fuse.patch-metadata");
-        if (patchMetadata != null) {
+        Object patchMetadataObject = mavenSession.getUserProperties().get("__org.jboss.redhat-fuse.patch-metadata");
+        if (patchMetadataObject instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> patchMetadata = (Map<String, Object>) patchMetadataObject;
             // should be something like this:
             // patchMetaData = {java.util.LinkedHashMap@3134}  size = 2
             //  {@3145} "cves" -> {java.util.LinkedList@3135}  size = 4
@@ -615,10 +616,17 @@ public class AssemblyMojo extends MojoSupport {
             //     {@3161} "changes" -> {java.util.LinkedList@3170}  size = 2
             //  {@3146} "fixes" -> {java.util.LinkedList@3136}  size = 0
 
-            if (patchMetadata.get("cves") instanceof List) {
-                Map<String, BundleReplacements.OverrideBundle> overrideToBundleOverride = new HashMap<>();
-                @SuppressWarnings("unchecked")
-                List<Map<String, Object>> cves = (List<Map<String, Object>>) patchMetadata.get("cves");
+            Map<String, BundleReplacements.OverrideBundle> overrideToBundleOverride = new HashMap<>();
+
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> cves = (List<Map<String, Object>>) patchMetadata.get("cves");
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> fixes = (List<Map<String, Object>>) patchMetadata.get("fixes");
+
+            if (cves != null) {
+                if (cves.size() > 0) {
+                    getLog().info("Found " + cves.size() + " CVE fixes");
+                }
                 for (Map<String, Object> cve : cves) {
                     String cveId = (String) cve.get("id");
 //                    String cveDescription = (String) cve.get("description");
@@ -641,8 +649,35 @@ public class AssemblyMojo extends MojoSupport {
                         overrideToBundleOverride.get(originalLocation).getCves().add(cveId);
                     }
                 }
-                builder.setPatchMetadata(overrideToBundleOverride);
             }
+            if (fixes != null) {
+                if (fixes.size() > 0) {
+                    getLog().info("Found " + fixes.size() + " patch fixes");
+                }
+                for (Map<String, Object> fix : fixes) {
+                    String fixId = (String) fix.get("id");
+//                    String cveDescription = (String) cve.get("description");
+                    @SuppressWarnings("unchecked")
+                    List<Map<String, Object>> fixOverrides = (List<Map<String, Object>>) fix.get("changes");
+                    for (Map<String, Object> override : fixOverrides) {
+                        String groupId = (String) override.get("groupId");
+                        String artifactId = (String) override.get("artifactId");
+                        VersionRange range = (VersionRange) override.get("versions");
+                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range.toString());
+                        org.eclipse.aether.version.Version fixVersion = (org.eclipse.aether.version.Version) override.get("fix");
+                        if (!overrideToBundleOverride.containsKey(originalLocation)) {
+                            BundleReplacements.OverrideBundle repl = new BundleReplacements.OverrideBundle();
+                            repl.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
+                            repl.setOriginalUri(originalLocation);
+                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fixVersion.toString()));
+                            repl.compile();
+                            overrideToBundleOverride.put(originalLocation, repl);
+                        }
+                        overrideToBundleOverride.get(originalLocation).getFixes().add(fixId);
+                    }
+                }
+            }
+            builder.setPatchMetadata(overrideToBundleOverride);
         }
 
         // Generate the assembly

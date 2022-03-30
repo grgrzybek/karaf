@@ -1006,8 +1006,13 @@ public class Builder {
                         replacement = bundle.replace(location, replacement);
                     }
                     if (!bundle.equals(replacement)) {
-                        LOGGER.info("   Overriding bundle {} with {}{}", newBundle[0], replacement, ob.getCves().size() == 0 ? ""
-                                : " (CVEs: " + String.join(", ", ob.getCves()) + ")");
+                        if (ob.getCves().size() > 0) {
+                            LOGGER.info("   Overriding bundle {} with {}{}", newBundle[0], replacement, " (CVEs: " + String.join(", ", ob.getCves()) + ")");
+                        } else if (ob.getFixes().size() > 0) {
+                            LOGGER.info("   Overriding bundle {} with {}{}", newBundle[0], replacement, " (fixes: " + String.join(", ", ob.getCves()) + ")");
+                        } else {
+                            LOGGER.info("   Overriding bundle {} with {}", newBundle[0], replacement);
+                        }
                         newBundle[0] = replacement;
                     }
                 }
@@ -1037,9 +1042,13 @@ public class Builder {
                         replacement = lib.replace(location, replacement);
                     }
                     if (!lib.equals(replacement)) {
-                        LOGGER.info("   Overriding library {} with {}{}", newLib[0], replacement, ob.getCves().size() == 0 ? ""
-                                : " (CVEs: " + String.join(", ", ob.getCves()) + ")");
-                        newLib[0] = replacement;
+                        if (ob.getCves().size() > 0) {
+                            LOGGER.info("   Overriding library {} with {}{}", newLib[0], replacement, " (CVEs: " + String.join(", ", ob.getCves()) + ")");
+                        } else if (ob.getFixes().size() > 0) {
+                            LOGGER.info("   Overriding library {} with {}{}", newLib[0], replacement, " (fixes: " + String.join(", ", ob.getFixes()) + ")");
+                        } else {
+                            LOGGER.info("   Overriding library {} with {}", newLib[0], replacement);
+                        }
                     }
                 }
             });

@@ -67,6 +67,8 @@ public class BundleReplacements {
         private BundleOverrideMode mode = BundleOverrideMode.OSGI;
         @XmlTransient
         private final List<String> cves = new LinkedList<>();
+        @XmlTransient
+        private final List<String> fixes = new LinkedList<>();
 
         public String getOriginalUri() {
             return originalUri;
@@ -98,6 +100,10 @@ public class BundleReplacements {
 
         public List<String> getCves() {
             return cves;
+        }
+
+        public List<String> getFixes() {
+            return fixes;
         }
 
         /**
