@@ -44,6 +44,7 @@ import java.util.Set;
 
 import org.apache.commons.ssl.PKCS8Key;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
+import org.apache.sshd.common.keyprovider.FileKeyPairProvider;
 import org.apache.sshd.common.session.SessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +59,14 @@ public class OpenSSHKeyPairProvider extends AbstractKeyPairProvider {
     private String algorithm;
     private int keySize;
 
+    private FileKeyPairProvider delegate;
+
     public OpenSSHKeyPairProvider(Path privateKeyPath, Path publicKeyPath, String algorithm, int keySize) {
         this.privateKeyPath = privateKeyPath;
         this.publicKeyPath = publicKeyPath;
         this.algorithm = algorithm;
         this.keySize = keySize;
+        this.delegate = new FileKeyPairProvider(privateKeyPath);
     }
 
     @Override
@@ -72,6 +76,11 @@ public class OpenSSHKeyPairProvider extends AbstractKeyPairProvider {
         }
         if (!privateKeyPath.toFile().exists()) {
             createServerKey();
+        }
+
+        Iterable<KeyPair> result = delegate.loadKeys(sessionContext);
+        if (result.iterator().hasNext()) {
+            return result;
         }
 
         // 1. Try to read the PKCS8 private key. If it is RSA or DSA we can infer the public key directly from the
