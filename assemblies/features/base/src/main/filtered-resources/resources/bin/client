@@ -79,6 +79,10 @@ fi
 setupClassPath() {
     # Add the jars in the lib dir
     CLASSPATH="${KARAF_HOME}/system/org/apache/karaf/org.apache.karaf.client/@@project.version@@/org.apache.karaf.client-@@project.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/boot/eddsa-@@eddsa.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/ext/bcpkix-jdk15on-@@bouncycastle.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/ext/bcprov-jdk15on-@@bouncycastle.version@@.jar"
+    CLASSPATH="${CLASSPATH}:${KARAF_HOME}/lib/ext/bcutil-jdk15on-@@bouncycastle.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/apache/sshd/sshd-osgi/@@sshd.version@@/sshd-osgi-@@sshd.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/apache/sshd/sshd-scp/@@sshd.version@@/sshd-scp-@@sshd.version@@.jar"
     CLASSPATH="${CLASSPATH}:${KARAF_HOME}/system/org/apache/sshd/sshd-sftp/@@sshd.version@@/sshd-sftp-@@sshd.version@@.jar"
