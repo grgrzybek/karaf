@@ -309,9 +309,9 @@
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.25.Final-redhat-00002</hibernate.version>
+        <hibernate.version>5.3.26.Final-redhat-00002</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
-        <hibernate.validator.version>6.0.22.Final-redhat-00002</hibernate.validator.version>
+        <hibernate.validator.version>6.0.23.Final-redhat-00001</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
