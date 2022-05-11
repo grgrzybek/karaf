@@ -309,9 +309,9 @@
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.25.Final-redhat-00002</hibernate.version>
+        <hibernate.version>5.3.26.Final-redhat-00002</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
-        <hibernate.validator.version>6.0.22.Final-redhat-00002</hibernate.validator.version>
+        <hibernate.validator.version>6.0.23.Final-redhat-00001</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
@@ -343,7 +343,7 @@
         <pax.swissbox.version>1.8.4</pax.swissbox.version>
         <pax.url.version>2.6.11</pax.url.version>
         <pax.web.version>7.4.4</pax.web.version>
-        <pax.web.undertow.version>2.2.16.Final-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.2.17.SP4-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.3</pax.jdbc.version>
         <pax.jms.version>1.1.1</pax.jms.version>
