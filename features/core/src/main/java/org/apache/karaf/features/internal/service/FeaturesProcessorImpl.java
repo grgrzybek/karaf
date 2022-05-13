@@ -133,7 +133,14 @@ public class FeaturesProcessorImpl implements FeaturesProcessor {
             Feature f = featureList.get(i);
             // overriding features first, so we can further override their bundles
             for (FeatureReplacements.OverrideFeature override : getInstructions().getFeatureReplacements().getReplacements()) {
-                if (f.getId().equals(override.getFeature().getId())) {
+                String name = override.getFeature().getName();
+                String version = override.getFeature().getVersion();
+                if (override.getVersionRange() != null && !"".equals(override.getVersionRange().trim())) {
+                    version = override.getVersionRange();
+                }
+                String id = name + Feature.VERSION_SEPARATOR + version;
+                FeaturePattern fp = new FeaturePattern(id);
+                if (fp.matches(f.getName(), f.getVersion())) {
                     switch (override.getMode()) {
                         case REPLACE:
                             featureList.set(i, override.getFeature());
