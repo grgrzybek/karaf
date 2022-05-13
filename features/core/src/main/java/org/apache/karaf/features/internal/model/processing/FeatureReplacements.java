@@ -62,6 +62,8 @@ public class FeatureReplacements {
     public static class OverrideFeature {
         @XmlAttribute
         private FeatureOverrideMode mode = FeatureOverrideMode.REPLACE;
+        @XmlAttribute
+        private String versionRange;
         @XmlElement
         private Feature feature;
 
@@ -71,6 +73,14 @@ public class FeatureReplacements {
 
         public void setMode(FeatureOverrideMode mode) {
             this.mode = mode;
+        }
+
+        public String getVersionRange() {
+            return versionRange;
+        }
+
+        public void setVersionRange(String versionRange) {
+            this.versionRange = versionRange;
         }
 
         public Feature getFeature() {

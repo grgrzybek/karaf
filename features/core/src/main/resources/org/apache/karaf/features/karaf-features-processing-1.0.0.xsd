@@ -219,6 +219,7 @@ according to http://karaf.apache.org/xmlns/features/v1.6.0 XML schema.
             <xs:element name="feature" type="features:feature" />
         </xs:sequence>
         <xs:attribute name="mode" type="tns:featureOverrideMode" default="replace" />
+        <xs:attribute name="versionRange" type="xs:string" default="" />
     </xs:complexType>
 
     <xs:simpleType name="featureOverrideMode">
