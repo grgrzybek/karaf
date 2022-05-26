@@ -192,7 +192,7 @@
         <classmate.version>1.5.1</classmate.version>
         <cxf.version>3.3.9</cxf.version>
         <eddsa.version>0.3.0</eddsa.version>
-        <jna.version>5.9.0</jna.version>
+        <jna.version>5.11.0</jna.version>
         <jakarta.activation.version>1.2.2.redhat-00001</jakarta.activation.version>
         <jakarta.jaxb.version>2.3.3.redhat-00001</jakarta.jaxb.version>
         <jakarta.jaxws.version>2.3.3</jakarta.jaxws.version>
