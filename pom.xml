@@ -321,7 +321,7 @@
         <jackson.databind.version>2.12.6.1</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00002</jboss.logging.version>
         <aesh.version>2.0.0.redhat-00001</aesh.version>
-        <jetty.version>9.4.43.v20210629-redhat-00001</jetty.version>
+        <jetty.version>9.4.48.v20220622</jetty.version>
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
