@@ -309,7 +309,7 @@
         <hibernate42.version>4.2.15.Final</hibernate42.version>
         <hibernate43.version>4.3.6.Final</hibernate43.version>
         <hibernate52.version>5.2.18.Final</hibernate52.version>
-        <hibernate.version>5.3.26.Final-redhat-00002</hibernate.version>
+        <hibernate.version>5.3.27.Final-redhat-00001</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
         <hibernate.validator.version>6.0.23.Final-redhat-00001</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
@@ -317,11 +317,11 @@
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
         <jansi.version>1.18.0.redhat-00001</jansi.version>
         <javassist.version>3.27.0.GA-redhat-00001</javassist.version>
-        <jackson.version>2.12.6</jackson.version>
-        <jackson.databind.version>2.12.6.1</jackson.databind.version>
+        <jackson.version>2.12.6.redhat-00001</jackson.version>
+        <jackson.databind.version>2.12.6.1-redhat-00004</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00002</jboss.logging.version>
         <aesh.version>2.0.0.redhat-00001</aesh.version>
-        <jetty.version>9.4.43.v20210629-redhat-00001</jetty.version>
+        <jetty.version>9.4.48.v20220622</jetty.version>
         <jline.version>3.19.0</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
@@ -343,7 +343,7 @@
         <pax.swissbox.version>1.8.4</pax.swissbox.version>
         <pax.url.version>2.6.11</pax.url.version>
         <pax.web.version>7.4.4</pax.web.version>
-        <pax.web.undertow.version>2.2.17.SP4-redhat-00001</pax.web.undertow.version>
+        <pax.web.undertow.version>2.2.19.SP2-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.3</pax.jdbc.version>
         <pax.jms.version>1.1.1</pax.jms.version>
