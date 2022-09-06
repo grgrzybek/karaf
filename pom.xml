@@ -189,9 +189,9 @@
         <eclipselink.version>2.7.8</eclipselink.version>
         <jasypt.bundle.version>1.9.3_1</jasypt.bundle.version>
         <jolokia.version>1.7.1</jolokia.version>
-        <servlet.spec.groupId>javax.servlet</servlet.spec.groupId>
-        <servlet.spec.artifactId>javax.servlet-api</servlet.spec.artifactId>
-        <servlet.spec.version>3.1.0</servlet.spec.version>
+        <servlet.spec.groupId>jakarta.servlet</servlet.spec.groupId>
+        <servlet.spec.artifactId>jakarta.servlet-api</servlet.spec.artifactId>
+        <servlet.spec.version>4.0.4</servlet.spec.version>
 
         <geronimo.jms-spec.version>1.1.1</geronimo.jms-spec.version>
         <geronimo.jta-spec.version>1.1.1</geronimo.jta-spec.version>
@@ -309,7 +309,8 @@
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.5</pax.swissbox.version>
         <pax.url.version>2.6.11</pax.url.version>
-        <pax.web.version>8.0.6</pax.web.version>
+        <pax.web.version>9.0.0-SNAPSHOT</pax.web.version>
+        <jetty.version>10.0.11</jetty.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.3</pax.jdbc.version>
         <pax.jms.version>1.1.0</pax.jms.version>

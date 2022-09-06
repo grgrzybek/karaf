@@ -35,6 +35,7 @@ public class CamelExampleTest extends BaseTest {
 
     public void setup() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-camel-example-features/" + System.getProperty("karaf.version") + "/xml");
+        featureService.installFeature("pax-web-specs");
     }
 
     @Test(timeout = 60000)

@@ -53,6 +53,8 @@ public class StandardFeaturesTest extends BaseTest {
 
     @Test
     public void installAriesBlueprintWebFeature() throws Exception {
+        // needed for org.apache.aries.blueprint.webosgi/1.0.1 which requires javax.servlet < 4
+        featureService.installFeature("pax-web-specs");
         installAssertAndUninstallFeatures("pax-web-http", "blueprint-web");
     }
     

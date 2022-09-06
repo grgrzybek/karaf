@@ -121,7 +121,8 @@ public class RestExampleTest extends BaseTest {
 
         installAndAssertFeature("activation");
         installAndAssertFeature("scr");
-        installAndAssertFeature("karaf-rest-example-whiteboard");
+        // refresh needed to attach pax-web-compatibility-servlet31 bundle to jakarta.servlet-api/4
+        featureService.installFeature("karaf-rest-example-whiteboard");
 
         String output = executeCommand("web:servlet-list");
         while (!output.contains("cxf-servlet")) {
