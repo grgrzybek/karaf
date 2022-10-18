@@ -218,9 +218,9 @@ if "%EXTRA_JAVA_OPTS%" == "" goto :KARAF_EXTRA_JAVA_OPTS_END
 
 set CLASSPATH=%KARAF_HOME%\system\org\apache\karaf\org.apache.karaf.client\@@project.version@@\org.apache.karaf.client-@@project.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\boot\eddsa-@@eddsa.version@@.jar"
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcpkix-jdk15on-@@bouncycastle.version@@.jar"
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcprov-jdk15on-@@bouncycastle.version@@.jar"
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcutil-jdk15on-@@bouncycastle.version@@.jar"
+set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcpkix-jdk18on-@@bouncycastle.version@@.jar"
+set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcprov-jdk18on-@@bouncycastle.version@@.jar"
+set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcutil-jdk18on-@@bouncycastle.version@@.jar"
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-osgi\@@sshd.version@@\sshd-osgi-@@sshd.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-scp\@@sshd.version@@\sshd-scp-@@sshd.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-sftp\@@sshd.version@@\sshd-sftp-@@sshd.version@@.jar
