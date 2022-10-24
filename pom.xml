@@ -345,7 +345,7 @@
         <pax.web.version>7.4.5</pax.web.version>
         <pax.web.undertow.version>2.2.19.SP2-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
-        <pax.jdbc.version>1.5.3</pax.jdbc.version>
+        <pax.jdbc.version>1.5.5</pax.jdbc.version>
         <pax.jms.version>1.1.1</pax.jms.version>
         <pax.transx.version>0.5.2</pax.transx.version>
 
