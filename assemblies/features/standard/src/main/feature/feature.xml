@@ -1247,7 +1247,6 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
         <bundle dependency="true" start-level="30">mvn:com.sun.mail/javax.mail/${javax.mail.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/${geronimo.jta-spec.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:jakarta.annotation/jakarta.annotation-api/${jakarta.annotation.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-jaspic_1.0_spec/${geronimo.jaspic-spec.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm/${asm.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-util/${asm.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-commons/${asm.version}</bundle>
@@ -1257,7 +1256,6 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
         <bundle start-level="30">mvn:org.eclipse.jetty/jetty-continuation/${jetty.version}</bundle>
         <bundle start-level="30">mvn:org.eclipse.jetty/jetty-http/${jetty.version}</bundle>
         <bundle start-level="30">mvn:org.eclipse.jetty/jetty-io/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-jaspi/${jetty.version}</bundle>
         <bundle start-level="30">mvn:org.eclipse.jetty/jetty-plus/${jetty.version}</bundle>
        	<bundle start-level="30">mvn:org.eclipse.jetty/jetty-jndi/${jetty.version}</bundle>
         <bundle start-level="30">mvn:org.eclipse.jetty/jetty-rewrite/${jetty.version}</bundle>
@@ -1385,9 +1383,9 @@ role=${env:ORG_APACHE_KARAF_WEBCONSOLE_ROLE:-admin}
         <bundle start-level="30">mvn:org.apache.sshd/sshd-scp/${sshd.version}</bundle>
         <bundle start-level="30">mvn:org.apache.sshd/sshd-sftp/${sshd.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.not-yet-commons-ssl/${not-yet-commons-ssl.bundle.version}</bundle>
-        <bundle start-level="30">mvn:org.bouncycastle/bcutil-jdk15on/${bouncycastle.version}</bundle>
-        <bundle start-level="30">mvn:org.bouncycastle/bcprov-jdk15on/${bouncycastle.version}</bundle>
-        <bundle start-level="30">mvn:org.bouncycastle/bcpkix-jdk15on/${bouncycastle.version}</bundle>
+        <bundle start-level="30">mvn:org.bouncycastle/bcutil-jdk18on/${bouncycastle.version}</bundle>
+        <bundle start-level="30">mvn:org.bouncycastle/bcprov-jdk18on/${bouncycastle.version}</bundle>
+        <bundle start-level="30">mvn:org.bouncycastle/bcpkix-jdk18on/${bouncycastle.version}</bundle>
         <bundle start-level="30">mvn:net.i2p.crypto/eddsa/${eddsa.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.ssh/${project.version}</bundle>
         <config name="org.apache.karaf.command.acl.ssh">
@@ -2373,7 +2371,7 @@ encrypt = admin, manager, viewer
 
     <feature name="spring-security-crypto-encryption" description="Advanced encryption support for Karaf security" version="${project.version}">
         <feature>jaas</feature>
-        <bundle start-level="30">mvn:org.bouncycastle/bcprov-jdk15on/${bouncycastle.version}</bundle>
+        <bundle start-level="30">mvn:org.bouncycastle/bcprov-jdk18on/${bouncycastle.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-crypto/${spring.security53.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.spring-security-crypto/${project.version}</bundle>
     </feature>

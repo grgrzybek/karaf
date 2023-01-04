@@ -67,12 +67,16 @@ public class MBeanInvocationHandler implements InvocationHandler {
                     try {
                         return method.invoke(wrapped, args);
                     } catch (InvocationTargetException e) {
-                        return null;
+                        throw e;
                     }
                 }
             });
         } catch (Exception pae) {
             Throwable cause = pae.getCause();
+            if (cause instanceof InvocationTargetException
+                    && ((InvocationTargetException) cause).getTargetException() != null) {
+                cause = ((InvocationTargetException) cause).getTargetException();
+            }
             throw cause == null ? pae:cause;
         }
         
