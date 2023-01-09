@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-security-crypto</artifactId>
-            <version>${spring.security53.version}</version>
+            <version>${spring.security57.version}</version>
         </dependency>
 
         <dependency>

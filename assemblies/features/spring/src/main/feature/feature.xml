@@ -99,7 +99,7 @@
 
     <!-- Spring Security -->
 
-    <feature name="spring-security" description="Spring Security 5.5.x support" version="${spring.security55.version}">
+    <feature name="spring-security" description="Spring Security 5.7.x support" version="${spring.security57.version}">
         <feature>war</feature>
         <feature version="[5.3,6)">spring-jdbc</feature>
         <feature version="[5.3,6)">spring-tx</feature>
@@ -109,11 +109,14 @@
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.databind.version}</bundle>
         <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/${aspectj.bundle.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-core/${spring.security55.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security55.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security55.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security55.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security55.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-crypto/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-core/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-ldap/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-ldap/${spring.ldap.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security57.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security57.version}</bundle>
     </feature>
 
     <!-- Aries Blueprint Spring 5.3.x support -->
