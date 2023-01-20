@@ -629,13 +629,13 @@ public class AssemblyMojo extends MojoSupport {
             //       0 = {java.util.LinkedHashMap@3188}  size = 4
             //        {@3196} "groupId" -> {@3197} "org.apache.logging.log4j"
             //        {@3198} "artifactId" -> {@3199} "*"
-            //        {@3200} "versions" -> {org.eclipse.aether.util.version.GenericVersionRange@3201} "[2.0,2.17.1)"
-            //        {@3202} "fix" -> {org.eclipse.aether.util.version.GenericVersion@3203} "2.17.1"
+            //        {@3200} "versions" -> {@3201} "[2.0,2.17.1)"
+            //        {@3202} "fix" -> {@3203} "2.17.1"
             //       1 = {java.util.LinkedHashMap@3189}  size = 4
             //        {@3196} "groupId" -> {@3212} "org.ops4j.pax.logging"
             //        {@3198} "artifactId" -> {@3213} "*"
-            //        {@3200} "versions" -> {org.eclipse.aether.util.version.GenericVersionRange@3214} "[1.10.0,1.11.13)"
-            //        {@3202} "fix" -> {org.eclipse.aether.util.version.GenericVersion@3215} "1.11.13"
+            //        {@3200} "versions" -> {@3214} "[1.10.0,1.11.13)"
+            //        {@3202} "fix" -> {@3215} "1.11.13"
             //    1 = {java.util.LinkedHashMap@3149}  size = 3
             //     {@3157} "id" -> {@3184} "CVE-2021-45046"
             //     {@3159} "description" -> {@3185} "log4j-core: DoS in log4j 2.x with thread context message pattern and context lookup pattern"
@@ -669,14 +669,14 @@ public class AssemblyMojo extends MojoSupport {
                     for (Map<String, Object> override : cveOverrides) {
                         String groupId = (String) override.get("groupId");
                         String artifactId = (String) override.get("artifactId");
-                        VersionRange range = (VersionRange) override.get("versions");
-                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range.toString());
-                        org.eclipse.aether.version.Version fix = (org.eclipse.aether.version.Version) override.get("fix");
+                        String range = (String) override.get("versions");
+                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range);
+                        String fix = (String) override.get("fix");
                         if (!overrideToBundleOverride.containsKey(originalLocation)) {
                             BundleReplacements.OverrideBundle repl = new BundleReplacements.OverrideBundle();
                             repl.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
                             repl.setOriginalUri(originalLocation);
-                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fix.toString()));
+                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fix));
                             repl.compile();
                             overrideToBundleOverride.put(originalLocation, repl);
                         }
@@ -696,14 +696,14 @@ public class AssemblyMojo extends MojoSupport {
                     for (Map<String, Object> override : fixOverrides) {
                         String groupId = (String) override.get("groupId");
                         String artifactId = (String) override.get("artifactId");
-                        VersionRange range = (VersionRange) override.get("versions");
-                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range.toString());
-                        org.eclipse.aether.version.Version fixVersion = (org.eclipse.aether.version.Version) override.get("fix");
+                        String range = (String) override.get("versions");
+                        String originalLocation = String.format("mvn:%s/%s/%s", groupId, artifactId, range);
+                        String fixVersion = (String) override.get("fix");
                         if (!overrideToBundleOverride.containsKey(originalLocation)) {
                             BundleReplacements.OverrideBundle repl = new BundleReplacements.OverrideBundle();
                             repl.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
                             repl.setOriginalUri(originalLocation);
-                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fixVersion.toString()));
+                            repl.setReplacement(String.format("mvn:%s/%s/%s", groupId, artifactId, fixVersion));
                             repl.compile();
                             overrideToBundleOverride.put(originalLocation, repl);
                         }
