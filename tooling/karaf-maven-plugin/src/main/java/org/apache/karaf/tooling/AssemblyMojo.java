@@ -22,14 +22,17 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -600,6 +603,15 @@ public class AssemblyMojo extends MojoSupport {
                 .profiles(toArray(bootProfiles));
 
         Object patchMetadataObject = mavenSession.getUserProperties().get("__org.jboss.redhat-fuse.patch-metadata");
+        if (patchMetadataObject instanceof String) {
+            try {
+                byte[] decoded = Base64.getDecoder().decode((String) patchMetadataObject);
+                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decoded));
+                patchMetadataObject = ois.readObject();
+            } catch (Throwable ignored) {
+            }
+        }
+
         if (patchMetadataObject instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> patchMetadata = (Map<String, Object>) patchMetadataObject;
