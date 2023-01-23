@@ -512,9 +512,7 @@ route-suspend = admin, manager
 route-resume = admin, manager
         </config>
         <bundle start-level="30">mvn:org.fusesource.jansi/jansi/${jansi.version}</bundle>
-        <bundle start-level="30">mvn:org.jline/jline-terminal-jansi/${jline.version}</bundle>
-        <bundle start-level="30">mvn:org.jline/jline-terminal/${jline.version}</bundle>
-        <bundle start-level="30">mvn:org.jline/jline-builtins/${jline.version}</bundle>
+        <bundle start-level="30">mvn:org.jline/jline/${jline.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.aesh-jline/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.core/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.commands/${project.version}</bundle>
@@ -1195,11 +1193,6 @@ framework[/.*[E][q][u][i][n][o][x].*/] = admin
         </conditional>
     </feature>
 
-    <feature name="http" version="${project.version}" description="Implementation of the OSGI HTTP Service">
-        <feature dependency="true">pax-http-service</feature>
-        <requirement>http-service</requirement>
-    </feature>
-
     <feature name="felix-httplite" version="${felix.httplite.version}" description="Felix Httplite HTTP Service">
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.httplite.complete/${felix.httplite.version}</bundle>
         <capability>http-service;provider:=felix-httplite</capability>
@@ -1240,7 +1233,7 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
 
     <feature name="pax-web-http" description="Pax Web OSGi HTTP Service" version="${pax.web.version}">
         <!-- explicitly use pax-http-undertow. Conditionals don't work well with feature dependencies and blacklisted features -->
-        <feature>pax-http-undertow</feature>
+        <feature>pax-web-http-undertow</feature>
         <bundle start-level="30">mvn:org.apache.karaf.http/org.apache.karaf.http.core/${project.version}</bundle>
         <capability>http-service;provider:=pax-http</capability>
         <conditional>

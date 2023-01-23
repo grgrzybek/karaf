@@ -43,7 +43,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.ssl.PKCS8Key;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
 import org.apache.sshd.common.keyprovider.FileKeyPairProvider;
 import org.apache.sshd.common.keyprovider.KeyPairProvider;
@@ -118,36 +117,35 @@ public class OpenSSHKeyPairProvider extends AbstractKeyPairProvider {
         }
     }
 
+//    private KeyPair getKeyPair(InputStream is) throws GeneralSecurityException, IOException {
+//        PKCS8Key pkcs8 = new PKCS8Key(is, password == null ? null : password.toCharArray());
+//        return new KeyPair(pkcs8.getPublicKey(), pkcs8.getPrivateKey());
+//    }
 
-    private KeyPair getKeyPair(InputStream is) throws GeneralSecurityException, IOException {
-        PKCS8Key pkcs8 = new PKCS8Key(is, password == null ? null : password.toCharArray());
-        return new KeyPair(pkcs8.getPublicKey(), pkcs8.getPrivateKey());
-    }
-
-    private KeyPair convertLegacyKey(Path privateKeyPath) throws GeneralSecurityException, IOException {
-        KeyPair keypair = null;
-        try (ObjectInputStream r = new KeyPairObjectInputStream(Files.newInputStream(privateKeyPath))) {
-            keypair = (KeyPair)r.readObject();
-        }
-        catch (ClassNotFoundException e) {
-            throw new InvalidKeySpecException("Missing classes: " + e.getMessage(), e);
-        }
-        new PemWriter(privateKeyPath, publicKeyPath).writeKeyPair(algorithm, keypair);
-        return keypair;
-    }
-
-    // karaf 4.4.3
 //    private KeyPair convertLegacyKey(Path privateKeyPath) throws GeneralSecurityException, IOException {
 //        KeyPair keypair = null;
-//        SimpleGeneratorHostKeyProvider provider = new SimpleGeneratorHostKeyProvider();
-//        provider.setAlgorithm(algorithm);
-//        provider.setOverwriteAllowed(true);
-//        provider.setPath(privateKeyPath);
-//        provider.setKeySize(keySize);
-//        keypair = provider.loadKeys(null).iterator().next();
+//        try (ObjectInputStream r = new KeyPairObjectInputStream(Files.newInputStream(privateKeyPath))) {
+//            keypair = (KeyPair)r.readObject();
+//        }
+//        catch (ClassNotFoundException e) {
+//            throw new InvalidKeySpecException("Missing classes: " + e.getMessage(), e);
+//        }
 //        new PemWriter(privateKeyPath, publicKeyPath).writeKeyPair(algorithm, keypair);
 //        return keypair;
 //    }
+
+    // karaf 4.4.3
+    private KeyPair convertLegacyKey(Path privateKeyPath) throws GeneralSecurityException, IOException {
+        KeyPair keypair = null;
+        SimpleGeneratorHostKeyProvider provider = new SimpleGeneratorHostKeyProvider();
+        provider.setAlgorithm(algorithm);
+        provider.setOverwriteAllowed(true);
+        provider.setPath(privateKeyPath);
+        provider.setKeySize(keySize);
+        keypair = provider.loadKeys(null).iterator().next();
+        new PemWriter(privateKeyPath, publicKeyPath).writeKeyPair(algorithm, keypair);
+        return keypair;
+    }
 
     private KeyPair getKeyPairUsingPublicKeyFile() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory keyFactory = KeyFactory.getInstance(algorithm);

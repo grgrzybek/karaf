@@ -169,7 +169,7 @@ public class Activator extends BaseActivator implements ManagedService {
         String[] macs               = getStringArray("macs", "hmac-sha2-512,hmac-sha2-256");
         String[] ciphers            = getStringArray("ciphers", "aes256-ctr,aes192-ctr,aes128-ctr");
         String[] kexAlgorithms      = getStringArray("kexAlgorithms", "ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256");
-        String[] signAlgorithms     = getStringArray("signatureAlgorithms", "ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa");
+        String[] sigAlgorithms     = getStringArray("signatureAlgorithms", "ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa");
         // karaf 4.4.3:
 //        String[] sigAlgorithms      = getStringArray("sigAlgorithms", "ssh-rsa,rsa-sha2-256,rsa-sha2-512,sk-ecdsa-sha2-nistp256@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521");
         String welcomeBanner        = getString("welcomeBanner", null);
@@ -178,7 +178,7 @@ public class Activator extends BaseActivator implements ManagedService {
 
         Path serverPrivateKeyPath = Paths.get(privateHostKey);
         Path serverPublicKeyPath = Paths.get(publicHostKey);
-        KeyPairProvider keyPairProvider = new OpenSSHKeyPairProvider(serverPrivateKeyPath, serverPublicKeyPath, algorithm, keySize);
+        KeyPairProvider keyPairProvider = new OpenSSHKeyPairProvider(serverPrivateKeyPath, serverPublicKeyPath, algorithm, keySize, null);
         KarafJaasAuthenticator authenticator = new KarafJaasAuthenticator(sshRealm, sshRole, roleClasses);
         UserAuthFactoriesFactory authFactoriesFactory = new UserAuthFactoriesFactory();
         authFactoriesFactory.setAuthMethods(authMethods);
@@ -189,7 +189,7 @@ public class Activator extends BaseActivator implements ManagedService {
         server.setMacFactories(SshUtils.buildMacs(macs));
         server.setCipherFactories(SshUtils.buildCiphers(ciphers));
         server.setKeyExchangeFactories(SshUtils.buildKexAlgorithms(kexAlgorithms));
-        server.setSignatureFactories(SshUtils.buildSigAlgorithms(sigAlgorithms));
+        server.setSignatureFactories(SshUtils.buildSignatureAlgorithms(sigAlgorithms));
         server.setShellFactory(new ShellFactoryImpl(sessionFactory));
 
         if (sftpEnabled) {
