@@ -282,9 +282,9 @@ public class VerifyMojo extends MojoSupport {
             } else {
                 filePrefix = "file:";
             }
-            allDescriptors.add(filePrefix + project.getBuild().getDirectory() + File.separator 
+            allDescriptors.add(filePrefix + project.getBuild().getDirectory() + File.separator
                                + "feature"
-                               + File.separator 
+                               + File.separator
                                + "feature.xml");
         } else {
             allDescriptors.addAll(descriptors);
@@ -417,6 +417,7 @@ public class VerifyMojo extends MojoSupport {
                 }
             }
         }
+        executor.shutdown();
         int nb = successes.size() + ignored.size() + failures.size();
         getLog().info("Features verified: " + nb + ", failures: " + failures.size() + ", ignored: " + ignored.size() + ", skipped: " + skipped.size());
         if (!failures.isEmpty()) {
@@ -625,10 +626,8 @@ public class VerifyMojo extends MojoSupport {
         }
         FeaturesProcessorImpl processor = new FeaturesProcessorImpl(config);
         if (blacklistedDescriptors != null) {
-            blacklistedDescriptors.forEach(lp -> {
-                processor.getInstructions().getBlacklistedRepositoryLocationPatterns()
-                        .add(new LocationPattern(lp));
-            });
+            blacklistedDescriptors.forEach(lp -> processor.getInstructions().getBlacklistedRepositoryLocationPatterns()
+                    .add(new LocationPattern(lp)));
         }
         processor.getInstructions().getBlacklistedRepositoryLocationPatterns()
                 .add(new LocationPattern("mvn:" + selfGroupId + "/" + selfArtifactId));
@@ -645,7 +644,12 @@ public class VerifyMojo extends MojoSupport {
                             }
                         }
                         try (InputStream is = provider.open()) {
-                            Features featuresModel = JaxbUtil.unmarshal(provider.getUrl(), is, false);
+                            Features featuresModel;
+                            if (JacksonUtil.isJson(provider.getUrl())) {
+                                featuresModel = JacksonUtil.unmarshal(provider.getUrl());
+                            } else {
+                                featuresModel = JaxbUtil.unmarshal(provider.getUrl(), is, false);
+                            }
                             processor.process(featuresModel);
                             synchronized (loaded) {
                                 loaded.put(provider.getUrl(), featuresModel);

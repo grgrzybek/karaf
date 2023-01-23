@@ -104,7 +104,7 @@ public class SshUtils {
 
     public static List<NamedFactory<Signature>> buildSignatureAlgorithms(String[] names) {
         ServerConfig defaults = new ServerConfig();
-        List<NamedFactory<Signature>> avail = defaults.getSignatureFactories();
+        List<NamedFactory<Signature>> avail = defaults.getSignatureAlgorithms();
         // Fuse 7.11 removes the algorithms deprecated in 7.10 (SSHD-1004, ENTESB-17528)
 
         return filter(Signature.class, avail, names);
@@ -146,8 +146,8 @@ public class SshUtils {
 
         public List<KeyExchangeFactory> getKeyExchangeFactories() {
             return keyExchangeFactories;
-         }
- 
+        }
+
         public List<NamedFactory<Cipher>> getCipherFactories() {
             return cipherFactories;
         }
@@ -156,7 +156,7 @@ public class SshUtils {
             return macFactories;
         }
 
-        public List<NamedFactory<Signature>> getSignatureFactories() {
+        public List<NamedFactory<Signature>> getSignatureAlgorithms() {
             return signatureFactories;
         }
     }

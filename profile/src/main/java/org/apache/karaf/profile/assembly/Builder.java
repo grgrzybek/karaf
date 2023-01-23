@@ -113,6 +113,7 @@ import org.slf4j.LoggerFactory;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static java.util.jar.JarFile.MANIFEST_NAME;
+import static java.util.stream.Collectors.toMap;
 import static org.apache.karaf.profile.assembly.Builder.Stage.Startup;
 
 /**
@@ -190,12 +191,19 @@ public class Builder {
      * supported versions are defined.</p>
      */
     public enum JavaVersion {
-        Java16("1.6", 1),
-        Java17("1.7", 2),
-        Java18("1.8", 3),
+        Java6("1.6", 1),
+        Java7("1.7", 2),
+        Java8("1.8", 3),
         Java9("9", 4),
         Java10("10", 5),
-        Java11("11", 6);
+        Java11("11", 6),
+        Java12("12", 7),
+        Java13("13", 8),
+        Java14("14", 9),
+        Java15("15", 10),
+        Java16("16", 11),
+        Java17("17", 12),
+        Java18("18", 13);
 
         private String version;
         private int ordinal;
@@ -287,6 +295,7 @@ public class Builder {
     Map<String, Stage> profiles = new LinkedHashMap<>();
     Map<String, RepositoryInfo> repositories = new LinkedHashMap<>();
     Map<String, Stage> features = new LinkedHashMap<>();
+    Set<String> firstStageBootFeatures = new HashSet<>();
     Map<String, Stage> bundles = new LinkedHashMap<>();
     List<String> blacklistedProfileNames = new ArrayList<>();
     List<String> blacklistedFeatureIdentifiers = new ArrayList<>();
@@ -294,7 +303,7 @@ public class Builder {
     List<String> blacklistedRepositoryURIs = new ArrayList<>();
     BlacklistPolicy blacklistPolicy = BlacklistPolicy.Discard;
     List<String> libraries = new ArrayList<>();
-    JavaVersion javase = JavaVersion.Java18;
+    JavaVersion javase = JavaVersion.Java8;
     KarafVersion karafVersion = KarafVersion.v4x;
     String environment = null;
     boolean useReferenceUrls;
@@ -312,6 +321,8 @@ public class Builder {
     String generateConsistencyReport;
     String consistencyReportProjectName;
     String consistencyReportProjectVersion;
+    // KARAF-7074: for recursive/inner features, we should use parallelism by default
+    int resolverParallelism = Math.max(2, Runtime.getRuntime().availableProcessors());
 
     private ScheduledExecutorService executor;
     private DownloadManager manager;
@@ -440,6 +451,17 @@ public class Builder {
     }
 
     /**
+     * Configure first stage features to use at boot stage. Each feature may be specified as
+     * <code>name</code> or <code>name/version</code> (no version ranges allowed).
+     * @param features
+     * @return
+     */
+    public Builder firstStageBootFeatures(String... features) {
+        this.firstStageBootFeatures.addAll(Arrays.asList(features));
+        return features(Stage.Boot, features);
+    }
+
+    /**
      * Configure features to use at current {@link #defaultStage stage}. Each feature may be specified as
      * <code>name</code> or <code>name/version</code> (no version ranges allowed).
      * @param features
@@ -563,6 +585,11 @@ public class Builder {
      */
     public Builder useReferenceUrls(boolean useReferenceUrls) {
         this.useReferenceUrls = useReferenceUrls;
+        return this;
+    }
+
+    public Builder resolverParallelism(final int resolverParallelism) {
+        this.resolverParallelism = resolverParallelism;
         return this;
     }
 
@@ -905,7 +932,7 @@ public class Builder {
         //
         MavenResolver resolver = createMavenResolver();
         manager = new CustomDownloadManager(resolver, executor, null, translatedUrls);
-        this.resolver = new ResolverImpl(new Slf4jResolverLog(LOGGER));
+        this.resolver = new ResolverImpl(new Slf4jResolverLog(LOGGER), resolverParallelism);
 
         //
         // Unzip KARs
@@ -1314,14 +1341,12 @@ public class Builder {
                                         bundle2featureId.computeIfAbsent(bundle.getLocation().trim(), k -> new TreeSet<>()).add(feature.getId());
                                     }
                                 });
-                                feature.getConditional().forEach(cond -> {
-                                    cond.asFeature().getBundles().forEach(bundle -> {
-                                        // conditional bundles of feature
-                                        if (flavor.include(bundle)) {
-                                            bundle2featureId.computeIfAbsent(bundle.getLocation().trim(), k -> new TreeSet<>()).add(feature.getId());
-                                        }
-                                    });
-                                });
+                                feature.getConditional().forEach(cond -> cond.asFeature().getBundles().forEach(bundle -> {
+                                    // conditional bundles of feature
+                                    if (flavor.include(bundle)) {
+                                        bundle2featureId.computeIfAbsent(bundle.getLocation().trim(), k -> new TreeSet<>()).add(feature.getId());
+                                    }
+                                }));
                             }
                         });
                     }
@@ -1815,6 +1840,8 @@ public class Builder {
                     generatedDep.put(dep.getName(), dep);
                 }
                 dep.setDependency(false);
+                dep.setPrerequisite(firstStageBootFeatures.contains(dep.getName()) || firstStageBootFeatures.contains(
+                        nameOrPattern));
             }
         }
         // Add bundles
@@ -2143,7 +2170,12 @@ public class Builder {
                                 }
                             }
                             try (InputStream is = provider.open()) {
-                                Features featuresModel = JaxbUtil.unmarshal(url, is, false);
+                                Features featuresModel;
+                                if (JacksonUtil.isJson(url)) {
+                                    featuresModel = JacksonUtil.unmarshal(url);
+                                } else {
+                                    featuresModel = JaxbUtil.unmarshal(url, is, false);
+                                }
                                 // always process according to processor configuration
                                 featuresModel.setBlacklisted(processor.isRepositoryBlacklisted(url));
                                 processor.process(featuresModel);
@@ -2220,6 +2252,31 @@ public class Builder {
 
         // System bundle will be single bundle installed with bundleId == 0
         BundleRevision systemBundle = getSystemBundle();
+        if (resolverParallelism > 1) {
+            return doResolve(manager, resolver, repositories, features, bundles, optionals, processor, systemBundle);
+        }
+        // let a chance to be sequential in case order is important with the current framework
+        return features.stream()
+                .flatMap(it -> {
+                    try {
+                        return doResolve(manager, resolver, repositories, singletonList(it), bundles, optionals, processor, systemBundle).entrySet().stream();
+                    } catch (final RuntimeException e) {
+                        throw e;
+                    } catch (final Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                })
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a));
+    }
+
+    private Map<String, Integer> doResolve(DownloadManager manager,
+                                           Resolver resolver,
+                                           Collection<Features> repositories,
+                                           Collection<String> features,
+                                           Collection<String> bundles,
+                                           Collection<String> optionals,
+                                           FeaturesProcessor processor,
+                                           BundleRevision systemBundle) throws Exception {
         // Static distribution building callback and deployer that's used to deploy/collect startup-stage artifacts
         AssemblyDeployCallback callback = new AssemblyDeployCallback(manager, this, systemBundle, repositories, processor);
         Deployer deployer = new Deployer(manager, resolver, callback);

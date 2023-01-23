@@ -14,6 +14,53 @@
 
 === Configuration
 
+==== Environment Variables & System Properties
+
+Apache Karaf uses default configuration properties location in `etc` folder (`KARAF_ETC`).
+
+You can override any configuration using either environment variables or system properties.
+
+Basically, Apache Karaf is looking for property in env and system properties.
+
+You can use `PID_PROPERTY=VALUE` syntax for environment variable and `pid.property=value` for system properties.
+
+For instance, the following statement will override value `sshPort` in `etc/org.apache.karaf.shell.cfg`:
+
+```
+# environment variable
+export ORG_APACHE_KARAF_SHELL_SSHPORT=8102
+```
+
+```
+# system property
+-Dorg.apache.karaf.shell.sshPort=8102
+```
+
+You can override any configuration property using this mechanism.
+
+[NOTE]
+====
+Please note that making this functionality requires OSGi configuration object to exist and have properties defined.
+It is not possible to override non-existing properties or create new entries in configuration based on environment variable.
+====
+
+[NOTE]
+====
+Environment variable matches configuration pid with all `.`, `-`, `~` replaced by `_`.
+It means that you can override `org.apache.felix.fileinstall~deploy` configuration with `ORG_APACHE_FELIX_FILEINSTAL_DEPLOY` environment variable.
+====
+
+It's possible to "append" a new value based on the content of a configuration property.
+For instance, you want to add a new features repository to the default value (define the `etc/org.apache.karaf.features.cfg` config file `featuresRepositories` property.
+You can use the following env variable:
+
+----
+export ORG_APACHE_KARAF_FEATURES_FEATURESREPOSITORIES='${featuresRepositories},mvn:org.apache.karaf.decanter/apache-karaf-decanter/2.5.0/xml/features'
+----
+
+It means that Karaf will take value of `featuresRepositories` property contained in the `etc/org.apache.karaf.features.cfg` configuration file and add
+`mvn:org.apache.karaf.decanter/apache-karaf-decanter/2.5.0/xml/features`.
+
 ==== Files
 
 Apache Karaf stores and loads all configuration in files located in the `etc` folder.
@@ -55,6 +102,65 @@ means that `key` will contain `bar` if you start Karaf with `-Dfoo=bar`.
 Environment variables can be referenced inside configuration files using the syntax `${env:<name>}` (e.g.
 `property=${env:FOO}` will set "property" to the value of the enviroment variable "FOO"). Default and alternate
 values can be defined for them as well using the same syntax as above.
+
+Apache Karaf also supports other syntax, supporting:
+
+* files on disk, for example to be used with Kubernetes secrets
+* environment variables
+* properties defined in `etc/config.properties`
+* system properties
+
+===== Secret Files
+
+Usually secrets (for example when provided by Kubernetes) will surface as files in a location.
+By default, the location is `etc` folder. However, you can point to any folder. The configuration
+is located in `etc/config.properties`:
+
+----
+org.apache.felix.configadmin.plugin.interpolation.secretsdir=${karaf.etc}
+----
+
+The file contents are opaque and contain the secret value as-is. To use content of a secret file in a
+configuration property, you can do:
+
+----
+user=my-user
+password=$[secret:db.password]
+----
+
+The content of `etc/db.password` will by used as value for `password` property.
+
+===== Environment variables
+
+Exactly the same as `${env:USER}`, you can use `$[env:USER]` syntax in a property:
+
+----
+greeting="Hello $[env:USER]"
+----
+
+With this syntax, default value is passed like this:
+
+----
+greeting="Hello $[env:USER;default=John]"
+----
+
+It's also possible to define the type of the property:
+
+----
+port=$[env:PORT;type=Integer]
+----
+
+===== System properties
+
+System property can be passed with `-Dfoo=bar` to the Karaf process or define in `etc/config.properties`.
+
+You can use these properties using the following syntax:
+
+----
+port=$[prop:my.port;default=8080]
+----
+
+===== cfg files
 
 In Apache Karaf, a configuration is a PID with a set of properties attached.
 
@@ -101,6 +207,21 @@ You can also do the same using the `config:*` commands or the ConfigMBean.
 Apache Karaf persists configuration using its own persistence manager in the case of when available persistence managers do not support that.
 Configuration files are placed by default in `KARAF_ETC`, but it could be overridden via variable `storage` in `etc/org.apache.karaf.config.cfg`.
 If you want to disable the Karaf persistence manager, set the storage variable to an empty string (`storage=`).
+
+===== json files
+
+You can also use config files wiht json format.
+
+By default, Apache Karaf loads all `*.cfg.json` files from the `etc` folder.
+
+You can change the file extension using `KARAF_JSON_CONFIG_EXTENSION` environment variable or `karaf.json.config.extension` system property.
+
+For instance, you can use `.myjson` extension using:
+
+----
+export KARAF_JSON_CONFIG_EXTENSION=.myjson
+./bin/karaf
+----
 
 ==== `config:*` commands
 

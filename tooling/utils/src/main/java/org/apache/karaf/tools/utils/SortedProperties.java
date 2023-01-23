@@ -62,6 +62,4 @@ public class SortedProperties extends Properties {
         return Collections.enumeration(new TreeSet<>(super.keySet()));
     }
 
-
-
 }

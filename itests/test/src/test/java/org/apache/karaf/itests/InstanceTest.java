@@ -19,15 +19,25 @@ import javax.management.ObjectName;
 import javax.management.openmbean.TabularData;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
 
+import javax.management.MBeanServer;
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectName;
+import javax.management.openmbean.TabularData;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -87,6 +97,21 @@ public class InstanceTest extends BaseTest {
         executeCommand("instance:destroy itest666");
     }
 
+    @Test
+    public void packageCommand() throws Exception {
+        executeCommand("instance:create test");
+        executeCommand("instance:package test archive.zip");
+        String zipPath = Paths.get(System.getProperty("karaf.home"), "archive.zip").toString();
+        ZipFile zipFile = new ZipFile(zipPath);
+
+        List<? extends ZipEntry> entries = Collections.list(zipFile.entries());
+        assertFalse(entries.isEmpty());
+        assertTrue(entries.stream().anyMatch(e -> e.getName().equals("bin/karaf")));
+        assertTrue(entries.stream().anyMatch(e -> e.getName().equals("etc/system.properties")));
+
+        executeCommand("instance:destroy test");
+    }
+
     private int getInstancesNum(MBeanServerConnection connection, ObjectName name) throws Exception {
         TabularData instances = (TabularData) connection.getAttribute(name, "Instances");
         return instances.size();
@@ -123,5 +148,4 @@ public class InstanceTest extends BaseTest {
                 new String[]{"java.lang.String", "int", "int", "int", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"});
         mbeanServer.invoke(name, "renameInstance", new Object[]{"itest5", "new_itest5"}, new String[]{"java.lang.String", "java.lang.String"});
     }
-
 }

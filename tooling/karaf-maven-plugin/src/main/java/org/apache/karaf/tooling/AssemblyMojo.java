@@ -38,12 +38,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
 import org.apache.karaf.features.internal.model.processing.BundleReplacements;
 import org.apache.karaf.profile.assembly.Builder;
 import org.apache.karaf.tooling.utils.IoUtils;
@@ -63,6 +65,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.aether.repository.WorkspaceReader;
+import org.eclipse.aether.version.VersionRange;
 import org.eclipse.aether.version.VersionRange;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.FrameworkFactory;
@@ -101,6 +104,12 @@ public class AssemblyMojo extends MojoSupport {
      */
     @Parameter
     protected File featuresProcessing;
+
+    /**
+     * If greater than 0, the feature resolver concurrency, otherwise it defaults to the machine one.
+     */
+    @Parameter
+    protected int resolverParallelism;
 
     /*
      * There are three builder stages related to maven dependency scopes:
@@ -208,6 +217,15 @@ public class AssemblyMojo extends MojoSupport {
      */
     @Parameter
     private List<String> bootFeatures;
+
+    /**
+     * List of features from runtime-scope features XML files and KARs to be installed into system repo
+     * and listed in featuresBoot property in etc/org.apache.karaf.features.cfg. These will be installed
+     * before {@link this#bootFeatures}. They will be wrapped in parentheses in featuresBoot.
+     */
+    @Parameter
+    private List<String> firstStageBootFeatures;
+
     /**
      * List of features from provided-scope features XML files and KARs to be installed into system repo
      * and not mentioned elsewhere.
@@ -446,7 +464,7 @@ public class AssemblyMojo extends MojoSupport {
      * built artifacts from the maven project.
      */
     @Parameter
-    protected Map<String, String> translatedUrls;
+    protected Properties translatedUrls;
 
     /**
      * Specify a list of additional properties that should be added to <code>${karaf.etc}/config.properties</code>
@@ -519,6 +537,9 @@ public class AssemblyMojo extends MojoSupport {
         if (featuresProcessing != null) {
             builder.setFeaturesProcessing(featuresProcessing.toPath());
         }
+        if (resolverParallelism > 0) {
+            builder.resolverParallelism(resolverParallelism);
+        }
 
         // Set up remote repositories from Maven build, to be used by pax-url-aether resolver
         String remoteRepositories = MavenUtil.remoteRepositoryList(project.getRemoteProjectRepositories());
@@ -573,6 +594,7 @@ public class AssemblyMojo extends MojoSupport {
         builder.defaultStage(Builder.Stage.Boot)
                 .kars(toArray(bootKars))
                 .repositories(bootFeatures.isEmpty() && bootProfiles.isEmpty() && installAllFeaturesByDefault, toArray(bootRepositories))
+                .firstStageBootFeatures(toArray(firstStageBootFeatures))
                 .features(toArray(bootFeatures))
                 .bundles(toArray(bootBundles))
                 .profiles(toArray(bootProfiles));
@@ -903,7 +925,9 @@ public class AssemblyMojo extends MojoSupport {
                 urls.put(mvnUrl, artifact.getFile().toURI().toString());
             }
         }
-        urls.putAll(translatedUrls);
+        for (Map.Entry<Object, Object> entry : translatedUrls.entrySet()) {
+            urls.put(entry.getKey().toString(), entry.getValue().toString());
+        }
         return urls;
     }
 
@@ -999,6 +1023,7 @@ public class AssemblyMojo extends MojoSupport {
         blacklistedBundles = nonNullList(blacklistedBundles);
         startupFeatures = nonNullList(startupFeatures);
         bootFeatures = nonNullList(bootFeatures);
+        firstStageBootFeatures = nonNullList(firstStageBootFeatures);
         installedFeatures = nonNullList(installedFeatures);
         blacklistedFeatures = nonNullList(blacklistedFeatures);
         startupProfiles = nonNullList(startupProfiles);
@@ -1012,7 +1037,7 @@ public class AssemblyMojo extends MojoSupport {
     private void setNullMapsToEmpty() {
         config = nonNullMap(config);
         system = nonNullMap(system);
-        translatedUrls = nonNullMap(translatedUrls);
+        translatedUrls = nonNullProps(translatedUrls);
     }
 
     private List<String> nonNullList(List<String> list) {
@@ -1022,6 +1047,10 @@ public class AssemblyMojo extends MojoSupport {
 
     private Map<String, String> nonNullMap(Map<String, String> map) {
         return map == null ? new LinkedHashMap<>() : map;
+    }
+
+    private Properties nonNullProps(Properties props) {
+        return props == null ? new Properties() : props;
     }
 
 }

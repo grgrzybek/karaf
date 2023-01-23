@@ -39,6 +39,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>test</groupId>
+            <artifactId>simplify-jar-c</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

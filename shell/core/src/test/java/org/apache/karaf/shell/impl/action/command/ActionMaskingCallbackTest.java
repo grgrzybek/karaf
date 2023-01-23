@@ -32,7 +32,6 @@ import org.apache.karaf.shell.api.console.SessionFactory;
 import org.apache.karaf.shell.impl.console.HeadlessSessionImpl;
 import org.apache.karaf.shell.impl.console.SessionFactoryImpl;
 import org.apache.karaf.shell.impl.console.parsing.KarafParser;
-import org.jline.reader.ParsedLine;
 import org.jline.reader.Parser;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +42,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class ActionMaskingCallbackTest {
 
@@ -74,6 +72,8 @@ public class ActionMaskingCallbackTest {
         check("user-add --opt2=valOpt2 user password foo", "user-add --opt2=valOpt2 user ######## foo");
         check("user-add --opt1 --opt2 valOpt2 --opt3=valOpt3 user password foo", "user-add --opt1 --opt2 valOpt2 --opt3=@@@@@@@ user ######## foo");
         check("user-add --opt1 --opt2 valOpt2 --opt3 valOpt3 user password foo", "user-add --opt1 --opt2 valOpt2 --opt3 @@@@@@@ user ######## foo");
+        check("user-add --opt1 --opt2 valOpt2 --opt3 valOpt3 --opt4alias1 censorMe --opt4alias2 censorMeToo user password foo",
+                "user-add --opt1 --opt2 valOpt2 --opt3 @@@@@@@ --opt4alias1 ******** --opt4alias2 *********** user ######## foo");
     }
 
     private void check(String input, String expected) {
@@ -94,6 +94,9 @@ public class ActionMaskingCallbackTest {
 
         @Option(name = "--opt3", censor = true, mask = '@')
         private String opt3;
+
+        @Option(name = "--opt4", aliases = {"--opt4alias1", "--opt4alias2"}, censor = true, mask = '*')
+        private String opt4;
 
         @Argument(index = 0, name = "username")
         private String username;

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import javax.management.remote.rmi.RMIConnectorServer;
 
 import org.apache.karaf.jaas.config.KeystoreInstance;
 import org.apache.karaf.jaas.config.KeystoreManager;
@@ -109,6 +110,11 @@ public class Activator extends BaseActivator implements ManagedService {
         originalRmiServerHostname = System.getProperty("java.rmi.server.hostname");
         System.setProperty("java.rmi.server.hostname", rmiServerHost);
 
+        // https://issues.apache.org/jira/browse/KARAF-7312
+        // security enforcement using credentials filter pattern, passed via environment map
+        // JDK11+ only
+//        String credentialsFilterPattern = getString(RMIConnectorServer.CREDENTIALS_FILTER_PATTERN, String.class.getName() + ";!*");
+
         String jmxRealm = getString("jmxRealm", "karaf");
         String serviceUrl = getString("serviceUrl",
                 "service:jmx:rmi://" + rmiServerHost + ":" + rmiServerPort + "/jndi/rmi://" + rmiRegistryHost + ":" + rmiRegistryPort + "/karaf-" + System.getProperty("karaf.name"));
@@ -174,6 +180,8 @@ public class Activator extends BaseActivator implements ManagedService {
         // but "jmx.remote.rmi.server.credential.types" is kept for backward compatibility
         // this is used in javax.management.remote.rmi.RMIJRMPServerImpl.RMIJRMPServerImpl
         environment.put("jmx.remote.rmi.server.credential.types", new String[] { String[].class.getName() });
+        // karaf 4.4.3 (JDK11+)
+//        environment.put(RMIConnectorServer.CREDENTIALS_FILTER_PATTERN, credentialsFilterPattern);
         try {
             connectorServerFactory.setEnvironment(environment);
             connectorServerFactory.setJmxmpEnvironment(jmxmpEnvironment);
@@ -189,7 +197,7 @@ public class Activator extends BaseActivator implements ManagedService {
             connectorServerFactory.setTrustStore(trustStore);
             connectorServerFactory.setKeystoreManager(keystoreManager);
             connectorServerFactory.init();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.error("Can't init JMXConnectorServer: " + e.getMessage());
         }
 

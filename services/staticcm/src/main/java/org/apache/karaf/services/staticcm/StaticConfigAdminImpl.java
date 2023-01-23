@@ -39,7 +39,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class StaticConfigAdminImpl implements ConfigurationAdmin {
     private final BundleContext context;
     private final List<Configuration> configurations;
-    
+
     public StaticConfigAdminImpl(BundleContext context, List<Configuration> configs) throws IOException {
         Objects.requireNonNull(configs, "configs");
         this.context = context;
@@ -49,25 +49,25 @@ public class StaticConfigAdminImpl implements ConfigurationAdmin {
             public ManagedService addingService(ServiceReference<ManagedService> reference) {
                 ManagedService service = context.getService(reference);
                 Object pidObj = reference.getProperty(Constants.SERVICE_PID);
-                
+
                 boolean found = false;
-                
+
                 if (pidObj instanceof String) {
                     String pid = (String) pidObj;
-                    
+
                     for (Configuration config : configurations) {
                         if (config.getPid().equals(pid) && config.getFactoryPid() == null) {
                         	found = true;
                         	invokeUpdate(service, config);
                         }
                     }
-                    
+
                 }
-                
+
                 if (!found) {
                 	invokeUpdate(service, null);
                 }
-                
+
                 return service;
             }
 
@@ -89,7 +89,7 @@ public class StaticConfigAdminImpl implements ConfigurationAdmin {
                     for (Configuration config : configurations) {
                         if (config.getPid().equals(pid) && config.getFactoryPid() != null) {
                             try {
-                                factory.updated(config.getFactoryPid(), config.getProperties());
+                                factory.updated(config.getFactoryPid(), config.getProcessedProperties(null));
                             } catch (ConfigurationException e) {
                                 e.printStackTrace();
                             }
@@ -108,10 +108,10 @@ public class StaticConfigAdminImpl implements ConfigurationAdmin {
         };
         factoryTracker.open();
     }
-    
+
     private void invokeUpdate(ManagedService service, Configuration config) {
 		try {
-			service.updated(config == null ? null : config.getProperties());
+			service.updated(config == null ? null : config.getProcessedProperties(null));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -153,7 +153,7 @@ public class StaticConfigAdminImpl implements ConfigurationAdmin {
             configs = new ArrayList<>();
             Filter flt = context.createFilter(filter);
             for (Configuration config : configurations) {
-                if (flt.match(config.getProperties())) {
+                if (flt.match(config.getProcessedProperties(null))) {
                     configs.add(config);
                 }
             }

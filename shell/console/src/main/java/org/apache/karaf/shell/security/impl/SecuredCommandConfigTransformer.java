@@ -75,7 +75,7 @@ public class SecuredCommandConfigTransformer implements ConfigurationListener {
         }
         scopeName = scopeName.trim();
 
-        Dictionary<String, Object> configProps = config.getProperties();
+        Dictionary<String, Object> configProps = config.getProcessedProperties(null);
 
         Map<String, Dictionary<String, Object>> configMaps = new HashMap<>();
         for (Enumeration<String> e = configProps.keys(); e.hasMoreElements(); ) {
@@ -130,10 +130,8 @@ public class SecuredCommandConfigTransformer implements ConfigurationListener {
         if (!commandACLArgs.endsWith("/]")) {
             throw new IllegalStateException("Badly formatted argument match: " + commandACLArgs + " Should end with '/]'");
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append("[/.*/,"); // add a wildcard argument since the Function execute method has the arguments as second arg
-        sb.append(commandACLArgs.substring(1));
-        return sb.toString();
+        return "[/.*/," // add a wildcard argument since the Function execute method has the arguments as second arg
+            + commandACLArgs.substring(1);
     }
 
     void deleteServiceGuardConfig(String originatingPid, String scope) throws IOException, InvalidSyntaxException {
@@ -235,10 +233,10 @@ public class SecuredCommandConfigTransformer implements ConfigurationListener {
         Map<String, String> scopeBundleMaps = new HashMap<>();
         try {
             for (Configuration config : configAdmin.listConfigurations("(service.pid=" + ACL_SCOPE_BUNDLE_MAP + ")")) {
-                Enumeration<String> keys = config.getProperties().keys();
+                Enumeration<String> keys = config.getProcessedProperties(null).keys();
                 while (keys.hasMoreElements()) {
                     String key = keys.nextElement();
-                    scopeBundleMaps.put(key, (String)config.getProperties().get(key));
+                    scopeBundleMaps.put(key, (String)config.getProcessedProperties(null).get(key));
                 }
             }
         } catch (Exception ex) {

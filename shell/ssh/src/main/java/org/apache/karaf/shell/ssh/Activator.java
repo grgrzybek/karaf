@@ -161,6 +161,7 @@ public class Activator extends BaseActivator implements ManagedService {
         Class<?>[] roleClasses      = getClassesArray("sshRoleTypes", "org.apache.karaf.jaas.boot.principal.RolePrincipal");
         String sshRole              = getString("sshRole", null);
         String privateHostKey       = getString("hostKey", System.getProperty("karaf.etc") + "/host.key");
+        String privateKeyPassword   = getString("hostKeyPassword", null);
         String publicHostKey        = getString("hostKeyPub", System.getProperty("karaf.etc") + "/host.key.pub");
         String[] authMethods        = getStringArray("authMethods", "keyboard-interactive,password,publickey");
         int keySize                 = getInt("keySize", 2048);
@@ -169,6 +170,8 @@ public class Activator extends BaseActivator implements ManagedService {
         String[] ciphers            = getStringArray("ciphers", "aes256-ctr,aes192-ctr,aes128-ctr");
         String[] kexAlgorithms      = getStringArray("kexAlgorithms", "ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256");
         String[] signAlgorithms     = getStringArray("signatureAlgorithms", "ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,sk-ecdsa-sha2-nistp256@openssh.com,sk-ssh-ed25519@openssh.com,rsa-sha2-512,rsa-sha2-256,ssh-rsa");
+        // karaf 4.4.3:
+//        String[] sigAlgorithms      = getStringArray("sigAlgorithms", "ssh-rsa,rsa-sha2-256,rsa-sha2-512,sk-ecdsa-sha2-nistp256@openssh.com,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521");
         String welcomeBanner        = getString("welcomeBanner", null);
         String moduliUrl            = getString("moduli-url", null);
         boolean sftpEnabled         = getBoolean("sftpEnabled", true);
@@ -186,7 +189,7 @@ public class Activator extends BaseActivator implements ManagedService {
         server.setMacFactories(SshUtils.buildMacs(macs));
         server.setCipherFactories(SshUtils.buildCiphers(ciphers));
         server.setKeyExchangeFactories(SshUtils.buildKexAlgorithms(kexAlgorithms));
-        server.setSignatureFactories(SshUtils.buildSignatureAlgorithms(signAlgorithms));
+        server.setSignatureFactories(SshUtils.buildSigAlgorithms(sigAlgorithms));
         server.setShellFactory(new ShellFactoryImpl(sessionFactory));
 
         if (sftpEnabled) {

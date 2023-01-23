@@ -230,8 +230,8 @@ public class FeaturesProcessorImpl implements FeaturesProcessor {
 
         String originalLocation = bundle.getLocation();
         Optional<BundleReplacements.OverrideBundle> bestMatch = this.getInstructions().getBundleReplacements().getOverrideBundles().stream()
-                        .filter(overrideBundle -> overrideBundle.getOriginalUriPattern().strictlyMatches(originalLocation))
-                        .max((o1, o2) -> Integer.compare(o1.getReplacement().length(), o2.getReplacement().length()));
+                .filter(overrideBundle -> overrideBundle.getOriginalUriPattern().strictlyMatches(originalLocation))
+                .max((o1, o2) -> Integer.compare(o1.getReplacement().length(), o2.getReplacement().length()));
         bestMatch.ifPresent(o -> doOverrideBundle(bundle, o));
     }
 

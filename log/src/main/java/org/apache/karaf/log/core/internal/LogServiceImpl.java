@@ -59,6 +59,14 @@ public class LogServiceImpl implements LogService, PaxAppender {
                 throw new IllegalStateException("Unsupported Log4j2 configuration type: " + file);
             }
         }
+        else if (config.get("org.ops4j.pax.logging.logback.config.file") != null) {
+            String file = config.get("org.ops4j.pax.logging.logback.config.file").toString();
+            if (file.endsWith(".xml")) {
+                return new LogServiceLogbackXmlImpl(file);
+            } else {
+                throw new IllegalStateException("Unsupported Logback configuration type: " + file);
+            }
+        }
         else {
             throw new IllegalStateException("Unrecognized configuration");
         }
@@ -78,7 +86,7 @@ public class LogServiceImpl implements LogService, PaxAppender {
         if (logger == null) {
             logger = LogServiceInternal.ROOT_LOGGER;
         }
-        return getDelegate(cfg.getProperties()).getLevel(logger);
+        return getDelegate(cfg.getProcessedProperties(null)).getLevel(logger);
     }
 
     public void setLevel(String level) {
@@ -101,7 +109,7 @@ public class LogServiceImpl implements LogService, PaxAppender {
 
         // Get config
         Configuration cfg = getConfiguration();
-        Dictionary<String, Object> props = cfg.getProperties();
+        Dictionary<String, Object> props = cfg.getProcessedProperties(null);
         // Update
         getDelegate(props).setLevel(logger, level);
         // Save

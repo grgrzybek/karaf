@@ -13,6 +13,7 @@
  */
 package org.apache.karaf.itests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
@@ -21,6 +22,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.openmbean.TabularData;
 
+import org.apache.karaf.features.FeatureState;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 
 import org.junit.Test;
@@ -73,6 +75,31 @@ public class FeatureTest extends BaseTest {
     }
 
     @Test
+    public void listCommandFromRepository() {
+        executeCommand("feature:repo-add mvn:org.apache.karaf.cellar/apache-karaf-cellar/3.0.0/xml/features", new RolePrincipal("admin"));
+        String repositoryName = "karaf-cellar-3.0.0";
+        String featureListOutput = executeCommand("feature:list --repository " + repositoryName, new RolePrincipal("viewer"));
+        assertFalse(featureListOutput.isEmpty());
+
+        String[] lines = featureListOutput.split("\\R");
+        String headers = lines[0];
+        assertContains("Name", headers);
+        assertContains("Version", headers);
+        assertContains("Required", headers);
+        assertContains("State", headers);
+        assertContains("Repository", headers);
+        assertContains("Description", headers);
+
+        // lines[1] is a separator line, start from 2
+        int repositoryColumnIndex = 4;
+        for (int i = 2; i < lines.length; i++) {
+            String row = lines[i];
+            assertTrue(row.matches("(.*|){4}"));
+            assertContains(repositoryName, row);
+        }
+    }
+
+    @Test
     public void listViaMBean() throws Exception {
         MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("org.apache.karaf:type=feature,name=root");
@@ -81,8 +108,31 @@ public class FeatureTest extends BaseTest {
     }
 
     @Test
+    public void versionListCommand() {
+        executeCommand("feature:install wrapper", new RolePrincipal("admin"));
+        String featureVersionListOutput = executeCommand("feature:version-list wrapper", new RolePrincipal("viewer"));
+        String[] lines = featureVersionListOutput.split("\\R");
+        String headers = lines[0];
+        assertContains("Version", headers);
+        assertContains("Repository", headers);
+        assertContains("Repository URL", headers);
+        assertContains("State", headers);
+        // lines[1] separates headers and rows
+        String row = lines[2];
+        assertTrue(row.matches("(.*|){3}Started"));
+    }
+
+    @Test
     public void installUninstallCommand() throws Exception {
         System.out.println(executeCommand("feature:install -v -r wrapper", new RolePrincipal("admin")));
+        assertFeatureInstalled("wrapper");
+        System.out.println(executeCommand("feature:uninstall -r wrapper", new RolePrincipal("admin")));
+        assertFeatureNotInstalled("wrapper");
+    }
+
+    @Test
+    public void upgradeUninstallCommand() throws Exception {
+        System.out.println(executeAlias("feature:upgrade -v -r wrapper", new RolePrincipal("admin")));
         assertFeatureInstalled("wrapper");
         System.out.println(executeCommand("feature:uninstall -r wrapper", new RolePrincipal("admin")));
         assertFeatureNotInstalled("wrapper");
@@ -142,6 +192,17 @@ public class FeatureTest extends BaseTest {
         MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("org.apache.karaf:type=feature,name=root");
         mbeanServer.invoke(name, "refreshRepository", new Object[] { ".*pax-web.*" }, new String[]{ "java.lang.String" });
+    }
+
+    @Test
+    public void statusCommand() throws Exception {
+        executeCommand("feature:install -v -r wrapper", new RolePrincipal("admin"));
+        String featureStatus = executeCommand("feature:status wrapper");
+        assertContains(FeatureState.Started.name(), featureStatus);
+
+        executeCommand("feature:uninstall wrapper", new RolePrincipal("admin"));
+        featureStatus = executeCommand("feature:status wrapper");
+        assertContains(FeatureState.Uninstalled.name(), featureStatus);
     }
 
     @Test

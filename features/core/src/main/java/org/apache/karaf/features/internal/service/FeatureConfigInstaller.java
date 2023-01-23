@@ -19,14 +19,18 @@ package org.apache.karaf.features.internal.service;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 
+import org.apache.felix.cm.json.Configurations;
 import org.apache.felix.utils.properties.InterpolationHelper;
 import org.apache.felix.utils.properties.TypedProperties;
 import org.apache.karaf.features.ConfigFileInfo;
@@ -45,6 +49,7 @@ public class FeatureConfigInstaller {
     private static final Logger LOGGER = LoggerFactory.getLogger(FeaturesServiceImpl.class);
     private static final String CONFIG_KEY = "org.apache.karaf.features.configKey";
     private static final String FILEINSTALL_FILE_NAME = "felix.fileinstall.filename";
+    private static final Pattern JSON_PATTERN = Pattern.compile("\\s*\\{[\\s\\S]*");
 
     private final ConfigurationAdmin configAdmin;
     private File storage;
@@ -62,13 +67,18 @@ public class FeatureConfigInstaller {
         this.configCfgStore = configCfgStore;
     }
 
-    private ConfigId parsePid(String pid) {
-        int n = pid.indexOf('-');
-        ConfigId cid = new ConfigId();
+    private ConfigId parsePid(final String pid) {
+        final ConfigId cid = new ConfigId();
+        cid.pid = pid;
         cid.fullPid = pid;
+        final int n = pid.contains("~") ? pid.indexOf('~') : pid.indexOf('-');
         if (n > 0) {
-            cid.factoryPid = pid.substring(n + 1);
+            cid.isFactoryPid = true;
+            cid.factoryPid = pid.substring(0, n);
             cid.pid = pid.substring(0, n);
+            if (pid.contains("~")) {
+                cid.name = pid.substring(n + 1);
+            }
         } else {
             cid.pid = pid;
             cid.acl = pid.startsWith("org.apache.karaf.command.acl.") || pid.startsWith("jmx.acl");
@@ -76,22 +86,26 @@ public class FeatureConfigInstaller {
         return cid;
     }
 
-    private Configuration createConfiguration(ConfigurationAdmin configurationAdmin, String pid,
-                                              String factoryPid)
+    private Configuration createConfiguration(ConfigurationAdmin configurationAdmin, ConfigId cid)
         throws IOException, InvalidSyntaxException {
-        if (factoryPid != null) {
-            return configurationAdmin.createFactoryConfiguration(pid, null);
+        if (cid.isFactoryPid) {
+            if (Objects.nonNull(cid.name)) {
+                return configurationAdmin.getFactoryConfiguration(cid.factoryPid, cid.name, null);
+            } else {
+                return configurationAdmin.createFactoryConfiguration(cid.factoryPid, null);
+            }
         } else {
-            return configurationAdmin.getConfiguration(pid, null);
+            return configurationAdmin.getConfiguration(cid.pid, null);
         }
     }
 
     private Configuration findExistingConfiguration(ConfigurationAdmin configurationAdmin, ConfigId cid)
         throws IOException, InvalidSyntaxException {
         String filter;
-        if (cid.factoryPid == null) {
+        if (!cid.isFactoryPid) {
             filter = "(" + Constants.SERVICE_PID + "=" + cid.pid + ")";
         } else {
+//            filter = "(" + CONFIG_KEY + "=" + cid.pid + ")";
             filter = "(" + CONFIG_KEY + "=" + cid.fullPid + ")";
         }
         Configuration[] configurations = configurationAdmin.listConfigurations(filter);
@@ -100,36 +114,49 @@ public class FeatureConfigInstaller {
 
     public void installFeatureConfigs(Feature feature) throws IOException, InvalidSyntaxException {
         for (ConfigInfo config : feature.getConfigurations()) {
-            TypedProperties props = new TypedProperties();
-            // trim lines
-            String val = config.getValue();
+            String configValue = config.getValue();
+            TypedProperties properties = new TypedProperties();
+            boolean jsonFormat = false;
             if (config.isExternal()) {
+                // the configuration is actually located on the URL contained in the config value
                 try {
-                    props.load(new URL(val));
-                } catch (java.net.MalformedURLException e) {
-                    throw new IOException("Failed to load config info from URL [" + val + "] for feature [" + feature.getName() + "/" + feature.getVersion() + "].", e);
+                    configValue = loadConfiguration(new URL(configValue));
+                } catch (MalformedURLException e) {
+                    throw new IOException("Failed to load configuration from URL " + configValue + " for feature " + feature.getName() + "/" + feature.getVersion(), e);
                 }
+            }
+            if (JSON_PATTERN.matcher(configValue).matches()) {
+                // json format
+                properties = convertToTypedProperties(Configurations.buildReader().build(new StringReader(configValue)).readConfiguration());
+                jsonFormat = true;
             } else {
-                props.load(new StringReader(val));
+                // properties format
+                properties.load(new StringReader(configValue));
             }
             ConfigId cid = parsePid(config.getName());
             Configuration cfg = findExistingConfiguration(configAdmin, cid);
             if (cfg == null || config.isOverride()) {
                 File cfgFile = null;
                 if (storage != null) {
-                    cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.fullPid + ".cfg");
+                    if (jsonFormat) {
+                        cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.fullPid + ".json");
+                    } else {
+                        cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.fullPid + ".cfg");
+                    }
                 }
                 if (!cfgFile.exists() || config.isOverride()) {
-                    Dictionary<String, Object> cfgProps = convertToDict(props);
-                    cfg = createConfiguration(configAdmin, cid.pid, cid.factoryPid);
-                    cfgProps.put(CONFIG_KEY, cid.fullPid);
-                    props.put(CONFIG_KEY, cid.fullPid);
+                    Dictionary<String, Object> cfgProps = convertToDict(properties);
+                    cfg = createConfiguration(configAdmin, cid);
+                    cfgProps.put(CONFIG_KEY, cid.pid);
+                    properties.put(CONFIG_KEY, cid.pid);
                     cfg.update(cfgProps);
                     if (storage != null && configCfgStore) {
+// ????????????????????
+                        properties.put(FILEINSTALL_FILE_NAME, cfgFile.getAbsoluteFile().toURI().toString());
                         cfgProps.put(FILEINSTALL_FILE_NAME, cfgFile.getAbsoluteFile().toURI().toString());
                     }
                     try {
-                        updateStorage(cid, props, false);
+                        updateStorage(cid, properties, false, jsonFormat);
                     } catch (Exception e) {
                         LOGGER.warn("Can't update cfg file", e);
                     }
@@ -138,17 +165,17 @@ public class FeatureConfigInstaller {
                 }
             } else if (config.isAppend()) {
                 boolean update = false;
-                Dictionary<String, Object> properties = cfg.getProperties();
-                for (String key : props.keySet()) {
-                    if (properties.get(key) == null) {
-                        properties.put(key, props.get(key));
+                Dictionary<String, Object> p = cfg.getProcessedProperties(null);
+                for (String key : properties.keySet()) {
+                    if (p.get(key) == null) {
+                        p.put(key, properties.get(key));
                         update = true;
                     }
                 }
                 if (update) {
-                    cfg.update(properties);
+                    cfg.update(p);
                     try {
-                        updateStorage(cid, props, true);
+                        updateStorage(cid, properties, true, jsonFormat);
                     } catch (Exception e) {
                         LOGGER.warn("Can't update cfg file", e);
                     }
@@ -158,6 +185,14 @@ public class FeatureConfigInstaller {
         for (ConfigFileInfo configFile : feature.getConfigurationFiles()) {
             installConfigurationFile(configFile.getLocation(), configFile.getFinalname(),
                                      configFile.isOverride());
+        }
+    }
+
+    private String loadConfiguration(final URL url) throws IOException {
+        try (final InputStream inputStream = new BufferedInputStream(url.openStream())) {
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            StreamUtils.copy(inputStream, outputStream);
+            return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 
@@ -172,7 +207,8 @@ public class FeatureConfigInstaller {
                     }
                     File cfgFile = null;
                     if (storage != null) {
-                        cfgFile = new File(storage, configId.fullPid + ".cfg");
+//                        cfgFile = new File(storage, configId.fullPid + ".cfg");
+                        cfgFile = new File(storage, configId.pid + ".cfg");
                     }
                     if (cfgFile.exists()) {
                         cfgFile.delete();
@@ -197,6 +233,16 @@ public class FeatureConfigInstaller {
             cfgProps.put(e.getKey(), e.getValue());
         }
         return cfgProps;
+    }
+
+    private TypedProperties convertToTypedProperties(Dictionary<String, Object> dict) {
+        TypedProperties typedProperties = new TypedProperties();
+        Enumeration<String> keys = dict.keys();
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            typedProperties.put(key, dict.get(key));
+        }
+        return typedProperties;
     }
 
     /**
@@ -289,26 +335,35 @@ public class FeatureConfigInstaller {
         }
     }
 
-    protected void updateStorage(ConfigId cid, TypedProperties props, boolean append)
+    protected void updateStorage(ConfigId cid, TypedProperties props, boolean append, boolean jsonFormat)
         throws Exception {
         if (storage != null && configCfgStore) {
-            File cfgFile = getConfigFile(cid);
+            File cfgFile = getConfigFile(cid, jsonFormat);
             if (!cfgFile.exists()) {
                 File tmpCfgFile = File.createTempFile(cfgFile.getName(), ".tmp", cfgFile.getParentFile());
-                props.save(tmpCfgFile);
+                if (jsonFormat) {
+                    Configurations.buildWriter().build(new FileWriter(tmpCfgFile)).writeConfiguration(convertToDict(props));
+                } else {
+                    props.save(tmpCfgFile);
+                }
                 tmpCfgFile.renameTo(cfgFile);
             } else {
-                updateExistingConfig(props, append, cfgFile);
+                updateExistingConfig(props, append, cfgFile, jsonFormat);
             }
         }
     }
 
-    private File getConfigFile(ConfigId cid) throws IOException, InvalidSyntaxException {
+    private File getConfigFile(ConfigId cid, boolean jsonFormat) throws IOException, InvalidSyntaxException {
         Configuration cfg = findExistingConfiguration(configAdmin, cid);
         // update the cfg file depending of the configuration
-        File cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.fullPid + ".cfg");
-        if (cfg != null && cfg.getProperties() != null) {
-            Object val = cfg.getProperties().get(FILEINSTALL_FILE_NAME);
+        File cfgFile;
+        if (jsonFormat) {
+            cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.pid + ".json");
+        } else {
+            cfgFile = new File(storage, (cid.acl ? "auth/" : "") + cid.pid + ".cfg");
+        }
+        if (cfg != null && cfg.getProcessedProperties(null) != null) {
+            Object val = cfg.getProcessedProperties(null).get(FILEINSTALL_FILE_NAME);
             try {
                 if (val instanceof URL) {
                     cfgFile = new File(((URL)val).toURI());
@@ -327,9 +382,13 @@ public class FeatureConfigInstaller {
         return cfgFile;
     }
 
-    private void updateExistingConfig(TypedProperties props, boolean append, File cfgFile) throws IOException {
+    private void updateExistingConfig(TypedProperties props, boolean append, File cfgFile, boolean jsonFormat) throws IOException {
         TypedProperties properties = new TypedProperties();
-        properties.load(cfgFile);
+        if (jsonFormat) {
+            properties = convertToTypedProperties(Configurations.buildReader().build(new FileReader(cfgFile)).readConfiguration());
+        } else {
+            properties.load(cfgFile);
+        }
         for (String key : props.keySet()) {
             if (!isInternalKey(key)) {
                 List<String> comments = props.getComments(key);
@@ -357,7 +416,11 @@ public class FeatureConfigInstaller {
             }
         }
         storage.mkdirs();
-        properties.save(cfgFile);
+        if (jsonFormat) {
+            Configurations.buildWriter().build(new FileWriter(cfgFile)).writeConfiguration(new Hashtable(properties));
+        } else {
+            properties.save(cfgFile);
+        }
     }
 
     private boolean isInternalKey(String key) {
@@ -366,11 +429,14 @@ public class FeatureConfigInstaller {
             || FILEINSTALL_FILE_NAME.equals(key);
     }
 
-    class ConfigId {
+    private static final class ConfigId {
+        boolean isFactoryPid;
         String fullPid;
         String pid;
         String factoryPid;
+        String name;
         // ENTESB-7844 - cleanup ${karaf.etc} directory
         boolean acl;
     }
+
 }

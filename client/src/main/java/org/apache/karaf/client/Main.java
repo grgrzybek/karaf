@@ -16,9 +16,15 @@
  */
 package org.apache.karaf.client;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.Console;
+import java.io.FileInputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Proxy;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.security.KeyPair;
@@ -33,7 +39,6 @@ import org.apache.sshd.agent.SshAgent;
 import org.apache.sshd.agent.local.AgentImpl;
 import org.apache.sshd.agent.local.LocalAgentFactory;
 import org.apache.sshd.client.ClientBuilder;
-import org.apache.sshd.client.ClientFactoryManager;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.auth.keyboard.UserInteraction;
 import org.apache.sshd.client.channel.ChannelExec;
@@ -46,8 +51,8 @@ import org.apache.sshd.common.RuntimeSshException;
 import org.apache.sshd.common.channel.PtyMode;
 import org.apache.sshd.common.config.keys.FilePasswordProvider;
 import org.apache.sshd.common.keyprovider.FileKeyPairProvider;
-import org.apache.sshd.common.util.io.NoCloseInputStream;
-import org.apache.sshd.common.util.io.NoCloseOutputStream;
+import org.apache.sshd.common.util.io.input.NoCloseInputStream;
+import org.apache.sshd.common.util.io.output.NoCloseOutputStream;
 import org.apache.sshd.core.CoreModuleProperties;
 import org.jline.terminal.Attributes;
 import org.jline.terminal.Attributes.ControlChar;
@@ -133,7 +138,7 @@ public class Main {
                     }
                 });
             }
-            
+
             if (config.getUser()==null || config.getUser().isEmpty()) {
             	while (true) {
             		String user = console.readLine("Enter user: ");
@@ -149,7 +154,7 @@ public class Main {
             else if (console != null) {
                 console.printf("Logging in as %s\n", config.getUser());
             }
-            
+
             setupAgent(config.getUser(), config.getKeyFile(), client, passwordProvider);
 
             // define hearbeat (for the keep alive) and timeouts
@@ -187,22 +192,20 @@ public class Main {
                     ChannelExec channel = session.createExecChannel(config.getCommand() + "\n");
                     channel.setIn(new ByteArrayInputStream(new byte[0]));
                     if (!config.isBatch()) {
-                        new Thread() {
-                            public void run() {
-                                while (true) {
-                                    try {
-                                        int a = System.in.read();
-                                        if (a == -1) {
-                                            channel.close(true);
-                                            break;
-                                        }
-                                        Thread.sleep(1000);
-                                    } catch (Exception e) {
-                                        //ignore
+                        new Thread(() -> {
+                            while (true) {
+                                try {
+                                    int a = System.in.read();
+                                    if (a == -1) {
+                                        channel.close(true);
+                                        break;
                                     }
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    //ignore
                                 }
                             }
-                        }.start();
+                        }).start();
                     }
                     channel.setAgentForwarding(true);
                     NoCloseOutputStream output = new NoCloseOutputStream(terminal.output());
@@ -213,28 +216,29 @@ public class Main {
                     if (channel.getExitStatus() != null) {
                         exitStatus = channel.getExitStatus();
                     }
+
                 } else {
                     ChannelShell channel = session.createShellChannel();
                     Attributes attributes = terminal.enterRawMode();
                     try {
                         Map<PtyMode, Integer> modes = new HashMap<>();
                         // Control chars
-                        modes.put(PtyMode.VINTR, attributes.getControlChar(ControlChar.VINTR));
-                        modes.put(PtyMode.VQUIT, attributes.getControlChar(ControlChar.VQUIT));
-                        modes.put(PtyMode.VERASE, attributes.getControlChar(ControlChar.VERASE));
-                        modes.put(PtyMode.VKILL, attributes.getControlChar(ControlChar.VKILL));
-                        modes.put(PtyMode.VEOF, attributes.getControlChar(ControlChar.VEOF));
-                        modes.put(PtyMode.VEOL, attributes.getControlChar(ControlChar.VEOL));
-                        modes.put(PtyMode.VEOL2, attributes.getControlChar(ControlChar.VEOL2));
-                        modes.put(PtyMode.VSTART, attributes.getControlChar(ControlChar.VSTART));
-                        modes.put(PtyMode.VSTOP, attributes.getControlChar(ControlChar.VSTOP));
-                        modes.put(PtyMode.VSUSP, attributes.getControlChar(ControlChar.VSUSP));
-                        modes.put(PtyMode.VDSUSP, attributes.getControlChar(ControlChar.VDSUSP));
-                        modes.put(PtyMode.VREPRINT, attributes.getControlChar(ControlChar.VREPRINT));
-                        modes.put(PtyMode.VWERASE, attributes.getControlChar(ControlChar.VWERASE));
-                        modes.put(PtyMode.VLNEXT, attributes.getControlChar(ControlChar.VLNEXT));
-                        modes.put(PtyMode.VSTATUS, attributes.getControlChar(ControlChar.VSTATUS));
-                        modes.put(PtyMode.VDISCARD, attributes.getControlChar(ControlChar.VDISCARD));
+                        addMode(modes, PtyMode.VINTR, attributes, ControlChar.VINTR);
+                        addMode(modes, PtyMode.VQUIT, attributes, ControlChar.VQUIT);
+                        addMode(modes, PtyMode.VERASE, attributes, ControlChar.VERASE);
+                        addMode(modes, PtyMode.VKILL, attributes, ControlChar.VKILL);
+                        addMode(modes, PtyMode.VEOF, attributes, ControlChar.VEOF);
+                        addMode(modes, PtyMode.VEOL, attributes, ControlChar.VEOL);
+                        addMode(modes, PtyMode.VEOL2, attributes, ControlChar.VEOL2);
+                        addMode(modes, PtyMode.VSTART, attributes, ControlChar.VSTART);
+                        addMode(modes, PtyMode.VSTOP, attributes, ControlChar.VSTOP);
+                        addMode(modes, PtyMode.VSUSP, attributes, ControlChar.VSUSP);
+                        addMode(modes, PtyMode.VDSUSP, attributes, ControlChar.VDSUSP);
+                        addMode(modes, PtyMode.VREPRINT, attributes, ControlChar.VREPRINT);
+                        addMode(modes, PtyMode.VWERASE, attributes, ControlChar.VWERASE);
+                        addMode(modes, PtyMode.VLNEXT, attributes, ControlChar.VLNEXT);
+                        addMode(modes, PtyMode.VSTATUS, attributes, ControlChar.VSTATUS);
+                        addMode(modes, PtyMode.VDISCARD, attributes, ControlChar.VDISCARD);
                         // Input flags
                         modes.put(PtyMode.IGNPAR, getFlag(attributes, InputFlag.IGNPAR));
                         modes.put(PtyMode.PARMRK, getFlag(attributes, InputFlag.PARMRK));
@@ -336,6 +340,13 @@ public class Main {
         }
     }
 
+    private static void addMode(Map<PtyMode, Integer> modes, PtyMode mode, Attributes attributes, ControlChar ctrl) {
+        final int value = attributes.getControlChar(ctrl);
+        if (value != -1) {
+            modes.put(mode, value);
+        }
+    }
+
     private static int getFlag(Attributes attributes, InputFlag flag) {
         return attributes.getInputFlag(flag) ? 1 : 0;
     }
@@ -350,8 +361,7 @@ public class Main {
 
     private static void setupAgent(String user, String keyFile, SshClient client, FilePasswordProvider passwordProvider) {
         SshAgent agent;
-        URL builtInPrivateKey = Main.class.getClassLoader().getResource("karaf.key");
-        agent = startAgent(user, builtInPrivateKey, keyFile, passwordProvider);
+        agent = startAgent(user, keyFile, passwordProvider);
         client.setAgentFactory(new LocalAgentFactory(agent));
         client.getProperties().put(SshAgent.SSH_AUTHSOCKET_ENV_NAME, "local");
     }
@@ -376,15 +386,9 @@ public class Main {
         return session;
     }
 
-    private static SshAgent startAgent(String user, URL privateKeyUrl, String keyFile, FilePasswordProvider passwordProvider) {
-        InputStream is = null;
+    private static SshAgent startAgent(String user, String keyFile, FilePasswordProvider passwordProvider) {
         try {
             SshAgent agent = new AgentImpl();
-            is = privateKeyUrl.openStream();
-            ObjectInputStream r = new ObjectInputStream(is);
-            KeyPair keyPair = (KeyPair) r.readObject();
-            is.close();
-            agent.addIdentity(keyPair, user);
             if (keyFile != null) {
                 FileKeyPairProvider fileKeyPairProvider = new FileKeyPairProvider(Paths.get(keyFile));
                 fileKeyPairProvider.setPasswordFinder(passwordProvider);
@@ -394,19 +398,8 @@ public class Main {
             }
             return agent;
         } catch (Throwable e) {
-            close(is);
             System.err.println("Error starting ssh agent for: " + e.getMessage());
             return null;
-        }
-    }
-
-    private static void close(Closeable is) {
-        if (is != null) {
-            try {
-                is.close();
-            } catch (IOException e1) {
-                // Ignore
-            }
         }
     }
 

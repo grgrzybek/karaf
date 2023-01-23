@@ -36,7 +36,7 @@ pipeline {
     tools {
         // ... tell Jenkins what java version, maven version or other tools are required ...
         maven 'maven_3_latest'
-        jdk 'adoptopenjdk_hotspot_8u282'
+        jdk 'jdk_11_latest'
     }
 
     options {
@@ -89,10 +89,19 @@ pipeline {
             }
         }
 
+        // stage('Code Quality') {
+        //    steps {
+        //        echo 'Checking Code Quality on SonarCloud'
+        //        withCredentials([string(credentialsId: 'sonarcloud-key-apache-karaf', variable: 'SONAR_TOKEN')]) {
+        //            sh 'mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=apache -Dsonar.projectKey=apache_karaf -Dsonar.branch.name=${BRANCH_NAME} -Dsonar.login=${SONAR_TOKEN}'
+        //        }
+        //    }
+        //}
+
         stage('Deploy') {
             when {
                 expression {
-                    env.BRANCH_NAME ==~ /(karaf-4.2.x|master)/
+                    env.BRANCH_NAME ==~ /(karaf-4.3.x|main)/
                 }
             }
             steps {
@@ -107,7 +116,7 @@ pipeline {
         // If this build failed, send an email to the list.
         failure {
             script {
-                if(env.BRANCH_NAME == "karaf-4.2.x" || env.BRANCH_NAME == "master") {
+                if(env.BRANCH_NAME == "karaf-4.3.x" || env.BRANCH_NAME == "main") {
                     emailext(
                             subject: "[BUILD-FAILURE]: Job '${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]'",
                             body: """
@@ -124,7 +133,7 @@ Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BRANC
         // If this build didn't fail, but there were failing tests, send an email to the list.
         unstable {
             script {
-                if(env.BRANCH_NAME == "karaf-4.2.x" || env.BRANCH_NAME == "master") {
+                if(env.BRANCH_NAME == "karaf-4.3.x" || env.BRANCH_NAME == "main") {
                     emailext(
                             subject: "[BUILD-UNSTABLE]: Job '${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]'",
                             body: """
@@ -144,7 +153,7 @@ Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BRANC
             // (in this cae we probably don't have to do any post-build analysis)
             deleteDir()
             script {
-                if ((env.BRANCH_NAME == "karaf-4.2.x" || env.BRANCH_NAME == "master") && (currentBuild.previousBuild != null) && (currentBuild.previousBuild.result != 'SUCCESS')) {
+                if ((env.BRANCH_NAME == "karaf-4.3.x" || env.BRANCH_NAME == "main") && (currentBuild.previousBuild != null) && (currentBuild.previousBuild.result != 'SUCCESS')) {
                     emailext (
                             subject: "[BUILD-STABLE]: Job '${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]'",
                             body: """

@@ -85,7 +85,6 @@
 # It could be directly installed using feature:repo-add command
 #
 enterprise=mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features
-enterprise-legacy=mvn:org.apache.karaf.features/enterprise-legacy/${karaf.version}/xml/features
 spring=mvn:org.apache.karaf.features/spring/${karaf.version}/xml/features
 spring-legacy=mvn:org.apache.karaf.features/spring-legacy/${karaf.version}/xml/features
 cellar=mvn:org.apache.karaf.cellar/apache-karaf-cellar/RELEASE/xml/features
@@ -97,6 +96,7 @@ cxf-dosgi=mvn:org.apache.cxf.dosgi/cxf-dosgi/RELEASE/xml/features
 cxf-dosgi-samples=mvn:org.apache.cxf.dosgi/cxf-dosgi-samples/RELEASE/xml/features
 cxf-xkms=mvn:org.apache.cxf.services.xkms/cxf-services-xkms-features/RELEASE/xml
 activemq=mvn:org.apache.activemq/activemq-karaf/RELEASE/xml/features
+aries.jax.rs.whiteboard=mvn:org.apache.aries.jax.rs/org.apache.aries.jax.rs.features/RELEASE/xml
 jclouds=mvn:org.apache.jclouds.karaf/jclouds-karaf/RELEASE/xml/features
 hawtio=mvn:io.hawt/hawtio-karaf/RELEASE/xml/features
 pax-cdi=mvn:org.ops4j.pax.cdi/pax-cdi-features/RELEASE/xml/features
@@ -106,6 +106,8 @@ pax-jpa=mvn:org.ops4j.pax.jpa/pax-jpa-features/RELEASE/xml/features
 pax-transx=mvn:org.ops4j.pax.transx/pax-transx-features/RELEASE/xml/features
 pax-web=mvn:org.ops4j.pax.web/pax-web-features/RELEASE/xml/features
 decanter=mvn:org.apache.karaf.decanter/apache-karaf-decanter/RELEASE/xml/features
+eclipsesource-jaxrs=mvn:com.eclipsesource.jaxrs/features/RELEASE/xml/features
+aries-cdi=mvn:org.apache.aries.cdi/aries-cdi-feature/RELEASE/xml/features
 aries-jpa=mvn:org.apache.aries.jpa/jpa-features/RELEASE/xml/features
 aries-rsa=mvn:org.apache.aries.rsa/rsa-features/RELEASE/xml/features
 hibernate=mvn:org.hibernate/hibernate-osgi/RELEASE/xml/karaf
@@ -304,6 +306,13 @@ sftpEnabled = ${env:ORG_APACHE_KARAF_SSH_SFTPENABLED:-true}
 hostKey = ${karaf.etc}/host.key
 
 #
+# The password required to decrypt the private key of the server stored in
+# 'hostKey'. This is not required if the private key stored in 'hostKey' is
+# not encrypted
+#
+#hostKeyPassword =
+
+#
 # The location of the hostKeyPub file defines where the public key of the server
 # is located. If no file is at the defined location it will be ignored.
 #
@@ -349,6 +358,13 @@ hostKey = ${karaf.etc}/host.key
 #
 completionMode = ${env:ORG_APACHE_KARAF_SHELL_COMPLETIONMODE:-GLOBAL}
 
+# If set to true, shell:logout command will not exit Karaf. This can be usfeul to avoid accidental exits.
+# You will be able to exit via 'shutdown' or 'halt' instead.
+disableLogout = false
+# If set to true, it will stop CTRL-D from exiting Karaf. This can be usfeul to avoid accidental exits.
+# You will be able to exit via 'shutdown' or 'halt' instead.
+disableEofExit = false
+
 #
 # Override allowed SSH cipher algorithms.
 # Default: aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-cbc,aes192-cbc,aes256-cbc
@@ -357,9 +373,9 @@ completionMode = ${env:ORG_APACHE_KARAF_SHELL_COMPLETIONMODE:-GLOBAL}
 
 #
 # Override allowed SSH HMAC algorithms.
-# Default: hmac-sha2-512,hmac-sha2-256,hmac-sha1
+# Default: hmac-sha2-512,hmac-sha2-256
 #
-# macs = hmac-sha2-512,hmac-sha2-256,hmac-sha1
+# macs = hmac-sha2-512,hmac-sha2-256
 
 #
 # Override allowed SSH key exchange algorithms.
@@ -460,7 +476,7 @@ uninstall = admin
 #
 install = admin
 	    </config>
-            
+
         <config name="org.apache.karaf.command.acl.cxf">
 #
 # This configuration file defines the ACLs for commands in the cxf subshell
@@ -505,6 +521,8 @@ route-resume = admin, manager
     </feature>
 
     <feature name="jline" version="${jline.version}" hidden="true">
+        <bundle dependency="true" start-level="30">mvn:org.fusesource.jansi/jansi/${jansi.version}</bundle>
+        <bundle start-level="30">mvn:org.jline/jline/${jline.version}</bundle>
     </feature>
 
     <feature name="shell-compat" description="Karaf Shell Compatibility" version="${project.version}">
@@ -517,7 +535,7 @@ route-resume = admin, manager
     <feature name="deployer" description="Karaf Deployer" version="${project.version}">
         <bundle start-level="26">mvn:org.apache.karaf.deployer/org.apache.karaf.deployer.features/${project.version}</bundle>
         <conditional>
-            <condition>wrap</condition>
+            <condition>pax-url-wrap</condition>
             <bundle start-level="24">mvn:org.apache.karaf.deployer/org.apache.karaf.deployer.wrap/${project.version}</bundle>
         </conditional>
         <conditional>
@@ -693,7 +711,6 @@ tree-show = admin, manager, viewer
     </feature>
 
     <feature name="config" description="Provide OSGi ConfigAdmin support" version="${project.version}">
-        <bundle start-level="30">mvn:org.apache.karaf.config/org.apache.karaf.config.core/${project.version}</bundle>
         <conditional>
             <condition>management</condition>
             <config name="jmx.acl.org.apache.karaf.config">
@@ -925,6 +942,12 @@ stop = admin, manager
         </config>
     </feature>
 
+    <feature name="jaas-deployer" description="Allow support of blueprint JAAS configuration in the deploy folder" version="${project.version}">
+        <feature>aries-blueprint</feature>
+        <feature>jaas</feature>
+        <bundle start-level="30">mvn:org.apache.karaf.jaas.blueprint/org.apache.karaf.jaas.blueprint.config/${project.version}</bundle>
+    </feature>
+
     <feature name="jaas" description="Provide JAAS support" version="${project.version}">
         <config name="org.apache.karaf.jaas">
 ################################################################################
@@ -978,7 +1001,7 @@ encryption.suffix = {CRYPT}
 #   basic/jasypt: MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512
 #   spring-security-crypto: argon2, bcrypt, pbkdf2, scrypt
 #
-encryption.algorithm = ${env:ORG_APACHE_KARAF_JAAS_ENCRYPTION_ALGORITHM:-MD5}
+encryption.algorithm = ${env:ORG_APACHE_KARAF_JAAS_ENCRYPTION_ALGORITHM:-SHA-256}
 
 #
 # Encoding of the encrypted password.
@@ -991,10 +1014,6 @@ encryption.encoding = ${env:ORG_APACHE_KARAF_JAAS_ENCRYPTION_ENCODING:-hexadecim
         <feature>jaas-boot</feature>
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.config/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.modules/${project.version}</bundle>
-        <conditional>
-            <condition>aries-blueprint</condition>
-            <bundle start-level="30">mvn:org.apache.karaf.jaas.blueprint/org.apache.karaf.jaas.blueprint.config/${project.version}</bundle>
-        </conditional>
         <conditional>
             <condition>shell</condition>
             <config name="org.apache.karaf.command.acl.jaas">
@@ -1209,7 +1228,7 @@ framework[/.*[E][q][u][i][n][o][x].*/] = admin
 
 org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_PORT:-8181}
         </config>
-        <bundle start-level="30" dependency="true">mvn:org.apache.felix/org.apache.felix.http.servlet-api/1.1.2</bundle>
+        <bundle start-level="30" dependency="true">mvn:org.apache.felix/org.apache.felix.http.servlet-api/1.2.0</bundle>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.http.jetty/${felix.http.version}</bundle>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.http.whiteboard/4.0.0</bundle>
         <capability>http-service;provider:=felix-http</capability>
@@ -1219,7 +1238,7 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
         </conditional>
     </feature>
 
-    <feature name="pax-http-service" description="Pax-Web OSGi HTTP Service" version="${pax.web.version}">
+    <feature name="pax-web-http" description="Pax Web OSGi HTTP Service" version="${pax.web.version}">
         <!-- explicitly use pax-http-undertow. Conditionals don't work well with feature dependencies and blacklisted features -->
         <feature>pax-http-undertow</feature>
         <bundle start-level="30">mvn:org.apache.karaf.http/org.apache.karaf.http.core/${project.version}</bundle>
@@ -1229,67 +1248,32 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
             <bundle start-level="30">mvn:org.apache.karaf.webconsole/org.apache.karaf.webconsole.http/${project.version}</bundle>
         </conditional>
     </feature>
-
-    <feature name="http-whiteboard" description="Provide HTTP Whiteboard pattern support" version="${project.version}">
-    	<feature>http</feature>
-        <feature>pax-http-whiteboard</feature>
+    <feature name="http" description="Transition feature for backward compatibility" version="${pax.web.version}">
+        <feature>pax-web-http</feature>
     </feature>
 
-    <feature name="war" description="Turn Karaf as a full WebContainer" version="${project.version}">
-        <feature>http</feature>
-        <feature>pax-war</feature>
+    <feature name="pax-web-http-whiteboard" description="Pax Web OSGi HTTP Whiteboard support" version="${pax.web.version}">
+        <feature>pax-web-http</feature>
+        <feature>pax-web-whiteboard</feature>
+        <feature>pax-web-websockets</feature>
+    </feature>
+    <feature name="http-whiteboard" description="Transition feature for backward compatibility" version="${pax.web.version}">
+        <feature>pax-web-http-whiteboard</feature>
+    </feature>
+
+    <feature name="pax-web-http-war" description="Turn Karaf as a full WebContainer" version="${project.version}">
+        <feature>pax-web-http</feature>
+        <feature>pax-web-war</feature>
+        <feature>pax-web-jsp</feature>
+        <feature>pax-web-websockets</feature>
         <bundle start-level="30">mvn:org.apache.karaf.web/org.apache.karaf.web.core/${project.version}</bundle>
     </feature>
-
-    <feature name="jetty" version="${jetty.version}">
-        <bundle dependency="true" start-level="30">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.2.1/${servicemix-spec-activation.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:javax.servlet/javax.servlet-api/${servlet.spec3.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:com.sun.mail/javax.mail/${javax.mail.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/${geronimo.jta-spec.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:jakarta.annotation/jakarta.annotation-api/${jakarta.annotation.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm/${asm.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-util/${asm.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-commons/${asm.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-tree/${asm.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.ow2.asm/asm-analysis/${asm.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/${aries.spifly.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-continuation/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-http/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-io/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-plus/${jetty.version}</bundle>
-       	<bundle start-level="30">mvn:org.eclipse.jetty/jetty-jndi/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-rewrite/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-security/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-server/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-servlet/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-servlets/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-util/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-util-ajax/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-webapp/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-jaas/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-xml/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-client/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-deploy/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-jmx/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty/jetty-proxy/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/websocket-server/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/websocket-client/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/websocket-common/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/websocket-servlet/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/websocket-api/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/javax-websocket-server-impl/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.websocket/javax-websocket-client-impl/${jetty.version}</bundle>
-        <bundle start-level="30">mvn:javax.websocket/javax.websocket-api/${websocket.version}</bundle>
+    <feature name="war" description="Transition feature for backward compatibility" version="${project.version}">
+        <feature>pax-web-http-war</feature>
     </feature>
 
-    <feature name="jetty" version="8.1.14.v20131031">
-        <bundle dependency="true" start-level="30">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.2.1/${servicemix-spec-activation.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:javax.servlet/javax.servlet-api/${servlet.spec3.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:com.sun.mail/javax.mail/${javax.mail.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/${geronimo.jta-spec.version}</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-annotation_1.1_spec/1.0.1</bundle>
-        <bundle dependency="true" start-level="30">mvn:org.apache.geronimo.specs/geronimo-jaspic_1.0_spec/1.1</bundle>
-        <bundle start-level="30">mvn:org.eclipse.jetty.aggregate/jetty-all-server/8.1.14.v20131031</bundle>
+    <feature name="jetty" description="Transition feature for backward compatibility" version="9.4.50.v20221201">
+        <feature>pax-web-jetty</feature>
     </feature>
 
     <feature name="kar" description="Provide KAR (KARaf archive) support" version="${project.version}">
@@ -1358,7 +1342,6 @@ realm=${env:ORG_APACHE_KARAF_WEBCONSOLE_REALM:-karaf}
 # The role required to access the WebConsole
 role=${env:ORG_APACHE_KARAF_WEBCONSOLE_ROLE:-admin}
         </config>
-        <feature>http</feature>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.webconsole/org.apache.karaf.webconsole.console/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.webconsole.plugins.memoryusage/${felix.memoryusage.webconsole.plugin.version}</bundle>
@@ -1374,6 +1357,7 @@ role=${env:ORG_APACHE_KARAF_WEBCONSOLE_ROLE:-admin}
             <condition>feature</condition>
             <bundle start-level="30">mvn:org.apache.karaf.webconsole/org.apache.karaf.webconsole.features/${project.version}</bundle>
         </conditional>
+        <requirement>osgi.implementation;osgi.implementation="osgi.http";version:Version="1.1"</requirement>
     </feature>
 
     <feature name="ssh" description="Provide a SSHd server on Karaf" version="${project.version}">
@@ -2160,6 +2144,7 @@ serviceUrl = service:jmx:rmi://${rmiServerHost}:${rmiServerPort}/jndi/rmi://${rm
 
 #
 # JMXMP connector enabled
+# NB: if you enable JMXMP, don't forget to add opendmk_jmxremote_optional jar in lib/boot folder
 #
 jmxmpEnabled = ${env:ORG_APACHE_KARAF_MANAGEMENT_JMXMPENABLED:-false}
 
@@ -2252,6 +2237,11 @@ jmxmpObjectName = connector:name=jmxmp
 # Locate an existing MBean server if possible (usefull when Karaf is embedded)
 #
 #locateExistingMBeanServerIfPossible = true
+
+#
+# Enforce credentials filter pattern to avoid deserialization
+#
+#jmx.remote.rmi.server.credentials.filter.pattern=java.lang.String;!*
         </config>
         <feature>jaas</feature>
         <bundle dependency="true" start-level="20">mvn:org.apache.aries/org.apache.aries.util/${aries.util.version}</bundle>
@@ -2376,9 +2366,17 @@ encrypt = admin, manager, viewer
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.spring-security-crypto/${project.version}</bundle>
     </feature>
 
+    <feature name="spring-security-crypto-encryption" description="Advanced encryption support for Karaf security" version="${project.version}">
+        <feature>jaas</feature>
+        <bundle dependency="true" start-level="30">mvn:org.bouncycastle/bcprov-jdk15on/${bouncycastle.version}</bundle>
+        <bundle dependency="true" start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-crypto/${spring.security53.version}</bundle>
+        <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.spring-security-crypto/${project.version}</bundle>
+    </feature>
+
     <feature name="scr" description="Declarative Service support" version="${project.version}">
         <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.function/${org.osgi.util.function.version}</bundle>
         <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.util.promise/${org.osgi.util.promise.version}</bundle>
+        <bundle dependency="true" start-level="30">mvn:org.osgi/org.osgi.service.component/1.5.0</bundle>
         <bundle dependency="true" start-level="30">mvn:org.apache.felix/org.apache.felix.metatype/${felix.metatype.version}</bundle>
         <bundle start-level="30">mvn:org.apache.felix/org.apache.felix.scr/${felix.scr.version}</bundle>
         <conditional>
@@ -2414,13 +2412,21 @@ disable = admin, manager
 
     <feature name="blueprint-web" description="Provides an OSGI-aware Servlet ContextListener for bootstrapping
         blueprint inside web-bundle containers" version="${project.version}">
-        <feature>war</feature>
         <feature>aries-blueprint</feature>
         <bundle>mvn:org.apache.aries.blueprint/org.apache.aries.blueprint.webosgi/${aries.blueprint.webosgi.version}</bundle>
+        <requirement>osgi.implementation;osgi.implementation="osgi.http";version:Version="1.1"</requirement>
     </feature>
 
-    <feature name="wrap" description="Wrap URL handler" version="${pax.url.version}">
+    <feature name="pax-url-wrap" description="Wrap URL handler" version="${pax.url.version}">
         <bundle start-level="10">mvn:org.ops4j.pax.url/pax-url-wrap/${pax.url.version}/jar/uber</bundle>
+    </feature>
+
+    <feature name="wrap" description="Transition feature to pax-url-wrap" version="${pax.url.version}">
+        <feature version="${pax.url.version}">pax-url-wrap</feature>
+    </feature>
+
+    <feature name="pax-url-classpath" description="Classpath URL handler" version="${pax.url.version}">
+        <bundle start-level="10">mvn:org.ops4j.pax.url/pax-url-classpath/${pax.url.version}</bundle>
     </feature>
 
     <feature name="profile" description="Profiles support" version="${project.version}">
@@ -2452,7 +2458,6 @@ profilesDirectory = ${karaf.home}/profiles
     </feature>
 
     <feature name="jolokia" description="Jolokia monitoring support" version="${jolokia.version}">
-        <feature>http</feature>
         <config name="org.jolokia.osgi">
 ################################################################################
 #
@@ -2478,6 +2483,7 @@ org.jolokia.realm=${env:ORG_JOLOKIA_OSGI_ORG_JOLOKIA_REALM:-karaf}
 org.jolokia.authMode=${env:ORG_JOLOKIA_OSGI_ORG_JOLOKIA_AUTHMODE:-jaas}
         </config>
         <bundle>mvn:org.jolokia/jolokia-osgi/${jolokia.version}</bundle>
+        <requirement>osgi.implementation;osgi.implementation="osgi.http";version:Version="1.1"</requirement>
     </feature>
 
     <feature name="maven" description="Commands for Maven configuration of services from pax-url-aether" version="${project.version}">
@@ -2592,13 +2598,12 @@ jul.layout.type = simple
     </feature>
 
     <feature name="documentation" description="Documentation of Karaf project in HTML" version="${project.version}">
-        <feature>war</feature>
+        <feature>pax-web-war</feature>
         <bundle>mvn:org.apache.karaf/manual/${project.version}</bundle>
     </feature>
 
     <feature name="standard" description="Wrap feature describing all features part of a standard distribution" version="${project.version}">
-        <feature>wrap</feature>
-        <feature>aries-blueprint</feature>
+        <feature>pax-url-wrap</feature>
         <feature>shell</feature>
         <feature>shell-compat</feature>
         <feature>feature</feature>

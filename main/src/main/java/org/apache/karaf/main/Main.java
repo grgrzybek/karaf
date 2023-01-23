@@ -30,9 +30,15 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.Provider;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
@@ -232,6 +238,36 @@ public class Main {
     }
 
     public void launch() throws Exception {
+        boolean clean = Arrays.asList(args).contains("clean");
+        boolean cleanall = Arrays.asList(args).contains("cleanall");
+        if (clean || cleanall) {
+            // clean instance
+            final Path dataDir = new File(System.getProperty(ConfigProperties.PROP_KARAF_DATA)).toPath();
+            final Path logDir = new File(System.getProperty(ConfigProperties.PROP_KARAF_LOG)).toPath();
+            if (Files.exists(dataDir)) {
+                try {
+                    Files.walkFileTree(dataDir, new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+                            if (cleanall || (clean && !file.startsWith(logDir))) {
+                                Files.delete(file);
+                            }
+                            return super.visitFile(file, attributes);
+                        }
+                        @Override
+                        public FileVisitResult postVisitDirectory(final Path dir, final IOException exception) throws IOException {
+                            if (cleanall || (clean && dir.compareTo(logDir) != 0)) {
+                                Files.delete(dir);
+                            }
+                            return super.postVisitDirectory(dir, exception);
+                        }
+                    });
+                } catch (final IOException ioException) {
+                    LOG.log(Level.WARNING, "Can't delete " + dataDir + " (" + ioException.getMessage() + ")", ioException);
+                }
+                Files.createDirectories(dataDir.resolve("tmp"));
+            }
+        }
         if (config == null) {
             config = new ConfigProperties();
         }

@@ -83,7 +83,6 @@ import org.osgi.resource.Resource;
 import org.osgi.resource.Wire;
 import org.osgi.service.repository.Repository;
 import org.osgi.service.resolver.Resolver;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -991,8 +990,7 @@ public class Deployer {
                 return;
             }
 
-            toStop = new HashSet<>();
-            toStop.addAll(toRefresh.keySet());
+            toStop = new HashSet<>(toRefresh.keySet());
             removeFragmentsAndBundlesInState(toStop, UNINSTALLED | RESOLVED | STOPPING);
             if (!toStop.isEmpty()) {
                 print("Stopping bundles:", verbose);

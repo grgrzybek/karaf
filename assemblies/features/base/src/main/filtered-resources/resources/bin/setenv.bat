@@ -49,7 +49,7 @@ rem set JAVA_MAX_MEM
 rem Additional JVM options
 rem SET JAVA_NON_DEBUG_OPTS
 rem Additional non-debug JVM options
-rem SET EXTRA_JAVA_OPTS 
+rem SET EXTRA_JAVA_OPTS
 rem Karaf home folder
 rem SET KARAF_HOME
 rem Karaf data folder

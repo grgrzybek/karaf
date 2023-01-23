@@ -36,6 +36,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
 
@@ -94,7 +95,7 @@ public class XATest extends BaseTest {
             dsList = executeCommand("jdbc:ds-list");
         }
         System.out.println(dsList);
-        
+
         System.out.println("== Creating table in Derby ==");
         System.out.println(executeCommand("jdbc:execute derby CREATE TABLE messages (id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY, message VARCHAR(1024) NOT NULL, CONSTRAINT primary_key PRIMARY KEY (id))"));
 
@@ -110,7 +111,9 @@ public class XATest extends BaseTest {
         featureService.installFeature("camel-sql", NO_AUTO_REFRESH);
         featureService.installFeature("camel-jms", NO_AUTO_REFRESH);
 
+        System.out.println("== Starting Narayana TX Manager == ");
         featureService.installFeature("transaction-manager-narayana");
+        assertNotNull(getOsgiService("org.jboss.narayana.osgi.jta.ObjStoreBrowserService", null, 30000l));
 
         Bundle bundle = bundleContext.installBundle("blueprint:file:etc/xa-test-camel.xml");
         bundle.start();

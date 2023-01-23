@@ -19,10 +19,6 @@
 package org.apache.karaf.shell.ssh;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.URL;
-import java.security.KeyPair;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,7 +58,8 @@ public class KarafAgentFactory implements SshAgentFactory {
         return LocalAgentFactory.DEFAULT_FORWARDING_CHANNELS;
     }
 
-    public SshAgent createClient(FactoryManager manager) throws IOException {
+    @Override
+    public SshAgent createClient(Session session, FactoryManager manager) throws IOException {
         String proxyId = (String) manager.getProperties().get(SshAgent.SSH_AUTHSOCKET_ENV_NAME);
         if (proxyId == null) {
             throw new IllegalStateException("No " + SshAgent.SSH_AUTHSOCKET_ENV_NAME + " environment variable set");
@@ -106,11 +103,6 @@ public class KarafAgentFactory implements SshAgentFactory {
         try {
             String user = (String) session.get("USER");
             SshAgent agent = new AgentImpl();
-            URL url = getClass().getClassLoader().getResource("karaf.key");
-            InputStream is = url.openStream();
-            ObjectInputStream r = new ObjectInputStream(is);
-            KeyPair keyPair = (KeyPair) r.readObject();
-            agent.addIdentity(keyPair, "karaf");
             String agentId = "local:" + user;
             session.put(SshAgent.SSH_AUTHSOCKET_ENV_NAME, agentId);
             locals.put(agentId, agent);

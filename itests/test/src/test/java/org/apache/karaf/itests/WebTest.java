@@ -43,11 +43,12 @@ public class WebTest extends BaseTest {
     @Before
     public void installWarFeature() throws Exception {
         installAndAssertFeature("war");
+        installAndAssertFeature("pax-web-karaf");
     }
-    
+
     @Test
     public void listCommand() throws Exception {
-        String listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+        String listOutput = executeCommand("web:wab-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(listOutput);
         assertFalse(listOutput.isEmpty());
     }
@@ -70,17 +71,6 @@ public class WebTest extends BaseTest {
             Thread.sleep(500);
             listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         }
-        int bundleId = -1;
-        try (BufferedReader reader = new BufferedReader(new StringReader(listOutput))) {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("Deployed") && line.contains("karaf-war-example-webapp")) {
-                    String id = line.substring(0, line.indexOf(" "));
-                    bundleId = Integer.parseInt(id);
-                    break;
-                }
-            }
-        }
         URL url = new URL("http://localhost:" + getHttpPort() + "/test");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoInput(true);
@@ -95,12 +85,14 @@ public class WebTest extends BaseTest {
         System.out.println(buffer.toString());
         assertContains("Hello World!", buffer.toString());
 
+        String name = "mvn_org.apache.karaf.examples_karaf-war-example-webapp_" + System.getProperty("karaf.version") + "_war";
+        String bundleId = executeCommand("bundle:id " + name, new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin"));
         System.out.println(executeCommand("web:uninstall " + bundleId, new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
-        listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+        listOutput = executeCommand("web:wab-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(listOutput);
         while (listOutput.contains("/test")) {
             Thread.sleep(500);
-            listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+            listOutput = executeCommand("web:wab-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         }
         assertContainsNot("/test", listOutput);
     }
@@ -110,10 +102,10 @@ public class WebTest extends BaseTest {
         MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("org.apache.karaf:type=web,name=root");
         mbeanServer.invoke(name, "install", new Object[]{ "mvn:org.apache.karaf.examples/karaf-war-example-webapp/" + System.getProperty("karaf.version") + "/war", "test" }, new String[]{ String.class.getName(), String.class.getName() });
+        Thread.sleep(2000);
         TabularData webBundles = (TabularData) mbeanServer.getAttribute(name, "WebBundles");
         assertEquals(1, webBundles.size());
 
-        Thread.sleep(2000);
 
         URL url = new URL("http://localhost:" + getHttpPort() + "/test");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

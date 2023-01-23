@@ -46,11 +46,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOError;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
 import java.security.KeyPair;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -208,8 +205,8 @@ public class ClientMojo extends AbstractMojo {
             channel.setIn(new ByteArrayInputStream(new byte[0]));
             final ByteArrayOutputStream sout = new ByteArrayOutputStream();
             final ByteArrayOutputStream serr = new ByteArrayOutputStream();
-            channel.setOut( AnsiConsole.wrapOutputStream(sout));
-            channel.setErr( AnsiConsole.wrapOutputStream(serr));
+            channel.setOut(sout);
+            channel.setErr(serr);
             channel.open();
             channel.waitFor(EnumSet.of(ClientChannelEvent.CLOSED), 0);
 
@@ -242,20 +239,15 @@ public class ClientMojo extends AbstractMojo {
     }
 
     private void setupAgent(String user, File keyFile, SshClient client) {
-        URL builtInPrivateKey = ClientMojo.class.getClassLoader().getResource("karaf.key");
-        SshAgent agent = startAgent(user, builtInPrivateKey, keyFile);
+        SshAgent agent = startAgent(user, keyFile);
         client.setAgentFactory( new LocalAgentFactory(agent));
         client.getProperties().put(SshAgent.SSH_AUTHSOCKET_ENV_NAME, "local");
     }
 
-    private SshAgent startAgent(String user, URL privateKeyUrl, File keyFile) {
-        try (InputStream is = privateKeyUrl.openStream())
+    private SshAgent startAgent(String user, File keyFile) {
+        try
         {
             SshAgent agent = new AgentImpl();
-            ObjectInputStream r = new ObjectInputStream(is);
-            KeyPair keyPair = (KeyPair) r.readObject();
-            is.close();
-            agent.addIdentity(keyPair, user);
             if (keyFile != null) {
                 FileKeyPairProvider fileKeyPairProvider = new FileKeyPairProvider(keyFile.getAbsoluteFile().toPath());
                 for (KeyPair key : fileKeyPairProvider.loadKeys(null)) {

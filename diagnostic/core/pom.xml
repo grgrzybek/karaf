@@ -56,10 +56,9 @@
             <artifactId>osgi.core</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
+            <artifactId>org.osgi.service.cm</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -117,6 +116,7 @@
                        	</Export-Package>
                         <Import-Package>
                             com.sun.management*;resolution:=optional,
+                            org.osgi.framework;version="[1,3)",
                             *
                         </Import-Package>
                         <Private-Package>

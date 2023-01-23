@@ -66,6 +66,7 @@ import org.apache.karaf.features.RepositoryEvent;
 import org.apache.karaf.features.internal.download.DownloadManager;
 import org.apache.karaf.features.internal.download.DownloadManagers;
 import org.apache.karaf.features.internal.model.Features;
+import org.apache.karaf.features.internal.model.JacksonUtil;
 import org.apache.karaf.features.internal.model.JaxbUtil;
 import org.apache.karaf.features.internal.region.DigraphHelper;
 import org.apache.karaf.features.internal.service.BundleInstallSupport.FrameworkInfo;
@@ -263,11 +264,11 @@ public class FeaturesServiceImpl implements FeaturesService, Deployer.DeployCall
     public void registerListener(FeaturesListener listener) {
         listeners.add(listener);
         try {
-            Set<String> repositoriesList = new TreeSet<>();
-            Map<String, Set<String>> installedFeatures = new TreeMap<>();
+            Set<String> repositoriesList;
+            Map<String, Set<String>> installedFeatures;
             synchronized (lock) {
-                repositoriesList.addAll(state.repositories);
-                installedFeatures.putAll(copy(state.installedFeatures));
+                repositoriesList = new TreeSet<>(state.repositories);
+                installedFeatures = new TreeMap<>(copy(state.installedFeatures));
             }
             for (String uri : repositoriesList) {
                 Repository repository = repositories.create(URI.create(uri), false);
@@ -355,7 +356,12 @@ public class FeaturesServiceImpl implements FeaturesService, Deployer.DeployCall
 
     @Override
     public Feature[] repositoryProvidedFeatures(URI uri) throws Exception {
-        Features features = JaxbUtil.unmarshal(uri.toURL().toExternalForm(), true);
+        Features features;
+        if (JacksonUtil.isJson(uri.toURL().toExternalForm())) {
+            features = JacksonUtil.unmarshal(uri.toURL().toExternalForm());
+        } else {
+            features = JaxbUtil.unmarshal(uri.toURL().toExternalForm(), true);
+        }
         Feature[] array = new Feature[features.getFeature().size()];
         return features.getFeature().toArray(array);
     }
@@ -1091,7 +1097,7 @@ public class FeaturesServiceImpl implements FeaturesService, Deployer.DeployCall
         if (configurationAdmin != null) {
             Configuration config = configurationAdmin.getConfiguration("org.ops4j.pax.url.mvn", null);
             if (config != null) {
-                Dictionary<String, Object> cfg = config.getProperties();
+                Dictionary<String, Object> cfg = config.getProcessedProperties(null);
                 if (cfg != null) {
                     for (Enumeration<String> e = cfg.keys(); e.hasMoreElements(); ) {
                         String key = e.nextElement();

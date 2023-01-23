@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -535,6 +534,7 @@ public class InstanceServiceImpl implements InstanceService {
                       " --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED" +
                       " --add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED" +
                       " --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED" +
+                      " --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED" +
                       " --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED";
         } else {
             jdkOpts = " -Djava.endorsed.dirs=\"" + new File(new File(new File(System.getProperty("java.home"), "jre"), "lib"), "endorsed") + System.getProperty("path.separator") + new File(new File(System.getProperty("java.home"), "lib"), "endorsed") + System.getProperty("path.separator") + new File(libDir, "endorsed").getCanonicalPath() + "\""

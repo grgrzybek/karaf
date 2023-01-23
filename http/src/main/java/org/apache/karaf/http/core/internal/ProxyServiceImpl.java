@@ -50,7 +50,7 @@ public class ProxyServiceImpl implements ProxyService {
         try {
             Configuration configuration = configurationAdmin.getConfiguration(CONFIGURATION_PID, null);
             if (configuration != null) {
-                update(configuration.getProperties());
+                update(configuration.getProcessedProperties(null));
             }
         } catch (Exception e) {
             LOG.error("Can't load proxies", e);
@@ -142,9 +142,9 @@ public class ProxyServiceImpl implements ProxyService {
         try {
             // get configuration
             Configuration configuration = configurationAdmin.getConfiguration(CONFIGURATION_PID);
-            Dictionary<String, Object> configurationProperties = configuration.getProperties();
+            Dictionary<String, Object> configurationProperties = configuration.getProcessedProperties(null);
             if (configurationProperties == null) {
-                configurationProperties = new Hashtable<String, Object>();
+                configurationProperties = new Hashtable<>();
             }
             // convert proxies map to String array
             String[] proxyArray = new String[proxies.size()];

@@ -86,11 +86,6 @@
             <artifactId>osgi.core</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.karaf</groupId>
@@ -195,10 +190,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.not-yet-commons-ssl</artifactId>
-            <version>${not-yet-commons-ssl.bundle.version}</version>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <scope>test</scope>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <scope>test</scope>
+            <version>${bouncycastle.version}</version>
         </dependency>
 
         <dependency>
@@ -208,6 +209,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-client</artifactId>
+            <version>${jetty.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -396,10 +403,6 @@
                                 <org.ops4j.pax.logging.DefaultServiceLog.level>INFO</org.ops4j.pax.logging.DefaultServiceLog.level>
                                 <karaf.version>${project.version}</karaf.version>
                                 <spring31.version>${spring31.version}</spring31.version>
-                                <spring32.version>${spring32.version}</spring32.version>
-                                <spring40.version>${spring40.version}</spring40.version>
-                                <spring41.version>${spring41.version}</spring41.version>
-                                <spring42.version>${spring42.version}</spring42.version>
                                 <spring43.version>${spring43.version}</spring43.version>
                                 <spring50.version>${spring50.version}</spring50.version>
                                 <spring51.version>${spring51.version}</spring51.version>

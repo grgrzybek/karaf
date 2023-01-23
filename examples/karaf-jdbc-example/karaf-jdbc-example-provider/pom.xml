@@ -57,12 +57,17 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.core</artifactId>
-            <version>6.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <version>6.0.0</version>
+            <artifactId>org.osgi.service.component</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -71,16 +76,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Private-Package>
-                            org.apache.karaf.examples.jdbc.provider,
-                            org.apache.karaf.util.tracker,
-                            org.apache.karaf.util.tracker.annotation
-                        </Private-Package>
-                        <Import-Package>*</Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>

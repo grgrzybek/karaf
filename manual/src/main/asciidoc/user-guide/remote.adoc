@@ -19,6 +19,17 @@ More over, you can also browse, download, and upload files remotely to a running
 
 Apache Karaf embeds a complete SSHd server.
 
+[NOTE]
+====
+For security reason, by default, `karaf` user is disabled. To allow the logon, you have to have an user. You can enable
+`karaf` user by uncommenting the user in `etc/users.properties`:
+
+----
+karaf = karaf,_g_:admingroup
+_g_\:admingroup = group,admin,manager,viewer,systembundles,ssh
+----
+====
+
 ==== SSHd server
 
 When you start Apache Karaf, it enables a remote console that can be accessed over SSH.
@@ -82,6 +93,12 @@ sshRealm = karaf
 hostKey = ${karaf.etc}/host.key
 
 #
+# The password required to decrypt the private key of the server stored in
+# 'hostKey'. This is not required if the private key stored in 'hostKey' is
+# not encrypted
+#hostKeyPassword =
+
+#
 # The location of the hostKeyPub file defines where the public key of the server
 # is located. If no file is at the defined location it will be ignored.
 #
@@ -120,6 +137,13 @@ sftpEnabled=true
 # You can change the completion mode directly in the shell console, using shell:completion command.
 #
 completionMode = GLOBAL
+
+# If set to true, shell:logout command will not exit Karaf. This can be usfeul to avoid accidental exits.
+# You will be able to exit via 'shutdown' or 'halt' instead.
+disableLogout = false
+# If set to true, it will stop CTRL-D from exiting Karaf. This can be usfeul to avoid accidental exits.
+# You will be able to exit via 'shutdown' or 'halt' instead.
+disableEofExit = false
 ----
 
 The `etc/org.apache.karaf.shell.cfg` configuration file contains different properties to configure the SSHd server:
@@ -128,8 +152,15 @@ The `etc/org.apache.karaf.shell.cfg` configuration file contains different prope
 * `sshHost` is the address of the network interface where the SSHd server is bound. The default value is 0.0.0.0,
  meaning that the SSHd server is bound on all network interfaces. You can bind on a target interface by providing the IP
  address of the network interface.
-* `hostKey` is the location of the `host.key` file. By defaut, it uses `etc/host.key`. This file stores the 
+* `hostKey` is the location of the `host.key` file. By defaut, it uses `etc/host.key`. This file stores the
  private key of the SSHd server.
+* `hostKeyPassword` is the password required to decrypt the private key of the server stored in `hostKey`, if the key
+is stored in an encrypted form. Note that Karaf does not use this property to
+encrypt the private key when generating it, only for reading external keys
+that are already encrypted. Also note that specifying a `hostKeyPassword`
+might require installing the BouncyCastle provider to support the desired
+encryption algorithm.
+* `hostKeyPub` is the location of the public key of the server.
 * `sshRole` is the default role used for SSH access. See the [Security section|security] of this user guide for details.
 * `sftpEnabled` controls if the SSH server starts the SFTP system or not. When enabled, Karaf SSHd supports SFTP, meaning
  that you can remotely access the Karaf filesystem with any sftp client.
@@ -351,6 +382,9 @@ When you are connected to a remote Apache Karaf console, you can logout using:
 * using CTRL-D key binding. Note that CTRL-D just logs out from the remote console in this case, it doesn't shutdown
  the Apache Karaf instance (as CTRL-D does when used on a local console).
 * using `shell:logout` command (or simply `logout`)
+
+To avoid accidental logouts, one or both of these can be disabled in `etc/org.apache.karaf.shell.cfg`, by setting `disableEofExit = true`
+and `disableLogout = true` respectively.
 
 ===== Filesystem clients
 

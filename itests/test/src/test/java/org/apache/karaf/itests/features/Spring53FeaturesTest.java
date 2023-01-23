@@ -23,27 +23,9 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
-
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 public class Spring53FeaturesTest extends BaseTest {
-
-    @Configuration
-    public Option[] config() {
-        String version = MavenUtils.getArtifactVersion("org.apache.karaf", "apache-karaf");
-        List<Option> result = new LinkedList<>(Arrays.asList(super.config()));
-        result.add(editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "featuresRepositories",
-                "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
-                        "mvn:org.apache.karaf.features/standard/" + version + "/xml/features"));
-        return result.toArray(new Option[result.size()]);
-    }
 
     @Test
     public void installSpringFeature() throws Exception {
@@ -97,17 +79,20 @@ public class Spring53FeaturesTest extends BaseTest {
 
     @Test
     public void installSpringWebFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-web", System.getProperty("spring53.version"));
+        installAssertAndUninstallFeatures("pax-web-http", "spring-web/" + System.getProperty("spring53.version"));
     }
 
     @Test
     public void installSpringWebSocketFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-websocket", System.getProperty("spring53.version"));
+        installAndAssertFeature("pax-web-http");
+        installAssertAndUninstallFeatures("pax-web-http", "spring-websocket/" + System.getProperty("spring53.version"));
     }
 
+    // Spring Security
+
     @Test
-    public void installSpringSecurityFeature() throws Exception {
-        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security55.version"));
+    public void installSpringSecurity57Feature() throws Exception {
+        installAssertAndUninstallFeature("spring-security", System.getProperty("spring.security57.version"));
     }
 
     @Test

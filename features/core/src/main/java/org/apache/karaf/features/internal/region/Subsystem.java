@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -329,7 +330,23 @@ public class Subsystem extends ResourceImpl {
 
     @SuppressWarnings("InfiniteLoopStatement")
     public void build(Map<String, List<Feature>> allFeatures) throws Exception {
-        doBuild(allFeatures, true);
+        Map<String, List<Feature>> cleaned = new LinkedHashMap<>();
+        for (Map.Entry<String, List<Feature>> entry : allFeatures.entrySet()) {
+            if (entry.getValue().size() > 1) {
+                Map<String, Feature> versionMap = new LinkedHashMap<>();
+                for (Feature feature : entry.getValue()) {
+                    if (!versionMap.containsKey(feature.getVersion())) {
+                        versionMap.put(feature.getVersion(), feature);
+                    } else {
+                        // warn about duplicate
+                    }
+                }
+                cleaned.put(entry.getKey(), new ArrayList<>(versionMap.values()));
+            } else {
+                cleaned.put(entry.getKey(), entry.getValue());
+            }
+        }
+        doBuild(cleaned, true);
     }
 
     private void doBuild(Map<String, List<Feature>> allFeatures, boolean mandatory) throws Exception {
@@ -516,9 +533,7 @@ public class Subsystem extends ResourceImpl {
         // download direct bundle: requirements - without consulting overrides
         for (Clause bundle : Parser.parseClauses(this.bundles.toArray(new String[this.bundles.size()]))) {
             final String loc = bundle.getName();
-            downloader.download(loc, provider -> {
-                bundles.put(loc, createResource(loc, getMetadata(provider), removeServiceRequirements));
-            });
+            downloader.download(loc, provider -> bundles.put(loc, createResource(loc, getMetadata(provider), removeServiceRequirements)));
         }
         // we *don't* have to download overrides separately - they're already taken into account from processed model
 
@@ -528,9 +543,7 @@ public class Subsystem extends ResourceImpl {
             for (Library library : feature.getLibraries()) {
                 if (library.isExport()) {
                     final String loc = library.getLocation();
-                    downloader.download(loc, provider -> {
-                        bundles.put(loc, createResource(loc, getMetadata(provider), removeServiceRequirements));
-                    });
+                    downloader.download(loc, provider -> bundles.put(loc, createResource(loc, getMetadata(provider), removeServiceRequirements)));
                 }
             }
         }

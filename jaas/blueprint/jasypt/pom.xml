@@ -85,12 +85,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.connect</artifactId>
             <scope>test</scope>

@@ -28,9 +28,11 @@ import java.util.regex.Pattern;
 
 import org.apache.karaf.deployer.kar.KarArtifactInstaller;
 import org.apache.karaf.features.BundleInfo;
+import org.apache.karaf.features.Conditional;
 import org.apache.karaf.features.ConfigFileInfo;
 import org.apache.karaf.features.internal.model.Feature;
 import org.apache.karaf.features.internal.model.Features;
+import org.apache.karaf.features.internal.model.JacksonUtil;
 import org.apache.karaf.features.internal.model.JaxbUtil;
 import org.apache.karaf.tooling.utils.MavenUtil;
 import org.apache.karaf.tooling.utils.MojoSupport;
@@ -122,6 +124,16 @@ public class KarMojo extends MojoSupport {
     @Parameter(defaultValue = "${repositoryPath}")
     private String repositoryPath = "repository/";
 
+    /**
+     * Timestamp for reproducible output archive entries, either formatted as ISO 8601
+     * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> or as an int representing seconds since the epoch (like
+     * <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
+     *
+     * @since 4.4.0
+     */
+    @Parameter(defaultValue = "${project.build.outputTimestamp}")
+    private String outputTimestamp;
+    
     private static final Pattern mvnPattern = Pattern.compile("mvn:([^/ ]+)/([^/ ]+)/([^/ ]*)(/([^/ ]+)(/([^/ ]+))?)?");
 
 
@@ -202,11 +214,23 @@ public class KarMojo extends MojoSupport {
     private List<Artifact> readResources(File featuresFile) throws MojoExecutionException {
         List<Artifact> resources = new ArrayList<>();
         try {
-            Features features = JaxbUtil.unmarshal(featuresFile.toURI().toASCIIString(), false);
+            Features features;
+            if (JacksonUtil.isJson(featuresFile.toURI().toASCIIString())) {
+                features = JacksonUtil.unmarshal(featuresFile.toURI().toASCIIString());
+            } else {
+                features = JaxbUtil.unmarshal(featuresFile.toURI().toASCIIString(), false);
+            }
             for (Feature feature : features.getFeature()) {
                 for (BundleInfo bundle : feature.getBundles()) {
-                    if (ignoreDependencyFlag || (!ignoreDependencyFlag && !bundle.isDependency())) {
+                    if (ignoreDependencyFlag || !bundle.isDependency()) {
                         resources.add(resourceToArtifact(bundle.getLocation(), false));
+                    }
+                }
+                for (Conditional conditional : feature.getConditional()) {
+                    for (BundleInfo bundle : conditional.getBundles()) {
+                        if (ignoreDependencyFlag || !bundle.isDependency()) {
+                            resources.add(resourceToArtifact(bundle.getLocation(), false));
+                        }
                     }
                 }
                 for (ConfigFileInfo configFile : feature.getConfigurationFiles()) {
@@ -232,10 +256,13 @@ public class KarMojo extends MojoSupport {
         File archiveFile = getArchiveFile(outputDirectory, finalName, classifier);
 
         MavenArchiver archiver = new MavenArchiver();
+        archiver.setCreatedBy("Kar Maven Plugin", "org.apache.karaf.tooling", "karaf-maven-plugin");
         MavenArchiveConfiguration configuration = new MavenArchiveConfiguration();
         configuration.addManifestEntries(archive.getManifestEntries());
         archiver.setArchiver(jarArchiver);
         archiver.setOutputFile(archiveFile);
+        // configure for Reproducible Builds based on outputTimestamp value
+        archiver.configureReproducible(outputTimestamp);
 
         try {
             //TODO should .kar be a bundle?
@@ -256,7 +283,7 @@ public class KarMojo extends MojoSupport {
 //            archive.addManifestEntry(Constants.BUNDLE_SYMBOLICNAME, project.getArtifactId());
 
             //include the feature.xml
-			Artifact featureArtifact = factory.createArtifactWithClassifier(groupId, artifactId, version, "xml", KarArtifactInstaller.FEATURE_CLASSIFIER);
+            Artifact featureArtifact = factory.createArtifactWithClassifier(groupId, artifactId, version, "xml", KarArtifactInstaller.FEATURE_CLASSIFIER);
             jarArchiver.addFile(featuresFile, repositoryPath + layout.pathOf(featureArtifact));
 
             if (featureArtifact.isSnapshot()) {
@@ -333,7 +360,7 @@ public class KarMojo extends MojoSupport {
             if (resourcesDir.isDirectory()) {
                 archiver.getArchiver().addDirectory(resourcesDir);
             }
-            archiver.createArchive(project, archive);
+            archiver.createArchive(mavenSession, project, archive);
 
             return archiveFile;
         } catch (Exception e) {

@@ -22,6 +22,9 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
@@ -106,6 +109,12 @@ public class KarafTestSupport {
     static final Long COMMAND_TIMEOUT = 360000L;
     static final Long SERVICE_TIMEOUT = 360000L;
     static final long BUNDLE_TIMEOUT = 360000L;
+
+    // Commands provided by boot features will be available to the test at all times
+    // Only additionally installed features may require a proper custom timeout
+    // keep the default command timeout to ensure existing tests don't break, but use this
+    // as a default timeout for aliases
+    static final Long ALIAS_SERVICE_TIMEOUT = 1L;
 
     private static Logger LOG = LoggerFactory.getLogger(KarafTestSupport.class);
 
@@ -255,6 +264,7 @@ public class KarafTestSupport {
                 CoreOptions.mavenBundle().groupId("org.apache.karaf.itests").artifactId("common").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("jakarta.annotation").artifactId("jakarta.annotation-api").versionAsInProject(),
                 //replaceConfigurationFile("etc/host.key", getConfigFile("/etc/host.key")),
+                KarafDistributionOption.replaceConfigurationFile("etc/users.properties", getConfigFile("/etc/users.properties")),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "updateSnapshots", "none"),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", httpPort),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.management.cfg", "rmiRegistryPort", rmiRegistryPort),
@@ -270,11 +280,11 @@ public class KarafTestSupport {
                 new VMOption("--illegal-access=warn"),
                 new VMOption("--add-reads=java.xml=java.logging"),
                 new VMOption("--patch-module"),
-                new VMOption("java.base=lib/endorsed/org.apache.karaf.specs.locator-" 
-                + System.getProperty("karaf.version", "4.2.2-SNAPSHOT") + ".jar"),
+                new VMOption("java.base=lib/endorsed/org.apache.karaf.specs.locator-"
+                + System.getProperty("karaf.version", "4.4.3-SNAPSHOT") + ".jar"),
                 new VMOption("--patch-module"),
-                new VMOption("java.xml=lib/endorsed/org.apache.karaf.specs.java.xml-" 
-                + System.getProperty("karaf.version", "4.2.2-SNAPSHOT") + ".jar"),
+                new VMOption("java.xml=lib/endorsed/org.apache.karaf.specs.java.xml-"
+                + System.getProperty("karaf.version", "4.3.3-SNAPSHOT") + ".jar"),
                 new VMOption("--add-opens"),
                 new VMOption("java.base/java.security=ALL-UNNAMED"),
                 new VMOption("--add-opens"),
@@ -296,6 +306,7 @@ public class KarafTestSupport {
                 new VMOption("--add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED"),
                 new VMOption("--add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED"),
                 new VMOption("--add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED"),
+                new VMOption("--add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED"),
                 new VMOption("-classpath"),
                 new VMOption("lib/jdk9plus/*" + File.pathSeparator + "lib/boot/*"
                     + File.pathSeparator + "lib/endorsed/*")
@@ -316,6 +327,7 @@ public class KarafTestSupport {
                 CoreOptions.mavenBundle().groupId("org.apache.servicemix.bundles").artifactId("org.apache.servicemix.bundles.hamcrest").versionAsInProject(),
                 CoreOptions.mavenBundle().groupId("org.apache.karaf.itests").artifactId("common").versionAsInProject(),
                 //replaceConfigurationFile("etc/host.key", getConfigFile("/etc/host.key")),
+                KarafDistributionOption.replaceConfigurationFile("etc/users.properties", getConfigFile("/etc/users.properties")),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.features.cfg", "updateSnapshots", "none"),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", httpPort),
                 KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.management.cfg", "rmiRegistryPort", rmiRegistryPort),
@@ -363,7 +375,7 @@ public class KarafTestSupport {
      *
      * @param command The command to execute
      * @param principals The principals (e.g. RolePrincipal objects) to run the command under
-     * @return
+     * @return the result of executing the command
      */
     public String executeCommand(final String command, Principal ... principals) {
         return executeCommand(command, COMMAND_TIMEOUT, false, principals);
@@ -376,10 +388,48 @@ public class KarafTestSupport {
      * @param timeout    The amount of time in millis to wait for the command to execute.
      * @param silent     Specifies if the command should be displayed in the screen.
      * @param principals The principals (e.g. RolePrincipal objects) to run the command under
-     * @return
+     * @return the result of executing the command
      */
     public String executeCommand(final String command, final Long timeout, final Boolean silent, final Principal ... principals) {
-        waitForCommandService(command);
+        return executeCommand(command, timeout, SERVICE_TIMEOUT, silent, principals);
+    }
+
+    /**
+     * Executes a shell alias representing a command and returns output as a String.
+     *
+     * @param commandAlias The command alias to execute
+     * @param principals   The principals (e.g. RolePrincipal objects) to run the command alias under
+     * @return the result of executing the alias
+     */
+    public String executeAlias(final String commandAlias, Principal... principals) {
+        return executeAlias(commandAlias, COMMAND_TIMEOUT, ALIAS_SERVICE_TIMEOUT, false, principals);
+    }
+
+    /**
+     * Executes a shell alias representing a command and returns output as a String.
+     *
+     * @param commandAlias          The command alias to execute.
+     * @param timeout               The amount of time in millis to wait for the alias to execute.
+     * @param commandServiceTimeout The amount of time in millis to wait for the command service to be available in the OSGi environment.
+     * @param silent                Specifies if the alias should be displayed in the screen.
+     * @param principals            The principals (e.g. RolePrincipal objects) to run the command alias under
+     * @return the result of executing the alias
+     */
+    public String executeAlias(final String commandAlias, final Long timeout, final Long commandServiceTimeout, final Boolean silent, final Principal... principals) {
+        return executeCommand(commandAlias, timeout, commandServiceTimeout, silent, principals);
+    }
+
+    /**
+     * Executes a shell command or alias and returns output as a String.
+     *
+     * @param command    The command to execute.
+     * @param timeout    The amount of time in millis to wait for the command to execute.
+     * @param silent     Specifies if the command should be displayed in the screen.
+     * @param principals The principals (e.g. RolePrincipal objects) to run the command under
+     * @return the result of executing the command/alias
+     */
+    private String executeCommand(final String command, final Long timeout, final Long commandServiceTimeout, final Boolean silent, final Principal ... principals) {
+        waitForCommandService(command, commandServiceTimeout);
 
         String response;
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -392,6 +442,10 @@ public class KarafTestSupport {
                 if (!silent) {
                     System.err.println(command);
                 }
+
+                // load all aliases defined in the init script in the session
+                executeInitScript(session);
+
                 Object result = session.execute(command);
                 if (result != null) {
                     session.getConsole().println(result.toString());
@@ -428,6 +482,19 @@ public class KarafTestSupport {
             throw new RuntimeException(e.getMessage(), e);
         }
         return response;
+    }
+
+    private void executeInitScript(Session session) {
+        try {
+            // possibly all scripts in karaf.shell.init.script property ?
+            final Path initScript = Paths.get(System.getProperty("karaf.etc") + "/shell.init.script");
+            String script = String.join("\n",
+                    Files.readAllLines(initScript));
+            session.execute(script);
+        } catch (Exception e) {
+            LOG.debug("Error in initialization script", e);
+            System.err.println("Error in initialization script: " + e.getMessage());
+        }
     }
 
     public void assertServiceAvailable(String type) {
@@ -542,7 +609,7 @@ public class KarafTestSupport {
         }
     }
 
-    private void waitForCommandService(String command) {
+    private void waitForCommandService(String command, Long timeout) {
         // the commands are represented by services. Due to the asynchronous nature of services they may not be
         // immediately available. This code waits the services to be available, in their secured form. It
         // means that the code waits for the command service to appear with the roles defined.
@@ -561,7 +628,7 @@ public class KarafTestSupport {
         try {
             long start = System.currentTimeMillis();
             long cur   = start;
-            while (cur - start < SERVICE_TIMEOUT) {
+            while (cur - start < timeout) {
                 if (sessionFactory.getRegistry().getCommand(scope, name) != null) {
                     return;
                 }
@@ -641,7 +708,7 @@ public class KarafTestSupport {
     public String getJmxServiceUrl() throws Exception {
         org.osgi.service.cm.Configuration configuration = configurationAdmin.getConfiguration("org.apache.karaf.management", null);
         if (configuration != null) {
-            return configuration.getProperties().get("serviceUrl").toString();
+            return configuration.getProcessedProperties(null).get("serviceUrl").toString();
         }
         return "service:jmx:rmi:///jndi/rmi://localhost:" + MIN_RMI_SERVER_PORT + "/karaf-root";
     }
@@ -649,7 +716,7 @@ public class KarafTestSupport {
     public String getSshPort() throws Exception {
         org.osgi.service.cm.Configuration configuration = configurationAdmin.getConfiguration("org.apache.karaf.shell", null);
         if (configuration != null) {
-            return configuration.getProperties().get("sshPort").toString();
+            return configuration.getProcessedProperties(null).get("sshPort").toString();
         }
         return "8101";
     }
@@ -657,7 +724,7 @@ public class KarafTestSupport {
     public String getHttpPort() throws Exception {
         org.osgi.service.cm.Configuration configuration = configurationAdmin.getConfiguration("org.ops4j.pax.web", null);
         if (configuration != null) {
-            return configuration.getProperties().get("org.osgi.service.http.port").toString();
+            return configuration.getProcessedProperties(null).get("org.osgi.service.http.port").toString();
         }
         return "8181";
     }

@@ -52,10 +52,18 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.annotation</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -68,17 +76,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            org.apache.karaf.examples.jaas.app
-                        </Export-Package>
-                        <Import-Package>
-                            org.apache.karaf.shell*;version="[4,5)",
-                            *
-                        </Import-Package>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>

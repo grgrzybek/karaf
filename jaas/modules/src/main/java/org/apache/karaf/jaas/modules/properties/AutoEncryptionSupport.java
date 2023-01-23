@@ -155,6 +155,7 @@ public class AutoEncryptionSupport implements Runnable, Closeable {
                     userInfosBuilder.append(',').append(infos[i]);
                 }
                 userInfos = userInfosBuilder.toString();
+
                 if (user.contains("\\")) {
                     users.remove(user);
                     user = user.replace("\\", "\\\\");

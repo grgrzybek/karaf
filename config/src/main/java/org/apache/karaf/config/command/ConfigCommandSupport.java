@@ -36,6 +36,7 @@ public abstract class ConfigCommandSupport implements Action {
     public static final String PROPERTY_CONFIG_PROPS = "ConfigCommand.Props";
     public static final String PROPERTY_FACTORY = "ConfigCommand.Factory";
     public static final String PROPERTY_ALIAS = "ConfigCommand.Alias";
+    public static final String PROPERTY_TYPE = "ConfigCommand.Type";
 
     @Reference
     protected ConfigRepository configRepository;
@@ -50,7 +51,6 @@ public abstract class ConfigCommandSupport implements Action {
 
     protected abstract Object doExecute() throws Exception;
 
-    @SuppressWarnings("rawtypes")
     protected TypedProperties getEditedProps() throws Exception {
         return (TypedProperties) this.session.get(PROPERTY_CONFIG_PROPS);
     }

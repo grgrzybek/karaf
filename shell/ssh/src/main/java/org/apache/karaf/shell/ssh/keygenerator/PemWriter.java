@@ -19,16 +19,16 @@
 package org.apache.karaf.shell.ssh.keygenerator;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyPair;
-import java.util.ArrayList;
-import java.util.Collection;
 
-import org.apache.commons.ssl.PEMItem;
-import org.apache.commons.ssl.PEMUtil;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.util.io.pem.PemObject;
 
 public class PemWriter {
     private Path privateKeyPath;
@@ -40,19 +40,12 @@ public class PemWriter {
     }
 
     public void writeKeyPair(String resource, KeyPair kp) throws IOException, FileNotFoundException {
-        Collection<Object> items = new ArrayList<>();
-
-        items.add(new PEMItem(kp.getPrivate().getEncoded(), "PRIVATE KEY"));
-        byte[] bytes = PEMUtil.encode(items);
-        try (OutputStream os = Files.newOutputStream(privateKeyPath)) {
-            os.write(bytes);
+        try (JcaPEMWriter writer = new JcaPEMWriter(new FileWriter(privateKeyPath.toFile()))) {
+            writer.writeObject(new PemObject("PRIVATE KEY", kp.getPrivate().getEncoded()));
         }
 
-        items.clear();
-        items.add(new PEMItem(kp.getPublic().getEncoded(), "PUBLIC KEY"));
-        bytes = PEMUtil.encode(items);
-        try (OutputStream os = Files.newOutputStream(publicKeyPath)) {
-            os.write(bytes);
+        try (JcaPEMWriter writer = new JcaPEMWriter(new FileWriter(publicKeyPath.toFile()))) {
+            writer.writeObject(new PemObject("PUBLIC KEY", kp.getPublic().getEncoded()));
         }
     }
 }

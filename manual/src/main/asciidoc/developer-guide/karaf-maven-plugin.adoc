@@ -119,7 +119,7 @@ The example below generates help for the commands in the current project:
 
 |`format`
 |`String`
-|The output format (docbx, asciidoc, or conf) of the commands documentation. Default value: docbx
+|The output format (docbx, asciidoc, conf or md) of the commands documentation. Default value: docbx
 
 |`classLoader`
 |`String`
@@ -471,6 +471,9 @@ The `karaf:assembly` goal creates a Karaf instance (assembly) filesystem using t
                     <installedBundles>
                         <installedBundle>${additional.bundle}</installedBundle>
                     </installedBundles>
+                    <firstStageBootFeatures>
+                        <feature>ssh</feature>
+                    </firstStageBootFeatures>
                     <bootFeatures>
                         <feature>bundle</feature>
                         <feature>config</feature>
@@ -561,6 +564,14 @@ It's also possible to generate a Karaf instance as a static distribution (kind o
 |`String`
 |An environment identifier that may be used to select different variant of PID configuration file, e.g., `org.ops4j.pax.url.mvn.cfg#docker`. Default value: null
 
+|`framework`
+|`String[]`
+|The features providing the Karaf framework (optional)
+
+|`javase`
+|`String`
+|The Java version to use for the verify
+
 |`defaultStartLevel`
 |`int`
 |Default start level for bundles in features that don't specify it. Default value: 30
@@ -584,6 +595,10 @@ It's also possible to generate a Karaf instance as a static distribution (kind o
 |`startupFeatures`
 |`List<String>`
 |List of features from compile-scope features XML files and KARs to be installed into system repo and listed in etc/startup.properties.
+
+|`firstStageBootFeatures`
+|`List<String>`
+|List of features from runtime-scope features XML files and KARs to be installed into system repo and listed in featuresBoot property in etc/org.apache.karaf.features.cfg.These will be installed before bootFeatures. They will be wrapped in parentheses in featuresBoot.
 
 |`bootFeatures`
 |`List<String>`

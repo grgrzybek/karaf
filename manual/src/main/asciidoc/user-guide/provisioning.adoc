@@ -96,15 +96,15 @@ By default, `autoRefresh` is `true`. Using `false` will disable auto refresh per
 
 ==== Features repositories
 
-The features are described in a features XML descriptor. This XML file contains the description of a set of features.
+The features are described in a features XML or JSON descriptor. This file contains the description of a set of features.
 
-A features XML descriptor is named a "features repository". Before being able to install a feature, you have to register
+A features descriptor is named a "features repository". Before being able to install a feature, you have to register
 the features repository that provides the feature (using `feature:repo-add` command or FeatureMBean as described later).
 
 For instance, the following XML file (or "features repository") describes the `feature1` and `feature2` features:
 
 ----
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+<features name="my-features-repo" xmlns="http://karaf.apache.org/xmlns/features/v1.4.0">
   <feature name="feature1" version="1.0.0">
     <bundle>...</bundle>
     <bundle>...</bundle>
@@ -114,6 +114,34 @@ For instance, the following XML file (or "features repository") describes the `f
     <bundle>...</bundle>
   </feature>
 </features>
+----
+
+Here's the same descriptor in JSON format:
+
+----
+{
+ "name": "my-features-repo",
+ "feature": [
+    {
+        "name": "feature1",
+        "version": "1.0.0",
+        "bundle": [
+           { "location": "..." },
+           { "location": "..."
+        ]
+    },
+    {
+        "name": "feature2",
+        "version": "1.1.0",
+        "feature": [
+            { "name": "feature1" }
+        ]
+        "bundle": [
+            { "location": "..." }
+        ]
+    }
+ ]
+}
 ----
 
 We can note that the features XML has a schema. Take a look on [Features XML Schema section|provisioning-schema] of the user guide
@@ -197,6 +225,27 @@ This value can be "overridden" by the `start-level` attribute of the `<bundle/>`
   </feature>
 ----
 
+----
+{
+    "feature": [
+        {
+            "name": "my-project",
+            "version": "1.0.0"
+            "bundle": [
+                {
+                    "startLevel": 80,
+                    "location": "mvn:com.mycompany.myproject/myproject-dao"
+                },
+                {
+                    "startLeve": 85,
+                    "location": "mvn:com.mycompany.myproject/myproject-service"
+                }
+            ]
+        }
+    ]
+}
+----
+
 The start-level attribute insures that the `myproject-dao` bundle is started before the bundles that use it.
 
 Instead of using start-level, a better solution is to simply let the OSGi framework know what your dependencies are by
@@ -218,11 +267,47 @@ To do so, a feature can specify the `start` attribute to false in the `<bundle/>
   </feature>
 ----
 
+----
+{
+    "feature": [
+        {
+            "name": "my-project",
+            "version": "1.0.0"
+            "bundle": [
+                {
+                    "startLevel": 80,
+                    "start": false,
+                    "location": "mvn:com.mycompany.myproject/myproject-dao"
+                },
+                {
+                    "startLeve": 85,
+                    "start": false,
+                    "location": "mvn:com.mycompany.myproject/myproject-service"
+                }
+            ]
+        }
+    ]
+}
+----
+
 ===== Dependency
 
-A bundle can be flagged as being a dependency, using the `dependency` attribute set to true on the `<bundle/>` element.
+A bundle can be flagged as being a dependency, using the `dependency` attribute set to true on the `bundle` element.
 
 This information can be used by resolvers to compute the full list of bundles to be installed.
+
+----
+<bundle dependency="true">...</bundle>
+----
+
+----
+{
+    "dependency": true,
+    "location": "..."
+}
+----
+
+The dependency flag means that the bundle will be installed only if there's not other bundle providing the same capability.
 
 ==== Dependent features
 
@@ -236,6 +321,32 @@ A feature can depend on a set of other features:
   </feature>
 ----
 
+----
+{
+    "feature": [
+        {
+            "name": "my-project",
+            "version": "1.0.0",
+            "feature": [
+                { "name": "other" }
+            ],
+            "bundle": [
+                {
+                    "startLevel": 80,
+                    "start": false,
+                    "location": "mvn:com.mycompany.myproject/myproject-dao"
+                },
+                {
+                    "startLevel": 85,
+                    "start": false,
+                    "location": "mvn:com.mycompany.myproject/myproject-service"
+                }
+            ]
+        }
+    ]
+}
+----
+
 When the `my-project` feature will be installed, the `other` feature will be automatically installed as well.
 
 It's possible to define a version range for a dependent feature:
@@ -245,6 +356,22 @@ It's possible to define a version range for a dependent feature:
   <feature version="[2.5.6,4)">spring</feature>
   ...
 </feature>
+----
+
+----
+{
+    "feature": [
+        {
+            "name": "spring-dm",
+            "feature": [
+                {
+                    "name": "spring",
+                    "version": "[2.5.6,4)"
+                }
+            ]
+        }
+    ]
+}
 ----
 
 The feature with the highest version available in the range will be installed.
@@ -259,32 +386,75 @@ To specify an exact version, use a closed range such as `[3.1,3.1]`.
 
 A prerequisite feature is a special kind of dependency. If you add the `prerequisite` attribute to dependant feature tag then it will force installation and also activation of bundles in the dependant feature before the installation of the actual feature. This may be handy in the case that bundles enlisted in a given feature are not using pre installed URLs such as `wrap` or `war`.
 
-==== Feature configurations
-
-The `<config/>` element in a feature XML allows a feature to create and/or populate a configuration (identified by a configuration PID).
+----
+<feature name="foo" version="1.0.0">
+    <feature prerequisite="true">bar</feature>
+    ...
+</feature>
+----
 
 ----
+{
+    "name": "foo",
+    "version": "1.0.0",
+    "feature": [
+        {
+            "prerequisite": true,
+            "name": "bar"
+        }
+    ]
+}
+----
+
+==== Feature configurations
+
+The `<config/>` element in a feature XML (or "config" in feature JSON) allows a feature to create and/or populate a configuration (identified by a configuration PID).
+
+----
+...
 <config name="com.foo.bar">
   myProperty = myValue
 </config>
+...
 ----
 
-The `name` attribute of the `<config/>` element corresponds to the configuration PID (see the [Configuration section|configuration] for details).
+----
+...
+"config": [
+    {
+        "name": "com.foo.bar",
+        "value": "myProperty=myValue"
+    }
+]
+....
+----
+
+The `name` attribute of the `config` element corresponds to the configuration PID (see the [Configuration section|configuration] for details).
 
 The installation of the feature will have the same effect as dropping a file named `com.foo.bar.cfg` in the `etc` folder.
 
-The content of the `<config/>` element is a set of properties, following the key=value standard.
+The content (value) of the `config` element is a set of properties, following the `key=value` standard.
 
 ==== Feature configuration files
 
-Instead of using the `<config/>` element, a feature can specify `<configfile/>` elements.
+Instead of using the `config` element, a feature can specify `configfile` elements.
 
 ----
 <configfile finalname="/etc/myfile.cfg" override="false">URL</configfile>
 ----
 
-Instead of directly manipulating the Apache Karaf configuration layer (as when using the `<config/>` element), the
-`<configfile/>` element takes directly a file specified by a URL, and copy the file in the location specified by the
+----
+  "configfile": [
+    {
+        "finalname": "/etc/myfile.cfg",
+        "override": false,
+        "location": "URL"
+    }
+  ]
+----
+
+Instead of directly manipulating the Apache Karaf configuration layer (as when using the `config` element), the
+`configfile` element takes directly a file specified by a URL, and copy the file in the location specified by the
 `finalname` attribute.
 
 If not specified, the location is relative from the `KARAF_BASE` variable. It's also possible to use variable like
@@ -294,6 +464,16 @@ For instance:
 
 ----
 <configfile finalname="${karaf.etc}/myfile.cfg" override="false">URL</configfile>
+----
+
+----
+  "configfile": [
+    {
+        "finalname": "${karaf.etc}/myfile.cfg",
+        "override": false,
+        "location": "URL"
+    }
+  ]
 ----
 
 If the file is already present at the desired location it is kept and the deployment of the configuration file is skipped,
@@ -312,6 +492,10 @@ For instance, a feature can contain:
 <requirement>osgi.ee;filter:=&quot;(&amp;(osgi.ee=JavaSE)(!(version&gt;=1.8)))&quot;</requirement>
 ----
 
+----
+"requirement": "osgi.ee;filter="(&(osgi.ee=JavaSE)(!(version>1.8)))"
+----
+
 The requirement specifies that the feature will work by only if the JDK version is not 1.8 (so basically 1.7).
 
 The features resolver is also able to refresh the bundles when an optional dependency is satisfied, rewiring the optional import.
@@ -324,13 +508,21 @@ The `feature:repo-list` command lists all registered feature repositories:
 
 ----
 karaf@root()> feature:repo-list
-Repository               | URL
+Repository                        | URL
 --------------------------------------------------------------------------------------
-org.ops4j.pax.cdi-0.12.0 | mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0/xml/features
-org.ops4j.pax.web-4.1.4  | mvn:org.ops4j.pax.web/pax-web-features/4.1.4/xml/features
-standard-4.0.0           | mvn:org.apache.karaf.features/standard/4.0.0/xml/features
-enterprise-4.0.0         | mvn:org.apache.karaf.features/enterprise/4.0.0/xml/features
-spring-4.0.0             | mvn:org.apache.karaf.features/spring/4.0.0/xml/features
+pax-jms-1.1.0                     │ mvn:org.ops4j.pax.jms/pax-jms-features/1.1.0/xml/features
+standard-4.4.0                    │ mvn:org.apache.karaf.features/standard/4.4.0/xml/features
+org.ops4j.pax.jdbc-1.5.0          │ mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.5.0/xml/features
+aries-jpa-2.7.3                   │ mvn:org.apache.aries.jpa/jpa-features/2.7.3/xml/features
+framework-4.4.0                   │ mvn:org.apache.karaf.features/framework/4.4.0/xml/features
+org.ops4j.pax.web-8.0.2           │ mvn:org.ops4j.pax.web/pax-web-features/8.0.2/xml/features
+pax-transx-0.5.0                  │ mvn:org.ops4j.pax.transx/pax-transx-features/0.5.0/xml/features
+openjpa-3.2.0                     │ mvn:org.apache.openjpa/openjpa-features/3.2.0/xml/features
+specs-4.4.0                       │ mvn:org.apache.karaf.features/specs/4.4.0/xml/features
+hibernate-validator-osgi-features │ mvn:org.hibernate.validator/hibernate-validator-osgi-karaf-features/7.0.1.Final/xml/features
+spring-4.4.0                      │ mvn:org.apache.karaf.features/spring/4.4.0/xml/features
+enterprise-4.4.0                  │ mvn:org.apache.karaf.features/enterprise/4.4.0/xml/features
+org.ops4j.pax.cdi-1.1.4           │ mvn:org.ops4j.pax.cdi/pax-cdi-features/1.1.4/xml/features
 ----
 
 Each repository has a name and the URL to the features XML.
@@ -343,13 +535,21 @@ so update the features definition), you can use the `-r` option:
 karaf@root()> feature:repo-list -r
 Reloading all repositories from their urls
 
-Repository               | URL
+Repository                        | URL
 --------------------------------------------------------------------------------------
-org.ops4j.pax.cdi-0.12.0 | mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0/xml/features
-org.ops4j.pax.web-4.1.4  | mvn:org.ops4j.pax.web/pax-web-features/4.1.4/xml/features
-standard-4.0.0           | mvn:org.apache.karaf.features/standard/4.0.0/xml/features
-enterprise-4.0.0         | mvn:org.apache.karaf.features/enterprise/4.0.0/xml/features
-spring-4.0.0             | mvn:org.apache.karaf.features/spring/4.0.0/xml/features
+pax-jms-1.1.0                     │ mvn:org.ops4j.pax.jms/pax-jms-features/1.1.0/xml/features
+standard-4.4.0                    │ mvn:org.apache.karaf.features/standard/4.4.0/xml/features
+org.ops4j.pax.jdbc-1.5.0          │ mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.5.0/xml/features
+aries-jpa-2.7.3                   │ mvn:org.apache.aries.jpa/jpa-features/2.7.3/xml/features
+framework-4.4.0                   │ mvn:org.apache.karaf.features/framework/4.4.0/xml/features
+org.ops4j.pax.web-8.0.2           │ mvn:org.ops4j.pax.web/pax-web-features/8.0.2/xml/features
+pax-transx-0.5.0                  │ mvn:org.ops4j.pax.transx/pax-transx-features/0.5.0/xml/features
+openjpa-3.2.0                     │ mvn:org.apache.openjpa/openjpa-features/3.2.0/xml/features
+specs-4.4.0                       │ mvn:org.apache.karaf.features/specs/4.4.0/xml/features
+hibernate-validator-osgi-features │ mvn:org.hibernate.validator/hibernate-validator-osgi-karaf-features/7.0.1.Final/xml/features
+spring-4.4.0                      │ mvn:org.apache.karaf.features/spring/4.4.0/xml/features
+enterprise-4.4.0                  │ mvn:org.apache.karaf.features/enterprise/4.4.0/xml/features
+org.ops4j.pax.cdi-1.1.4           │ mvn:org.ops4j.pax.cdi/pax-cdi-features/1.1.4/xml/features
 ----
 
 ===== `feature:repo-add`
@@ -455,18 +655,18 @@ Without argument, the command refreshes all features repository:
 ----
 karaf@root()> feature:repo-refresh
 Refreshing feature url mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0/xml/features
-Refreshing feature url mvn:org.ops4j.pax.web/pax-web-features/4.1.4/xml/features
-Refreshing feature url mvn:org.apache.karaf.features/standard/4.0.0/xml/features
-Refreshing feature url mvn:org.apache.karaf.features/enterprise/4.0.0/xml/features
-Refreshing feature url mvn:org.apache.karaf.features/spring/4.0.0/xml/features
+Refreshing feature url mvn:org.ops4j.pax.web/pax-web-features/8.0.2/xml/features
+Refreshing feature url mvn:org.apache.karaf.features/standard/4.4.0/xml/features
+Refreshing feature url mvn:org.apache.karaf.features/enterprise/4.4.0/xml/features
+Refreshing feature url mvn:org.apache.karaf.features/spring/4.4.0/xml/features
 ----
 
 Instead of refreshing all features repositories, you can specify the features repository to refresh, by providing the URL
 or the features repository name (and optionally version):
 
 ----
-karaf@root()> feature:repo-refresh mvn:org.apache.karaf.features/standard/4.0.0/xml/features
-Refreshing feature url mvn:org.apache.karaf.features/standard/4.0.0/xml/features
+karaf@root()> feature:repo-refresh mvn:org.apache.karaf.features/standard/4.4.0/xml/features
+Refreshing feature url mvn:org.apache.karaf.features/standard/4.4.0/xml/features
 ----
 
 ----
@@ -546,25 +746,25 @@ Using the `-i` option displays only installed features:
 karaf@root()> feature:list -i
 Name            | Version | Required | State   | Repository     | Description
 -------------------------------------------------------------------------------------------------------------------
-aries-proxy     | 4.0.0   |          | Started | standard-4.0.0 | Aries Proxy
-aries-blueprint | 4.0.0   | x        | Started | standard-4.0.0 | Aries Blueprint
-feature         | 4.0.0   | x        | Started | standard-4.0.0 | Features Support
-shell           | 4.0.0   | x        | Started | standard-4.0.0 | Karaf Shell
-shell-compat    | 4.0.0   | x        | Started | standard-4.0.0 | Karaf Shell Compatibility
-deployer        | 4.0.0   | x        | Started | standard-4.0.0 | Karaf Deployer
-bundle          | 4.0.0   | x        | Started | standard-4.0.0 | Provide Bundle support
-config          | 4.0.0   | x        | Started | standard-4.0.0 | Provide OSGi ConfigAdmin support
-diagnostic      | 4.0.0   | x        | Started | standard-4.0.0 | Provide Diagnostic support
-instance        | 4.0.0   | x        | Started | standard-4.0.0 | Provide Instance support
-jaas            | 4.0.0   | x        | Started | standard-4.0.0 | Provide JAAS support
-log             | 4.0.0   | x        | Started | standard-4.0.0 | Provide Log support
-package         | 4.0.0   | x        | Started | standard-4.0.0 | Package commands and mbeans
-service         | 4.0.0   | x        | Started | standard-4.0.0 | Provide Service support
-system          | 4.0.0   | x        | Started | standard-4.0.0 | Provide System support
-kar             | 4.0.0   | x        | Started | standard-4.0.0 | Provide KAR (KARaf archive) support
-ssh             | 4.0.0   | x        | Started | standard-4.0.0 | Provide a SSHd server on Karaf
-management      | 4.0.0   | x        | Started | standard-4.0.0 | Provide a JMX MBeanServer and a set of MBeans in
-wrap            | 0.0.0   | x        | Started | standard-4.0.0 | Wrap URL handler
+aries-proxy     | 4.4.0   |          | Started | standard-4.4.0 | Aries Proxy
+aries-blueprint | 4.4.0   | x        | Started | standard-4.4.0 | Aries Blueprint
+feature         | 4.4.0   | x        | Started | standard-4.4.0 | Features Support
+shell           | 4.4.0   | x        | Started | standard-4.4.0 | Karaf Shell
+shell-compat    | 4.4.0   | x        | Started | standard-4.4.0 | Karaf Shell Compatibility
+deployer        | 4.4.0   | x        | Started | standard-4.4.0 | Karaf Deployer
+bundle          | 4.4.0   | x        | Started | standard-4.4.0 | Provide Bundle support
+config          | 4.4.0   | x        | Started | standard-4.4.0 | Provide OSGi ConfigAdmin support
+diagnostic      | 4.4.0   | x        | Started | standard-4.4.0 | Provide Diagnostic support
+instance        | 4.4.0   | x        | Started | standard-4.4.0 | Provide Instance support
+jaas            | 4.4.0   | x        | Started | standard-4.4.0 | Provide JAAS support
+log             | 4.4.0   | x        | Started | standard-4.4.0 | Provide Log support
+package         | 4.4.0   | x        | Started | standard-4.4.0 | Package commands and mbeans
+service         | 4.4.0   | x        | Started | standard-4.4.0 | Provide Service support
+system          | 4.4.0   | x        | Started | standard-4.4.0 | Provide System support
+kar             | 4.4.0   | x        | Started | standard-4.4.0 | Provide KAR (KARaf archive) support
+ssh             | 4.4.0   | x        | Started | standard-4.4.0 | Provide a SSHd server on Karaf
+management      | 4.4.0   | x        | Started | standard-4.4.0 | Provide a JMX MBeanServer and a set of MBeans in
+wrap            | 0.0.0   | x        | Started | standard-4.4.0 | Wrap URL handler
 ----
 
 ===== `feature:install`
@@ -582,7 +782,7 @@ We can simulate an installation using `-t` or `--simulate` option: it just displ
 
 ----
 karaf@root()> feature:install -t -v eventadmin
-Adding features: eventadmin/[4.0.0,4.0.0]
+Adding features: eventadmin/[4.4.0,4.4.0]
 No deployment change.
   Managing bundle:
     org.apache.felix.metatype / 1.0.12
@@ -591,7 +791,7 @@ No deployment change.
 You can specify a feature version to install:
 
 ----
-karaf@root()> feature:install eventadmin/4.0.0
+karaf@root()> feature:install eventadmin/4.4.0
 ----
 
 By default, the `feature:install` command is not verbose. If you want to have some details about actions performed by the `feature:install`
@@ -599,7 +799,7 @@ command, you can use the `-v` option:
 
 ----
 karaf@root()> feature:install -v eventadmin
-Adding features: eventadmin/[4.0.0,4.0.0]
+Adding features: eventadmin/[4.4.0,4.4.0]
 No deployment change.
 Done.
 ----
@@ -610,7 +810,7 @@ bundles, you can use the `-r` option:
 
 ----
 karaf@root()> feature:install -v -r eventadmin
-Adding features: eventadmin/[4.0.0,4.0.0]
+Adding features: eventadmin/[4.4.0,4.4.0]
 No deployment change.
 Done.
 ----

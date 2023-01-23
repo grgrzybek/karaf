@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -276,6 +277,10 @@ public class FeaturesPlugin extends AbstractWebConsolePlugin {
             jw.value(name);
             jw.key("url");
             String uri = r.getURI().toString();
+            // Hide the user:password if it contains one
+            if (uri.matches("\\S*://\\S*:\\S*@\\S*")) {
+                uri = uri.replaceFirst("://\\S*@", "://*****:*****@");
+            }
             jw.value(uri);
             jw.key("actions");
             jw.array();
@@ -310,9 +315,7 @@ public class FeaturesPlugin extends AbstractWebConsolePlugin {
         }
 
         try {
-            for (Repository r : featuresService.listRepositories()) {
-                repositories.add(r);
-            }
+            repositories.addAll(Arrays.asList(featuresService.listRepositories()));
         } catch (Exception e) {
             this.log.error(e.getMessage());
         }

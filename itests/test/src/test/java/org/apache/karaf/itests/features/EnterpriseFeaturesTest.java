@@ -50,13 +50,14 @@ public class EnterpriseFeaturesTest extends BaseTest {
                         "mvn:org.apache.karaf.features/framework/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/spring/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/enterprise/" + version + "/xml/features, " +
+                        "mvn:org.apache.karaf.features/specs/" + version + "/xml/features, " +
                         "mvn:org.apache.karaf.features/standard/" + version + "/xml/features"));
         return result.toArray(new Option[result.size()]);
     }
 
     @Test
     public void installTransaction20Feature() throws Exception {
-        installAssertAndUninstallFeature("transaction", "2.0.0");
+        installAssertAndUninstallFeature("transaction", "2.0");
     }
 
     @Test
@@ -71,12 +72,12 @@ public class EnterpriseFeaturesTest extends BaseTest {
     }
 
     @Test
-    public void installOpenJpa3Feature() throws Exception {
-        installAssertAndUninstallFeatures("openjpa3");
+    public void installOpenJpaFeature() throws Exception {
+        installAssertAndUninstallFeatures("openjpa");
     }
 
     @Test
-    public void installHibernateValidatorFeature() throws Exception {
+    public void installHibernateValidatorFeatures() throws Exception {
         installAssertAndUninstallFeatures("hibernate-validator");
         installAssertAndUninstallFeatures("hibernate-validator-joda-time");
         installAssertAndUninstallFeatures("hibernate-validator-javax-money");

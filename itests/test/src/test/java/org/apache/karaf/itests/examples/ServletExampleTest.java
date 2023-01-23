@@ -16,6 +16,7 @@
  */
 package org.apache.karaf.itests.examples;
 
+import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.karaf.itests.BaseTest;
 import org.junit.Assert;
@@ -35,6 +36,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.EnumSet;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
@@ -42,13 +44,18 @@ public class ServletExampleTest extends BaseTest {
 
     private void setup() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-servlet-example-features/" + System.getProperty("karaf.version") + "/xml");
+        installAndAssertFeature("http");
+        installAndAssertFeature("http-whiteboard");
+        installAndAssertFeature("pax-web-karaf");
+        featureService.installFeature("pax-web-jsp", EnumSet.noneOf(FeaturesService.Option.class));
+        installAndAssertFeature("pax-web-jsp");
     }
 
     private void verify() throws Exception {
-        String command = executeCommand("http:list", new RolePrincipal("viewer"));
+        String command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         while (!command.contains("servlet-example")) {
             Thread.sleep(200);
-            command = executeCommand("http:list", new RolePrincipal("viewer"));
+            command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
         System.out.println(command);
 
@@ -84,10 +91,10 @@ public class ServletExampleTest extends BaseTest {
 
         installAndAssertFeature("karaf-servlet-example-annotation");
 
-        String command = executeCommand("http:list", new RolePrincipal("viewer"));
-        while (!command.contains("servlet-example/multipart")) {
+        String command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
+        while (!command.contains("/multipart")) {
             Thread.sleep(200);
-            command = executeCommand("http:list", new RolePrincipal("viewer"));
+            command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
 
         verify();
@@ -117,10 +124,10 @@ public class ServletExampleTest extends BaseTest {
 
         installAndAssertFeature("karaf-servlet-example-upload");
 
-        String command = executeCommand("http:list", new RolePrincipal("viewer"));
+        String command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         while (!command.contains("upload-example")) {
             Thread.sleep(200);
-            command = executeCommand("http:list", new RolePrincipal("viewer"));
+            command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
         System.out.println(command);
 

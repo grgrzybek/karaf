@@ -41,8 +41,15 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <version>6.0.0</version>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <version>1.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.http</artifactId>
+            <version>1.2.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -55,6 +62,7 @@
                     <instructions>
                         <Import-Package>
                             org.osgi.service.component,
+                            org.eclipse.jetty.websocket.server,
                             *
                         </Import-Package>
                         <Private-Package>

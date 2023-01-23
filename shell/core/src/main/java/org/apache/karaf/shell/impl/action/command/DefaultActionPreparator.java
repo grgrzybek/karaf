@@ -100,8 +100,8 @@ public class DefaultActionPreparator {
         }
         
         // Populate
-        Map<Option, Object> optionValues = new HashMap<Option, Object>();
-        Map<Argument, Object> argumentValues = new HashMap<Argument, Object>();
+        Map<Option, Object> optionValues = new HashMap<>();
+        Map<Argument, Object> argumentValues = new HashMap<>();
         boolean processOptions = true;
         int argIndex = 0;
         for (Iterator<Object> it = params.iterator(); it.hasNext(); ) {
@@ -157,7 +157,7 @@ public class DefaultActionPreparator {
                     @SuppressWarnings("unchecked")
                     List<Object> l = (List<Object>) optionValues.get(option);
                     if (l == null) {
-                        l = new ArrayList<Object>();
+                        l = new ArrayList<>();
                         optionValues.put(option, l);
                     }
                     l.add(value);
@@ -180,7 +180,7 @@ public class DefaultActionPreparator {
                     @SuppressWarnings("unchecked")
                     List<Object> l = (List<Object>) argumentValues.get(argument);
                     if (l == null) {
-                        l = new ArrayList<Object>();
+                        l = new ArrayList<>();
                         argumentValues.put(argument, l);
                     }
                     l.add(param);
@@ -310,9 +310,9 @@ public class DefaultActionPreparator {
     public void printUsage(Action action, Map<Option, Field> options, Map<Argument, Field> arguments, PrintStream out, boolean globalScope, int termWidth) {
         Command command = action.getClass().getAnnotation(Command.class);
         if (command != null) {
-            List<Argument> argumentsSet = new ArrayList<Argument>(arguments.keySet());
+            List<Argument> argumentsSet = new ArrayList<>(arguments.keySet());
             argumentsSet.sort(Comparator.comparing(Argument::index));
-            Set<Option> optionsSet = new HashSet<Option>(options.keySet());
+            Set<Option> optionsSet = new HashSet<>(options.keySet());
             optionsSet.add(HelpOption.HELP);
             if (command != null && (command.description() != null || command.name() != null)) {
                 out.println(INTENSITY_BOLD + "DESCRIPTION" + INTENSITY_NORMAL);
@@ -382,9 +382,9 @@ public class DefaultActionPreparator {
             if (options.size() > 0) {
                 out.println(INTENSITY_BOLD + "OPTIONS" + INTENSITY_NORMAL);
                 for (Option option : optionsSet) {
-                    String opt = option.name();
+                    StringBuilder opt = new StringBuilder(option.name());
                     for (String alias : option.aliases()) {
-                        opt += ", " + alias;
+                        opt.append(", ").append(alias);
                     }
                     out.print("        ");
                     out.println(INTENSITY_BOLD + opt + INTENSITY_NORMAL);

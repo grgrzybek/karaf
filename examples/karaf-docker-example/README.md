@@ -312,7 +312,7 @@ karaf: Ignoring predefined value for KARAF_HOME
      / /| |/ /_/ / /  / /_/ / __/        
     /_/ |_|\__,_/_/   \__,_/_/         
 
-  Apache Karaf (4.2.5)
+  Apache Karaf (4.3.0-SNAPSHOT)
 
 Hit '<tab>' for a list of available commands
 and '[cmd] --help' for help on a specific command.

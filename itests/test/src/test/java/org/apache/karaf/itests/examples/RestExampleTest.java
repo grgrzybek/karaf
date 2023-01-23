@@ -26,11 +26,8 @@ import org.ops4j.pax.exam.spi.reactors.PerMethod;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,6 +37,9 @@ public class RestExampleTest extends BaseTest {
 
     private void setup() throws Exception {
         addFeaturesRepository("mvn:org.apache.karaf.examples/karaf-rest-example-features/" + System.getProperty("karaf.version") + "/xml");
+        installAndAssertFeature("http");
+        installAndAssertFeature("http-whiteboard");
+        installAndAssertFeature("pax-web-karaf");
     }
 
     private void verify() throws Exception {
@@ -106,15 +106,28 @@ public class RestExampleTest extends BaseTest {
     }
 
     @Test
+    public void testScrWithJerseyClient() throws Exception {
+        setup();
+
+        installAndAssertFeature("karaf-rest-example-scr");
+
+        installAndAssertFeature("karaf-rest-example-client-jersey");
+
+        verify();
+    }
+
+    @Test
     public void testWhiteboard() throws Exception {
         setup();
 
+        installAndAssertFeature("activation");
+        installAndAssertFeature("scr");
         installAndAssertFeature("karaf-rest-example-whiteboard");
 
-        String output = executeCommand("http:list", new RolePrincipal("viewer"));
-        while (!output.contains("Deployed")) {
+        String output = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
+        while (!output.contains("cxf-servlet")) {
             Thread.sleep(500);
-            output = executeCommand("http:list", new RolePrincipal("viewer"));
+            output = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
         System.out.println(output);
 

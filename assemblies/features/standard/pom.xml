@@ -331,8 +331,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.not-yet-commons-ssl</artifactId>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -382,6 +389,11 @@
             <artifactId>org.apache.karaf.services.eventadmin</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>org.apache.karaf.event</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- jasypt-encryption deps -->
         <dependency>
@@ -412,6 +424,21 @@
             <groupId>org.apache.karaf.scr</groupId>
             <artifactId>org.apache.karaf.scr.management</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- audit -->
+        <dependency>
+            <groupId>org.apache.karaf.audit</groupId>
+            <artifactId>org.apache.karaf.audit.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- manual -->
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>manual</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -463,6 +490,10 @@
                             <framework>
                                 <feature>framework</feature>
                             </framework>
+                            <features>
+                                <!-- webconsole, blueprint-web and jolokia features use requirement -->
+                                <feature>(?!(webconsole|blueprint-web|jolokia))*</feature>
+                            </features>
                             <ignoreMissingConditions>true</ignoreMissingConditions>
                             <featureProcessingInstructions>target/feature-processing/org.apache.karaf.features.xml</featureProcessingInstructions>
                         </configuration>

@@ -415,8 +415,8 @@ public abstract class MavenConfigurationSupport implements Action {
     private void decryptSettings() throws Exception {
         if (mavenSecuritySettings != null && mavenSettings != null) {
             masterPassword = cipher.decryptDecorated(mavenSecuritySettings.getMaster(), masterMasterPassword);
-            DefaultSecDispatcher dispatcher = new DefaultSecDispatcher();
-            DefaultSettingsDecrypter decrypter = new DefaultSettingsDecrypter(new DefaultSecDispatcher());
+            DefaultSecDispatcher dispatcher = new DefaultSecDispatcher(cipher);
+            DefaultSettingsDecrypter decrypter = new DefaultSettingsDecrypter(new DefaultSecDispatcher(cipher));
             try {
                 dispatcher.setConfigurationFile(securitySettings.value.getAbsolutePath());
                 Field f = dispatcher.getClass().getDeclaredField("_cipher");
@@ -467,14 +467,13 @@ public abstract class MavenConfigurationSupport implements Action {
                     repositories[0] = repositories[0].substring(1);
                 }
 
-                List<String> newRepositories = new LinkedList<>();
-                newRepositories.addAll(Arrays.asList(repositories));
+                List<String> newRepositories = new LinkedList<>(Arrays.asList(repositories));
 
                 // append all repositories from all active profiles from available settings.xml
                 if (mavenSettings != null) {
                     // see org.ops4j.pax.url.mvn.internal.config.MavenConfigurationImpl.getRepositories()
                     Set<String> activeProfiles = new LinkedHashSet<>(mavenSettings.getActiveProfiles());
-                    Map<String, Profile> profiles = (Map<String, Profile>)mavenSettings.getProfilesAsMap();
+                    Map<String, Profile> profiles = mavenSettings.getProfilesAsMap();
                     profiles.values().stream()
                             .filter((profile) -> profile.getActivation() != null && profile.getActivation().isActiveByDefault())
                             .map(Profile::getId)
@@ -591,7 +590,7 @@ public abstract class MavenConfigurationSupport implements Action {
         File result = null;
         if (files != null && files.length > 0) {
             List<String> names = new ArrayList<>(Arrays.stream(files).map(File::getName)
-                    .collect(TreeSet<String>::new, TreeSet::add, TreeSet::addAll));
+                    .collect(TreeSet::new, TreeSet::add, TreeSet::addAll));
 
             names.add(String.format(fileNameFormat, System.currentTimeMillis()));
 

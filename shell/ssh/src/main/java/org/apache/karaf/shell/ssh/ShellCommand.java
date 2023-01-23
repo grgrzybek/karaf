@@ -145,6 +145,10 @@ public class ShellCommand implements Command {
         } finally {
             callback.onExit(exitStatus);
             StreamUtils.close(in, out, err);
+            // do NOT close the session (QE, automation, ...)
+//            if (session != null) {
+//                session.close(false);
+//            }
         }
     }
 

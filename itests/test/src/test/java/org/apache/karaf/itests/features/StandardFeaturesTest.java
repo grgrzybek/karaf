@@ -46,11 +46,6 @@ public class StandardFeaturesTest extends BaseTest {
         assertFeatureInstalled("service");
         assertFeatureInstalled("system");
     }
-	
-    @Test
-    public void installFrameworkSecurityFeature() throws Exception {
-        installAssertAndUninstallFeatures("framework-security");
-    }
 
     public void installServiceSecurityFeature() throws Exception {
         System.out.println("===>installServiceSecurityFeature");
@@ -60,7 +55,7 @@ public class StandardFeaturesTest extends BaseTest {
     @Test
     @Ignore("ENTESB-9734: blueprint-web doesn't work with servlet API 4.0")
     public void installAriesBlueprintWebFeature() throws Exception {
-        installAssertAndUninstallFeatures("blueprint-web");
+        installAssertAndUninstallFeatures("pax-web-http", "blueprint-web");
     }
     
     @Test
@@ -75,28 +70,22 @@ public class StandardFeaturesTest extends BaseTest {
 
     @Test
     public void installHttpFeature() throws Exception {
-        installAssertAndUninstallFeatures("http");
+        installAssertAndUninstallFeatures("pax-web-http");
     }
 
     @Test
     public void installHttpWhiteboardFeature() throws Exception {
-        installAssertAndUninstallFeatures("http-whiteboard");
+        installAssertAndUninstallFeatures("pax-web-http-whiteboard");
     }
 
     @Test
     public void installWarFeature() throws Exception {
-        installAssertAndUninstallFeatures("war");
-    }
-
-    @Test
-    @Ignore("ENTESB-9734: Jetty doesn't work with servlet API 4.0")
-    public void installJettyFeature() throws Exception {
-        installAssertAndUninstallFeatures("jetty");
+        installAssertAndUninstallFeatures("pax-web-war");
     }
 
     @Test
     public void installWebConsoleFeature() throws Exception {
-        installAssertAndUninstallFeatures("webconsole");
+        installAssertAndUninstallFeatures("pax-web-http", "webconsole");
     }
 
     @Test
@@ -131,7 +120,7 @@ public class StandardFeaturesTest extends BaseTest {
 
     @Test
     public void installJolokiaFeature() throws Exception {
-        installAssertAndUninstallFeatures("jolokia");
+        installAssertAndUninstallFeatures("pax-web-http", "jolokia");
     }
 
 }

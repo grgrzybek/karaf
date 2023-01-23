@@ -38,7 +38,7 @@
         <module>karaf-branding-example</module>
         <module>karaf-bundle-example</module>
         <module>karaf-camel-example</module>
-        <!-- <module>karaf-cdi-example</module> -->
+        <module>karaf-cdi-example</module>
         <module>karaf-command-example</module>
         <module>karaf-config-example</module>
         <module>karaf-deployer-example</module>
@@ -57,8 +57,9 @@
         <module>karaf-itest-example</module>
         <module>karaf-maven-example</module>
         <module>karaf-mbean-example</module>
-        <module>karaf-profile-example</module>
+        <!-- <module>karaf-profile-example</module> -->
         <module>karaf-url-namespace-handler-example</module>
+        <module>karaf-redis-example</module>
         <module>karaf-rest-example</module>
         <module>karaf-servlet-example</module>
         <module>karaf-scheduler-example</module>
@@ -66,6 +67,7 @@
         <module>karaf-soap-example</module>
         <module>karaf-websocket-example</module>
         <module>karaf-war-example</module>
+        <module>karaf-graphql-example</module>
     </modules>
 
 </project>

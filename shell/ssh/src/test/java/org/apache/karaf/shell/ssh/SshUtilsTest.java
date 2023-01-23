@@ -30,7 +30,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SshUtilsTest {
-
    
     @Test
     public void testCiphersDefault() throws IOException {

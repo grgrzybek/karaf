@@ -279,7 +279,8 @@ You can create your own aliases in the `etc/shell.init.script` file.
 Like on most Unix environments, the Karaf console supports some key bindings:
 
 * the arrows key to navigate in the commands history
-* CTRL-D to logout/shutdown Karaf
+* CTRL-D to logout/shutdown Karaf. Note: to avoid accidental logouts, 
+this can be disabled by setting `disableEofExit = true` in `etc/org.apache.karaf.shell.cfg`.
 * CTRL-R to search previously executed command
 * CTRL-U to remove the current line
 
@@ -288,11 +289,9 @@ Like on most Unix environments, the Karaf console supports some key bindings:
 You can pipe the output of one command as input to another one. It's a pipe, using the | character:
 
 ----
-karaf@root()> feature:list |grep -i war
-pax-war                       | 4.1.4                            |          | Uninstalled | org.ops4j.pax.web-4.1.4  | Provide support of a full WebContainer
-pax-war-tomcat                | 4.1.4                            |          | Uninstalled | org.ops4j.pax.web-4.1.4  |
-war                           | 4.0.0                            |          | Uninstalled | standard-4.0.0           | Turn Karaf as a full WebContainer
-blueprint-web                 | 4.0.0                            |          | Uninstalled | standard-4.0.0           | Provides an OSGI-aware Servlet ContextListener fo
+karaf@root()> feature:list | grep -i felix
+felix-httplite                    │ 0.1.6            │          │ Uninstalled │ standard-4.4.0           │ Felix Httplite HTTP Service
+felix-http                        │ 4.1.12           │          │ Uninstalled │ standard-4.4.0           │ Felix HTTP Service
 ----
 
 ===== Grep, more, find, ...
@@ -316,7 +315,8 @@ Karaf console provides some core commands similar to a Unix environment:
 * `shell:info` prints various information about the current Karaf instance
 * `shell:java` executes a Java application
 * `shell:less` file pager
-* `shell:logout` disconnects shell from current session
+* `shell:logout` disconnects shell from current session. Note: to avoid accidental logouts, 
+this can be disabled by setting `disableLogout = true` in `etc/org.apache.karaf.shell.cfg`.
 * `shell:more` is a file pager
 * `shell:new` creates a new Java object
 * `shell:printf` formats and prints arguments

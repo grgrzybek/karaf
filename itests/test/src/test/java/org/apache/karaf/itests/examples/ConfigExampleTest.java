@@ -24,9 +24,7 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
 
-import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Dictionary;
@@ -77,7 +75,7 @@ public class ConfigExampleTest extends BaseTest {
         assertContains("Configuration changed", byteArrayOutputStream.toString());
 
         Configuration configuration = configurationAdmin.getConfiguration("org.apache.karaf.example.config", null);
-        Dictionary<String, Object> properties = configuration.getProperties();
+        Dictionary<String, Object> properties = configuration.getProcessedProperties(null);
         if (properties == null) {
             properties = new Hashtable<>();
         }

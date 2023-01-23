@@ -134,11 +134,10 @@ public class JaasHelper {
             for (int i = 0; i < cLen; i++) {
                 newDomains[i] = new DelegatingProtectionDomain(currentDomains[i], principals);
             }
-            for (int i = 0; i < aLen; i++) {
-                newDomains[cLen + i] = assignedDomains[i];
+            if (assignedDomains != null) {
+                System.arraycopy(assignedDomains, 0, newDomains, cLen, aLen);
             }
-            newDomains = optimize(newDomains);
-            return newDomains;
+            return optimize(newDomains);
         }
 
         private ProtectionDomain[] optimize(ProtectionDomain[] domains) {

@@ -16,28 +16,25 @@
  */
 package org.apache.karaf.features.internal.service;
 
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import org.apache.karaf.features.BootFinished;
 import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.features.internal.util.ExitManager;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+
 public class BootFeaturesInstaller {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BootFeaturesInstaller.class);
+    private static final String REQUIRE_SUCCESSFUL_BOOT = "karaf.require.successful.features.boot";
 
     private final FeaturesServiceImpl featuresService;
     private final BundleContext bundleContext;
+    private final ExitManager exitManager;
     private final String[] repositories;
     private final String features;
     private final boolean asynchronous;
@@ -59,11 +56,13 @@ public class BootFeaturesInstaller {
     
     public BootFeaturesInstaller(BundleContext bundleContext,
                                  FeaturesServiceImpl featuresService,
+                                 ExitManager exitManager,
                                  String[] repositories,
                                  String features,
                                  boolean asynchronous) {
         this.bundleContext = bundleContext;
         this.featuresService = featuresService;
+        this.exitManager = exitManager;
         this.repositories = repositories;
         this.features = features;
         this.asynchronous = asynchronous;
@@ -77,24 +76,33 @@ public class BootFeaturesInstaller {
             publishBootFinished();
             return;
         }
+
+        boolean quitIfUnsuccessful = Boolean.getBoolean(REQUIRE_SUCCESSFUL_BOOT);
+
         if (asynchronous) {
             new Thread("Initial Features Provisioning") {
                 public void run() {
-                    installBootFeatures();
+                    installBootFeatures(quitIfUnsuccessful);
                 }
             }.start();
         } else {
-            installBootFeatures();
+            installBootFeatures(quitIfUnsuccessful);
         }
     }
 
-    protected void installBootFeatures() {
+    protected void installBootFeatures(boolean quitIfUnsuccessful) {
         try {
-            addRepositories();
+            addRepositories(quitIfUnsuccessful);
 
             List<Set<String>> stagedFeatures = parseBootFeatures(features);
             for (Set<String> features : stagedFeatures) {
-                featuresService.installFeatures(features, EnumSet.of(FeaturesService.Option.NoFailOnFeatureNotFound));
+                EnumSet<FeaturesService.Option> options;
+                if (quitIfUnsuccessful) {
+                    options = EnumSet.noneOf(FeaturesService.Option.class);
+                } else {
+                    options = EnumSet.of(FeaturesService.Option.NoFailOnFeatureNotFound);
+                }
+                featuresService.installFeatures(features, options);
             }
             featuresService.bootDone();
             publishBootFinished();
@@ -110,19 +118,27 @@ public class BootFeaturesInstaller {
                     return;
                 }
             }
+
             LOGGER.error("Error installing boot features", e);
+            if (quitIfUnsuccessful) {
+                exitAfterFailedBoot();
+            }
         }
     }
 
-    private void addRepositories() {
+    private void addRepositories(boolean quitIfUnsuccessful) {
         for (String repo : repositories) {
             repo = repo.trim();
             if (!repo.isEmpty()) {
                 repo = separatorsToUnix(repo);
+                repo = encodePath(repo);
                 try {
                     featuresService.addRepository(URI.create(repo));
                 } catch (Exception e) {
                     LOGGER.error("Error installing boot feature repository " + repo, e);
+                    if (quitIfUnsuccessful) {
+                        exitAfterFailedBoot();
+                    }
                 }
             }
         }
@@ -173,10 +189,11 @@ public class BootFeaturesInstaller {
         }
     }
 
+
     //-----------------------------------------------------------------------
     /**
      * Converts all separators to the Unix separator of forward slash.
-     * 
+     *
      * @param path  the path to be changed, null ignored
      * @return the updated path
      */
@@ -186,10 +203,29 @@ public class BootFeaturesInstaller {
             if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
                 return path;
             }
-            
+
             path = path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
             LOGGER.debug("Converted path to unix separators: {}", path);
         }
         return path;
+    }
+    /**
+     * Converts all invalid characters in a path to a format supported by {@link URI#create(String)}.
+     *
+     * @param path the path to encode, null ignored
+     * @return the encoded path
+     */
+    private String encodePath(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        return path.replace(" ", "%20");
+    }
+
+    private void exitAfterFailedBoot() {
+        LOGGER.error("Exiting Karaf after a failed features boot" +
+                " (as configured by {} in system.properties)", REQUIRE_SUCCESSFUL_BOOT);
+        exitManager.exit();
     }
 }

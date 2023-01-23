@@ -98,7 +98,7 @@ public class ConfigInstaller {
                             }
                             else
                                 LOGGER.warn("      Could not append, because config file does not exist: {}", homeDirectory.relativize(configFile));
-                            
+
                         } else {
                             LOGGER.info("      adding config file: {}", homeDirectory.relativize(configFile));
                             Files.write(configFile, config.getValue().getBytes());

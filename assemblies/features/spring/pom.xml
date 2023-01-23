@@ -162,6 +162,9 @@
                             <framework>
                                 <feature>framework</feature>
                             </framework>
+                            <features>
+                                <feature>spring|spring-(?!(dm-web|web))*</feature>
+                            </features>
                         </configuration>
                     </execution>
                 </executions>

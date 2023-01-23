@@ -38,13 +38,14 @@ public class HttpTest extends BaseTest {
     @Before
     public void installHttpFeature() throws Exception {
         installAndAssertFeature("http");
+        installAndAssertFeature("pax-web-karaf");
         installAndAssertFeature("webconsole");
     }
     
     @Test
     public void list() throws Exception {
         waitForService("(objectClass=javax.servlet.ServletContext)", 5000);
-        assertContains("/system/console", executeCommand("http:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer")));
+        assertContains("/system/console", executeCommand("web:servlet-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer")));
     }
 
     @Test

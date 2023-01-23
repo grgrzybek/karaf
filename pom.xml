@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
-        <version>23</version>
+        <version>29</version>
         <relativePath />
     </parent>
 
@@ -93,7 +93,7 @@
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-        <tag>karaf-4.2.15</tag>
+        <tag>karaf-4.4.3</tag>
   </scm>
 
     <distributionManagement>
@@ -149,17 +149,17 @@
         <developer>
             <name>The Apache Karaf Team</name>
             <email>dev@karaf.apache.org</email>
-            <url>http://karaf.apache.org</url>
+            <url>https://karaf.apache.org</url>
             <organization>Apache Software Foundation</organization>
-            <organizationUrl>http://apache.org/</organizationUrl>
+            <organizationUrl>https://apache.org/</organizationUrl>
             <properties>
-                <picUrl>http://karaf.apache.org/images/karaf-logo.png</picUrl>
+                <picUrl>https://karaf.apache.org/images/karaf-logo.png</picUrl>
             </properties>
         </developer>
     </developers>
 
     <properties>
-        <project.build.outputTimestamp>1</project.build.outputTimestamp>        
+        <project.build.outputTimestamp>1</project.build.outputTimestamp>
 
         <scm.connection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</scm.connection>
         <scm.developerConnection>scm:git:https://gitbox.apache.org/repos/asf/karaf.git</scm.developerConnection>
@@ -175,11 +175,11 @@
         <activemq.version>5.11.0.redhat-630516</activemq.version>
         <aopalliance.bundle.version>1.0.6.fuse-redhat-00006</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
+        <!-- ??? -->
         <not-yet-commons-ssl.bundle.version>0.3.11.1-fuse-redhat-00006</not-yet-commons-ssl.bundle.version>
         <ant.bundle.version>1.7.0.6-fuse-redhat-00006</ant.bundle.version>
         <antlr.bundle.version>2.7.7.5-fuse-redhat-00002</antlr.bundle.version>
-        <asm6.version>6.2.1</asm6.version>
-        <asm.version>9.3</asm.version>
+        <asm.version>9.4</asm.version>
         <jakarta.annotation.version>1.3.5.redhat-00003</jakarta.annotation.version>
         <jsr305.annotation.version>3.0.2</jsr305.annotation.version>
         <javax.interceptor.version>1.2.2</javax.interceptor.version>
@@ -192,7 +192,7 @@
         <classmate.version>1.5.1</classmate.version>
         <cxf.version>3.3.9</cxf.version>
         <eddsa.version>0.3.0</eddsa.version>
-        <jna.version>5.11.0</jna.version>
+        <jna.version>5.12.1</jna.version>
         <jakarta.activation.version>1.2.2.redhat-00001</jakarta.activation.version>
         <jakarta.jaxb.version>2.3.3.redhat-00001</jakarta.jaxb.version>
         <jakarta.jaxws.version>2.3.3</jakarta.jaxws.version>
@@ -202,7 +202,7 @@
         <glassfish.jaxb.version>2.3.3.redhat-00001</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
         <commons-codec.version>1.15.0.redhat-00001</commons-codec.version>
-        <commons-compress.version>1.21.0.redhat-00001</commons-compress.version>
+        <commons-compress.version>1.22</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
@@ -210,13 +210,13 @@
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
         <commons-logging.version>1.2.0.redhat-3</commons-logging.version>
-        <commons-pool.version>1.6.0.redhat-10</commons-pool.version>
+        <commons-pool.version>1.6</commons-pool.version>
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <commons-io.version>2.11.0.redhat-00001</commons-io.version>
 
         <dom4j.bundle.version>2.1.3.2-fuse-redhat-00002</dom4j.bundle.version>
-        <eclipselink.version>2.7.8</eclipselink.version>
+        <eclipselink.version>2.7.11</eclipselink.version>
         <jasypt.bundle.version>1.9.3.2-fuse-redhat-00003</jasypt.bundle.version>
         <jolokia.version>1.7.1.redhat-00001</jolokia.version>
         <serp.bundle.version>1.15.1_1</serp.bundle.version>
@@ -232,7 +232,7 @@
         <servicemix-spec-jaxb.version>2.3_3</servicemix-spec-jaxb.version>
         <servicemix-javax-inject.version>1.3.0.fuse-redhat-00006</servicemix-javax-inject.version>
 
-        <easymock.version>4.3</easymock.version>
+        <easymock.version>5.0.1</easymock.version>
         <objenesis.version>2.6</objenesis.version>
         <bndlib.version>5.2.0</bndlib.version>
         <equinox.version>3.13.300</equinox.version>
@@ -240,30 +240,34 @@
         <equinox.coordinator.version>1.1.0.v20120522-1841</equinox.coordinator.version>
 
         <felix.bundlerepository.version>2.0.10</felix.bundlerepository.version>
-        <felix.configadmin.version>1.9.24</felix.configadmin.version>
+        <felix.cm.json.version>1.0.6</felix.cm.json.version>
+        <felix.configadmin.version>1.9.26</felix.configadmin.version>
+        <felix.configadmin.interpolation.plugin.version>1.2.6</felix.configadmin.interpolation.plugin.version>
+        <felix.configurator.version>1.0.16</felix.configurator.version>
         <felix.connect.version>0.2.0</felix.connect.version>
         <felix.coordinator.version>1.0.2</felix.coordinator.version>
+        <felix.converter.version>1.0.14</felix.converter.version>
         <felix.fileinstall.version>3.7.4</felix.fileinstall.version>
-        <felix.framework.version>5.6.12</felix.framework.version>
-        <felix.framework.security.version>2.6.1</felix.framework.security.version>
+        <felix.framework.version>7.0.5</felix.framework.version>
+        <felix.framework.security.version>2.8.3</felix.framework.security.version>
         <felix.gogo.runtime.version>1.1.6</felix.gogo.runtime.version>
         <felix.gogo.jline.version>1.1.8</felix.gogo.jline.version>
         <felix.httplite.version>0.1.6</felix.httplite.version>
-        <felix.http.version>4.1.12</felix.http.version>
-        <felix.inventory.version>1.0.6</felix.inventory.version>
-        <felix.plugin.version>5.1.6</felix.plugin.version>
+        <felix.http.version>4.2.2</felix.http.version>
+        <felix.inventory.version>1.1.0</felix.inventory.version>
+        <felix.maven-bundle-plugin.version>5.1.8</felix.maven-bundle-plugin.version>
         <felix.utils.version>1.11.8</felix.utils.version>
-        <felix.webconsole.version>4.8.2</felix.webconsole.version>
+        <felix.webconsole.version>4.8.4</felix.webconsole.version>
         <felix.webconsole.api.version>3.4.0</felix.webconsole.api.version>
         <felix.memoryusage.webconsole.plugin.version>1.0.10</felix.memoryusage.webconsole.plugin.version>
         <felix.metatype.version>1.2.4</felix.metatype.version>
-        <felix.eventadmin.version>1.6.2</felix.eventadmin.version>
+        <felix.eventadmin.version>1.6.4</felix.eventadmin.version>
         <felix.eventadmin.webconsole.plugin.version>1.1.8</felix.eventadmin.webconsole.plugin.version>
         <felix.obr.version>1.0.2-redhat-1</felix.obr.version>
-        <felix.scr.version>2.1.30</felix.scr.version>
-        <felix.scr.webconsole.plugin.version>2.1.0</felix.scr.webconsole.plugin.version>
+        <felix.scr.version>2.2.4</felix.scr.version>
+        <felix.scr.webconsole.plugin.version>2.2.0</felix.scr.webconsole.plugin.version>
         <felix.scr.annotation.version>1.12.0</felix.scr.annotation.version>
-        <felix.resolver.version>1.16.0</felix.resolver.version>
+        <felix.resolver.version>2.0.4</felix.resolver.version>
 
         <aries.application.version>1.0.0</aries.application.version>
         <aries.application.api.version>1.0.0</aries.application.api.version>
@@ -276,6 +280,7 @@
         <aries.blueprint.webosgi.version>1.0.1</aries.blueprint.webosgi.version>
         <aries.blueprint.spring.version>0.6.0</aries.blueprint.spring.version>
         <aries.blueprint.spring.extender.version>0.4.0</aries.blueprint.spring.extender.version>
+        <aries.jax.rs.whiteboard.version>2.0.2</aries.jax.rs.whiteboard.version>
         <aries.jmx.api.version>1.1.5</aries.jmx.api.version>
         <aries.jmx.core.version>1.1.8</aries.jmx.core.version>
         <aries.jmx.blueprint.api.version>1.2.0</aries.jmx.blueprint.api.version>
@@ -288,71 +293,91 @@
         <aries.jndi.api.version>1.1.0</aries.jndi.api.version>
         <aries.jndi.core.version>1.0.2</aries.jndi.core.version>
         <aries.jndi.url.version>1.1.0</aries.jndi.url.version>
-        <aries.proxy.version>1.1.12</aries.proxy.version>
+        <aries.proxy.version>1.1.13</aries.proxy.version>
         <aries.proxy.api.version>1.1.1</aries.proxy.api.version>
-        <aries.spifly.version>1.3.4</aries.spifly.version>
+        <aries.spifly.version>1.3.5</aries.spifly.version>
         <aries.subsystem.api.version>2.0.10</aries.subsystem.api.version>
         <aries.subsystem.core.version>2.0.10</aries.subsystem.core.version>
+        <aries.transaction.control.version>1.0.1</aries.transaction.control.version>
         <aries.transaction.manager.version>1.3.3</aries.transaction.manager.version>
         <aries.transaction.blueprint.version>1.1.1</aries.transaction.blueprint.version>
         <aries.transaction.blueprint.version2>2.3.1</aries.transaction.blueprint.version2>
         <aries.util.version>1.1.3</aries.util.version>
         <atomikos.version>5.0.8</atomikos.version>
 
-        <openjpa.version>3.2.0</openjpa.version>
+        <openjpa.version>3.2.2</openjpa.version>
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>27.1-jre</guava.version>
         <guava.failureaccess.version>1.0.1.redhat-00002</guava.failureaccess.version>
         <narayana.version>5.11.4.Final-redhat-00001</narayana.version>
         <hibernate.annotations.common.version>5.0.5.Final-redhat-00002</hibernate.annotations.common.version>
         <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
-        <hibernate42.version>4.2.15.Final</hibernate42.version>
-        <hibernate43.version>4.3.6.Final</hibernate43.version>
-        <hibernate52.version>5.2.18.Final</hibernate52.version>
+        <hibernate.ejb.version>3.4.0.GA</hibernate.ejb.version>
         <hibernate.version>5.3.28.Final-redhat-00001</hibernate.version>
         <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
         <hibernate.validator.version>6.0.23.Final-redhat-00001</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
         <jandex.version>2.0.5.Final-redhat-1</jandex.version>
-        <jansi.version>1.18.0.redhat-00001</jansi.version>
+        <jansi.version>2.4.0</jansi.version>
+<!--        <jansi.version>1.18.0.redhat-00001</jansi.version>-->
         <javassist.version>3.27.0.GA-redhat-00001</javassist.version>
         <jackson.version>2.12.6.redhat-00001</jackson.version>
         <jackson.databind.version>2.12.6.1-redhat-00004</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00002</jboss.logging.version>
         <aesh.version>2.0.0.redhat-00001</aesh.version>
         <jetty.version>9.4.48.v20220622</jetty.version>
-        <jline.version>3.19.0</jline.version>
+        <jline.version>3.21.0</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
         <maven.version>3.6.3.redhat-00004</maven.version>
         <maven.wagon.version>3.2.0</maven.wagon.version>
         <maven-plugin-annotations.version>3.6.0.redhat-00002</maven-plugin-annotations.version>
         <maven.resolver.version>1.3.1</maven.resolver.version>
-        <org.osgi.util.function.version>1.2.0</org.osgi.util.function.version>
-        <org.osgi.util.promise.version>1.2.0</org.osgi.util.promise.version>
+
+        <osgi.version>8.0.0</osgi.version>
+        <org.osgi.annotation.versioning.version>1.1.2</org.osgi.annotation.versioning.version>
+        <org.osgi.service.cm.version>1.6.1</org.osgi.service.cm.version>
+        <org.osgi.service.component.version>1.5.0</org.osgi.service.component.version>
+        <org.osgi.service.component.annotations.version>1.5.0</org.osgi.service.component.annotations.version>
+        <org.osgi.service.event.version>1.4.1</org.osgi.service.event.version>
+        <org.osgi.service.http.version>1.2.2</org.osgi.service.http.version>
         <org.osgi.service.jdbc.version>1.0.1</org.osgi.service.jdbc.version>
         <org.osgi.service.jpa.version>1.0.0</org.osgi.service.jpa.version>
-        <osgi.version>6.0.0</osgi.version>
-        <osgi.compendium.version>6.0.0</osgi.compendium.version>
+        <org.osgi.service.log.version>1.5.0</org.osgi.service.log.version>
+        <org.osgi.service.metatype.version>1.4.1</org.osgi.service.metatype.version>
+        <org.osgi.service.namespace.version>1.0.0</org.osgi.service.namespace.version>
+        <org.osgi.service.repository.version>1.1.0</org.osgi.service.repository.version>
+        <org.osgi.util.function.version>1.2.0</org.osgi.util.function.version>
+        <org.osgi.util.promise.version>1.2.0</org.osgi.util.promise.version>
 
         <pax.cdi.version>1.1.4</pax.cdi.version>
         <pax.exam.version>4.13.5</pax.exam.version>
-        <pax.logging.version>1.12.3</pax.logging.version>
+        <pax.logging.version>2.2.1</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.5</pax.swissbox.version>
-        <pax.url.version>2.6.11</pax.url.version>
-        <pax.web.version>7.4.6</pax.web.version>
-        <pax.web.undertow.version>2.2.21.Final</pax.web.undertow.version>
+        <pax.url.version>2.6.12</pax.url.version>
+        <pax.web.version>8.0.15</pax.web.version>
+        <pax.web.undertow.version>2.2.22.Final</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.5</pax.jdbc.version>
         <pax.jms.version>1.1.2</pax.jms.version>
         <pax.transx.version>0.5.3</pax.transx.version>
 
         <portlet-api.version>2.0</portlet-api.version>
+        <plexus-utils.version>3.4.2</plexus-utils.version>
         <slf4j.version>1.7.32.redhat-00001</slf4j.version>
-        <log4j2.version>2.17.1</log4j2.version>
+        <log4j2.version>2.19.0</log4j2.version>
         <servicemix.specs.version>2.9.0</servicemix.specs.version>
+
+        <spec.activation.version>1.2.2</spec.activation.version>
+        <spec.annotation.version>1.3.5</spec.annotation.version>
+        <spec.jaxb.version>2.3.2_3</spec.jaxb.version>
+        <spec.jaxrs.version>2.1</spec.jaxrs.version>
+        <spec.jaxws.version>2.3</spec.jaxws.version>
+        <spec.jws.version>1.1.1</spec.jws.version>
+        <spec.mail.version>1.6.5</spec.mail.version>
+        <spec.xjc.version>2.3.2_2</spec.xjc.version>
 
         <spring.osgi.version>1.2.1</spring.osgi.version>
         <spring31.version>3.1.4.RELEASE</spring31.version>
@@ -371,12 +396,15 @@
         <spring.security53.version>5.3.8.RELEASE-redhat-00003</spring.security53.version>
         <spring.security54.version>5.4.6_1</spring.security54.version>
         <spring.security55.version>5.5.7.1-fuse-redhat-00001</spring.security55.version>
+        <spring.security56.version>5.6.3_1</spring.security56.version>
+        <spring.security57.version>5.7.3_1</spring.security57.version>
 
-        <sshd.version>2.7.0.redhat-00001</sshd.version>
+        <sling.commons.johnzon.version>1.2.14</sling.commons.johnzon.version>
+        <sshd.version>2.9.2</sshd.version>
         <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
         <struts.bundle.version>1.3.10_1</struts.bundle.version>
-        <xbean.version>4.21</xbean.version>
+        <xbean.version>4.22</xbean.version>
         <xerces.bundle.version>2.12.2.1-fuse-redhat-00003</xerces.bundle.version>
         <xalan.bundle.version>2.7.2.3-fuse-redhat-00006</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2.1-fuse-redhat-00006</xalan-serializer.bundle.version>
@@ -386,6 +414,8 @@
 
         <websocket.version>1.1</websocket.version>
         <winsw.version>2.3.0</winsw.version>
+
+        <osgi-component-annotations.version>1.4.0</osgi-component-annotations.version>
 
         <surefire.argLine />
 
@@ -939,11 +969,6 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.osgi.service.obr</artifactId>
                 <version>${felix.obr.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>osgi.cmpn</artifactId>
-                <version>${osgi.compendium.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -1760,7 +1785,7 @@
                 <artifactId>org.apache.aries.subsystem.api</artifactId>
                 <version>${aries.subsystem.api.version}</version>
             </dependency>
-     
+
             <dependency>
                 <groupId>org.apache.aries.subsystem</groupId>
                 <artifactId>org.apache.aries.subsystem.core</artifactId>
@@ -2099,42 +2124,42 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.10.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0-M2</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>1.7.0</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2179,7 +2204,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.servicemix.tooling</groupId>
@@ -2194,12 +2219,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.4.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>ant-contrib</groupId>
@@ -2232,27 +2257,27 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.6.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.12.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.2.3</version>
+                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
@@ -2396,7 +2421,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>${felix.plugin.version}</version>
+                <version>${felix.maven-bundle-plugin.version}</version>
                 <inherited>true</inherited>
                 <extensions>true</extensions>
                 <configuration>
@@ -2432,17 +2457,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.4.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.3.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.12.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -2452,7 +2477,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.4.1</version>
             </plugin>
         </plugins>
     </reporting>
@@ -2512,6 +2537,7 @@
                                 <exclude>**/foo</exclude>
                                 <exclude>**/org.ops4j.pax.exam.TestContainerFactory</exclude>
                                 <exclude>**/maven-metadata-local.xml</exclude>
+                                <exclude>**/resources/*.md</exclude>
                                 <!-- jline -->
                                 <exclude>**/src/main/java/jline/**/*.java</exclude>
                                 <!-- test manifests -->

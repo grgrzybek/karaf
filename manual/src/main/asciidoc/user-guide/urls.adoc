@@ -47,7 +47,7 @@ The equivalent of the above bundle would be:
 In addition to being less verbose, the Maven url handlers can also resolve snapshots and can use a local copy of the jar if one is available in your Maven local repository.
 
 The `org.ops4j.pax.url.mvn` bundle resolves `mvn` URLs. It can be configured using the file `etc/org.ops4j.pax.url.mvn.cfg`.
-Full reference of `org.ops4j.pax.url.mvn` PID configuration can be found on https://ops4j1.jira.com/wiki/display/paxurl/Aether+Configuration[the pax-web Wiki page].
+Full reference of `org.ops4j.pax.url.mvn` PID configuration can be found on https://ops4j1.jira.com/wiki/display/paxurl/Aether+Configuration[the pax-url Wiki page].
 
 The most important property is:
 
@@ -73,6 +73,8 @@ Repositories on the local machine are supported through `file:/` URLs.
 Full configuration of `org.ops4j.pax.url.mvn` bundle can be done using `org.ops4j.pax.url.mvn` PID (see `etc/org.ops4j.pax.url.mvn.cfg` file). This however may be cumbersome in some scenarios.
 
 In order to make the user's life easier and to provide more _domain_ oriented approach, Karaf provides several shell commands that makes Maven configuration easier.
+
+If maven is supported by default via `mvn` URL, you can install `maven` optional feature providing additional shell commands to manipulate maven. It can be done with `feature:install maven`.
 
 ===== maven:summary
 

@@ -16,17 +16,11 @@
  */
 package org.apache.karaf.itests.examples;
 
-import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.karaf.itests.BaseTest;
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.StatusCode;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.apache.karaf.itests.util.SimpleSocket;
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -35,9 +29,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.osgi.framework.Bundle;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.assertEquals;
@@ -48,19 +39,19 @@ import static junit.framework.TestCase.assertTrue;
 public class WebSocketExampleTest extends BaseTest {
 
     @Test(timeout = 60000)
-    @Ignore("ENTESB-9734: Jetty doesn't work with servlet API 4.0")
     public void test() throws Exception {
-        featureService.installFeature("scr");
+        featureService.installFeature("pax-web-jetty-websockets");
+        featureService.installFeature("pax-web-karaf");
         featureService.installFeature("http");
-        featureService.installFeature("jetty");
+        featureService.installFeature("scr");
 
         Bundle bundle = bundleContext.installBundle("mvn:org.apache.karaf.examples/karaf-websocket-example/" + System.getProperty("karaf.version"));
         bundle.start();
 
-        String httpList = executeCommand("http:list", new RolePrincipal("viewer"));
-        while (!httpList.contains("Deployed")) {
+        String httpList = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
+        while (!httpList.contains("/example-websocket/*")) {
             Thread.sleep(1000);
-            httpList = executeCommand("http:list", new RolePrincipal("viewer"));
+            httpList = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
         System.out.println(httpList);
 
@@ -79,44 +70,4 @@ public class WebSocketExampleTest extends BaseTest {
 
         client.stop();
     }
-
-    @WebSocket
-    public class SimpleSocket {
-
-        private final CountDownLatch closeLatch;
-
-        private Session session;
-
-        public final List<String> messages;
-
-        public SimpleSocket() {
-            this.messages = new ArrayList<>();
-            this.closeLatch = new CountDownLatch(1);
-        }
-
-        public boolean awaitClose(int duration, TimeUnit unit) throws InterruptedException {
-            return this.closeLatch.await(duration, unit);
-        }
-
-        @OnWebSocketClose
-        public void onClose(int statusCode, String reason) {
-            System.out.println("Closing websocket client");
-            session.close(StatusCode.NORMAL, "I'm done");
-            this.session = null;
-            this.closeLatch.countDown(); // trigger latch
-        }
-
-        @OnWebSocketConnect
-        public void onConnect(Session session) {
-            System.out.println("Connecting websocket client");
-            this.session = session;
-        }
-
-        @OnWebSocketMessage
-        public void onMessage(String msg) {
-            System.out.println("Received websocket message: " + msg);
-            messages.add(msg);
-        }
-    }
-
 }

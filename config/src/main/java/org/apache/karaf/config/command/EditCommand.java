@@ -42,8 +42,10 @@ public class EditCommand extends ConfigCommandSupport {
     @Option(name = "--alias", aliases = {}, description = "Specifies the alias used for this factory config.", required = false, multiValued = false)
     String alias;
 
-    @Override
-    @SuppressWarnings("rawtypes")
+    @Option(name = "--type", aliases = {}, description = "Specifies the configuration storage type (cfg or json).", required = false, multiValued = false)
+    String suffix;
+
+    @Override    
     protected Object doExecute() throws Exception {
         String oldPid = (String) this.session.get(PROPERTY_CONFIG_PID);
         if (oldPid != null && !oldPid.equals(pid) && !force) {
@@ -73,6 +75,10 @@ public class EditCommand extends ConfigCommandSupport {
         TypedProperties props = this.configRepository.getConfig(pid);
         this.session.put(PROPERTY_CONFIG_PID, pid);
         this.session.put(PROPERTY_FACTORY, factory);
+        if (suffix == null) {
+            suffix = "cfg";
+        }
+        this.session.put(PROPERTY_TYPE, suffix);
         this.session.put(PROPERTY_CONFIG_PROPS, props);
         if (alias != null) {
             this.session.put(PROPERTY_ALIAS, alias);

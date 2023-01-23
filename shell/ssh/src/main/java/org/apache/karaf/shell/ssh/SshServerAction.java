@@ -73,12 +73,11 @@ public class SshServerAction implements Action
         // nio-workers
         CoreModuleProperties.NIO_WORKERS.set(server, nioWorkers);
 
-
         // max-concurrent-sessions
         if (maxConcurrentSessions != -1) {
-            CoreModuleProperties.MAX_CONCURRENT_SESSIONS.set(server,maxConcurrentSessions);
+            CoreModuleProperties.MAX_CONCURRENT_SESSIONS.set(server, maxConcurrentSessions);
         }
-        
+
         // welcome banner
         if (welcomeBanner != null) {
             CoreModuleProperties.WELCOME_BANNER.set(server, welcomeBanner);

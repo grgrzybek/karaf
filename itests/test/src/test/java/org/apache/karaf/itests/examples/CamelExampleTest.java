@@ -33,7 +33,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-@Ignore("ENTESB-9734: Camel, for now doesn't work with servlet API 4.0 - it should after it really uses newer Karaf for Fuse 7.3")
 public class CamelExampleTest extends BaseTest {
 
     public void setup() throws Exception {
