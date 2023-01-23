@@ -285,6 +285,12 @@
             <artifactId>hibernate-validator</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>classmate</artifactId>
+            <version>${classmate.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

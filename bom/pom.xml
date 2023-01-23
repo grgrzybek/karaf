@@ -1666,6 +1666,11 @@
                 <version>${jakarta.activation.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>${javax.annotation.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>jakarta.annotation</groupId>
                 <artifactId>jakarta.annotation-api</artifactId>
                 <version>${jakarta.annotation.version}</version>
@@ -1766,6 +1771,11 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
 
