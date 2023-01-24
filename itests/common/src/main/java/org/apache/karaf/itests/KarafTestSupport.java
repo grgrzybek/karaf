@@ -305,6 +305,7 @@ public class KarafTestSupport {
                 new VMOption("--add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED"),
                 new VMOption("--add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED"),
                 new VMOption("--add-exports=java.base/sun.net.www.content.text=ALL-UNNAMED"),
+                new VMOption("--add-exports=java.base/org.apache.karaf.specs.locator=java.xml,ALL-UNNAMED"),
                 new VMOption("--add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED"),
                 new VMOption("--add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED"),
                 new VMOption("-classpath"),

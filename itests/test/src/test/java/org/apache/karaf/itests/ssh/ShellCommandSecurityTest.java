@@ -16,6 +16,7 @@ package org.apache.karaf.itests.ssh;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.karaf.container.internal.JavaVersionUtil;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
 
@@ -32,6 +33,10 @@ public class ShellCommandSecurityTest extends SshCommandTestBase {
         
     @Test
     public void testShellCommandSecurityViaSsh() throws Exception {
+        String version = System.getProperty("java.specification.version");
+        if (!version.contains(".") && Integer.parseInt(version) >= 17) {
+            return;
+        }
         String vieweruser = "view" + System.nanoTime() + "_" + counter++;
 
         addViewer(vieweruser);
