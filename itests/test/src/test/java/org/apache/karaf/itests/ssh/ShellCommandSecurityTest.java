@@ -34,9 +34,6 @@ public class ShellCommandSecurityTest extends SshCommandTestBase {
     @Test
     public void testShellCommandSecurityViaSsh() throws Exception {
         String version = System.getProperty("java.specification.version");
-        if (!version.contains(".") && Integer.parseInt(version) >= 17) {
-            return;
-        }
         String vieweruser = "view" + System.nanoTime() + "_" + counter++;
 
         addViewer(vieweruser);
