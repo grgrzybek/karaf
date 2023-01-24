@@ -42,6 +42,14 @@ if not "%KARAF_TITLE%" == "" (
     title Karaf
 )
 
+rem Check/Set up some easily accessible MIN/MAX params for JVM mem usage
+if "%JAVA_MIN_MEM%" == "" (
+    set JAVA_MIN_MEM=128M
+)
+if "%JAVA_MAX_MEM%" == "" (
+    set JAVA_MAX_MEM=512M
+)
+
 goto BEGIN
 
 :warn
@@ -266,7 +274,15 @@ if not exist "%JAVA_HOME%\bin\server\jvm.dll" (
         echo For more details see http://java.sun.com/products/hotspot/whitepaper.html#client
     )
 )
-set DEFAULT_JAVA_OPTS=-XX:+UnlockDiagnosticVMOptions
+set DEFAULT_JAVA_OPTS=-Xms%JAVA_MIN_MEM% -Xmx%JAVA_MAX_MEM% -Dcom.sun.management.jmxremote  -XX:+UnlockDiagnosticVMOptions
+
+rem Check some easily accessible MIN/MAX params for JVM mem usage
+if not "%JAVA_PERM_MEM%" == "" (
+    set DEFAULT_JAVA_OPTS=%DEFAULT_JAVA_OPTS% -XX:PermSize=%JAVA_PERM_MEM%
+)
+if not "%JAVA_MAX_PERM_MEM%" == "" (
+    set DEFAULT_JAVA_OPTS=%DEFAULT_JAVA_OPTS% -XX:MaxPermSize=%JAVA_MAX_PERM_MEM%
+)
 
 set JAVA_OPTS=%DEFAULT_JAVA_OPTS% %JAVA_OPTS%
 
@@ -342,6 +358,7 @@ if "%KARAF_PROFILER%" == "" goto :RUN
     if "%1" == "run" goto :EXECUTE_RUN
     if "%1" == "daemon" goto :EXECUTE_DAEMON
     if "%1" == "client" goto :EXECUTE_CLIENT
+    if "%1" == "clean" goto :EXECUTE_CLEAN
     if "%1" == "debug" goto :EXECUTE_DEBUG
     if "%1" == "debugs" goto :EXECUTE_DEBUGS
     goto :EXECUTE
@@ -386,6 +403,11 @@ if "%KARAF_PROFILER%" == "" goto :RUN
 :EXECUTE_CLIENT
     SET OPTS=-Dkaraf.startLocalConsole=true -Dkaraf.startRemoteShell=false
     SET CHECK_ROOT_INSTANCE_RUNNING=false
+    shift
+    goto :RUN_LOOP
+
+:EXECUTE_CLEAN
+    pushd "%KARAF_DATA%" && (rmdir /S /Q "%KARAF_DATA%" 2>nul & popd)
     shift
     goto :RUN_LOOP
 

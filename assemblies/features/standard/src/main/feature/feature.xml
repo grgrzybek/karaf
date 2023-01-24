@@ -191,11 +191,11 @@ update = admin, manager
 #
 # This configuration file defines the ACLs for commands in the shell subshell
 #
-nano = admin, manager, viewer
-exec = admin, manager, viewer
-new = admin, manager, viewer
+nano = admin
+exec = admin
+new = admin
 info = admin, manager, viewer
-java = admin, manager, viewer
+java = admin
 date = admin, manager, viewer
 if = ssh,admin,manager,viewer
 complete = ssh,admin,manager,viewer
@@ -374,9 +374,9 @@ disableEofExit = false
 
 #
 # Override allowed SSH HMAC algorithms.
-# Default: hmac-sha2-512,hmac-sha2-256
+# Default: hmac-sha2-512,hmac-sha2-256,hmac-sha1
 #
-# macs = hmac-sha2-512,hmac-sha2-256
+# macs = hmac-sha2-512,hmac-sha2-256,hmac-sha1
 
 #
 # Override allowed SSH key exchange algorithms.
@@ -715,6 +715,7 @@ tree-show = admin, manager, viewer
     </feature>
 
     <feature name="config" description="Provide OSGi ConfigAdmin support" version="${project.version}">
+        <bundle start-level="30">mvn:org.apache.karaf.config/org.apache.karaf.config.core/${project.version}</bundle>
         <conditional>
             <condition>management</condition>
             <config name="jmx.acl.org.apache.karaf.config">
@@ -1018,6 +1019,10 @@ encryption.encoding = ${env:ORG_APACHE_KARAF_JAAS_ENCRYPTION_ENCODING:-hexadecim
         <feature>jaas-boot</feature>
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.config/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.modules/${project.version}</bundle>
+        <conditional>
+            <condition>aries-blueprint</condition>
+            <bundle start-level="30">mvn:org.apache.karaf.jaas.blueprint/org.apache.karaf.jaas.blueprint.config/${project.version}</bundle>
+        </conditional>
         <conditional>
             <condition>shell</condition>
             <config name="org.apache.karaf.command.acl.jaas">
@@ -2602,6 +2607,7 @@ jul.layout.type = simple
 
     <feature name="standard" description="Wrap feature describing all features part of a standard distribution" version="${project.version}">
         <feature>pax-url-wrap</feature>
+        <feature>aries-blueprint</feature>
         <feature>shell</feature>
         <feature>shell-compat</feature>
         <feature>feature</feature>

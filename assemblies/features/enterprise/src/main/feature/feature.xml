@@ -184,7 +184,6 @@ com.atomikos.icatch.log_base_dir=${karaf.data}/atomikos
         <bundle>mvn:javax.persistence/javax.persistence-api/${javax.persistence.version}</bundle>
         <bundle>mvn:org.javassist/javassist/${javassist.version}</bundle>
         <bundle>mvn:net.bytebuddy/byte-buddy/${bytebuddy.version}</bundle>
-        <bundle>mvn:org.jboss.spec.javax.transaction/jboss-transaction-api_1.2_spec/1.1.1.Final</bundle>
         <bundle>mvn:org.jboss/jandex/${jandex.version}</bundle>
         <bundle>mvn:com.fasterxml/classmate/${classmate.version}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${dom4j.bundle.version}</bundle>
