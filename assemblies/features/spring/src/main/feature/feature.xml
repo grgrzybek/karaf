@@ -86,7 +86,7 @@
 
     <feature name="spring-web" description="Spring 5.3.x Web support" version="${spring53.version}">
         <feature version="[${spring53.version},5.4)">spring</feature>
-        <bundle dependency="true">mvn:javax.servlet/javax.servlet-api/3.1.0</bundle>
+        <feature>http</feature>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-web/${spring53.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-webmvc/${spring53.version}</bundle>
     </feature>
