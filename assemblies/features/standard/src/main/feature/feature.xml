@@ -153,6 +153,7 @@ install = admin, manager
 uninstall = admin, manager
 start = admin, manager
 stop = admin, manager
+status = admin, manager
 update = admin, manager
             </config>
             <bundle start-level="30">mvn:org.apache.karaf.features/org.apache.karaf.features.command/${project.version}</bundle>
@@ -190,11 +191,11 @@ update = admin, manager
 #
 # This configuration file defines the ACLs for commands in the shell subshell
 #
-nano = admin
-exec = admin
-new = admin
+nano = admin, manager, viewer
+exec = admin, manager, viewer
+new = admin, manager, viewer
 info = admin, manager, viewer
-java = admin
+java = admin, manager, viewer
 date = admin, manager, viewer
 if = ssh,admin,manager,viewer
 complete = ssh,admin,manager,viewer
@@ -460,7 +461,11 @@ url-list = admin, manager, viewer
 # For an explanation of the syntax of this file, see the file:
 #   org.apache.karaf.command.acl.bundle.cfg
 #
-list = admin, manager, viewer
+wab-list = admin, manager, viewer
+servlet-list = admin, manager, viewer
+context-list = admin, manager, viewer
+meta = admin, manager, viewer
+wab-info = admin, manager, viewer
 start = admin
 stop = admin
 launch = admin
@@ -511,8 +516,9 @@ route-start = admin, manager
 route-suspend = admin, manager
 route-resume = admin, manager
         </config>
-        <bundle start-level="30">mvn:org.fusesource.jansi/jansi/${jansi.version}</bundle>
-        <bundle start-level="30">mvn:org.jline/jline/${jline.version}</bundle>
+        <!--bundle start-level="30">mvn:org.fusesource.jansi/jansi/${jansi.version}</bundle>
+        <bundle start-level="30">mvn:org.jline/jline/${jline.version}</bundle-->
+        <feature>jline</feature>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.aesh-jline/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.core/${project.version}</bundle>
         <bundle start-level="30">mvn:org.apache.karaf.shell/org.apache.karaf.shell.commands/${project.version}</bundle>
@@ -599,7 +605,7 @@ refresh = admin, manager
 resolve = admin, manager
 restart = admin, manager
 status = admin, manager, viewer
-setStartLevel(java.lang.String,int)[/([1-4])?[0-9]/,/.*/] = admin
+setStartLevel(java.lang.String, int)[/([1-4])?[0-9]/,/.*/] = admin
 setStartLevel = admin, manager
 start(java.lang.String)[/([1-4])?[0-9]/] = admin
 start = admin, manager
@@ -879,7 +885,7 @@ rebootCleanAll = admin
 # This configuration file defines the ACLs for various commands in the config subshell
 #
 # For an explanation of the syntax of this file, see the file:
-#   org.apache.karaf.command.acl.bundle.cfg
+#   org.apache.karaf.command.acl.system.cfg
 #
 list = admin, manager, viewer
 property-list = admin, manager
@@ -1359,7 +1365,6 @@ role=${env:ORG_APACHE_KARAF_WEBCONSOLE_ROLE:-admin}
         <bundle start-level="30">mvn:org.apache.sshd/sshd-osgi/${sshd.version}</bundle>
         <bundle start-level="30">mvn:org.apache.sshd/sshd-scp/${sshd.version}</bundle>
         <bundle start-level="30">mvn:org.apache.sshd/sshd-sftp/${sshd.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.not-yet-commons-ssl/${not-yet-commons-ssl.bundle.version}</bundle>
         <bundle start-level="30">mvn:org.bouncycastle/bcutil-jdk18on/${bouncycastle.version}</bundle>
         <bundle start-level="30">mvn:org.bouncycastle/bcprov-jdk18on/${bouncycastle.version}</bundle>
         <bundle start-level="30">mvn:org.bouncycastle/bcpkix-jdk18on/${bouncycastle.version}</bundle>

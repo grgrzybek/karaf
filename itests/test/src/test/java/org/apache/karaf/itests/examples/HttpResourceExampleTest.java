@@ -41,10 +41,10 @@ public class HttpResourceExampleTest extends BaseTest {
         installAndAssertFeature("pax-web-karaf");
         installAndAssertFeature("karaf-http-resource-example-whiteboard");
 
-        String command = executeCommand("web:servlet-list");
+        String command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         while (!command.contains("/example/*")) {
             Thread.sleep(200);
-            command = executeCommand("web:servlet-list");
+            command = executeCommand("web:servlet-list", new RolePrincipal("viewer"));
         }
         assertContains("ResourceServlet", command);
         assertContains("Whiteboard", command);

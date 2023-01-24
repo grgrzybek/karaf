@@ -41,7 +41,7 @@ public class ServiceTest extends BaseTest {
 
     @Test
     public void lsAlias() throws Exception {
-        String listOutput = executeAlias("ls");
+        String listOutput = executeAlias("ls", new RolePrincipal("viewer"));
         System.out.println(listOutput);
         assertFalse(listOutput.isEmpty());
     }

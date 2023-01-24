@@ -16,6 +16,7 @@
  */
 package org.apache.karaf.itests;
 
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,9 +47,9 @@ public class DisabledLogoutTest extends BaseTest {
 
     @Test
     public void testShellLogoutDisabled() {
-        executeCommand("shell:logout");
+        executeCommand("shell:logout", new RolePrincipal("viewer"));
         // Execute anything at all to verify that we didn't exit from Karaf. If we did, we'd get a runtime exception
-        assertNotNull(executeAlias("ld"));
+        assertNotNull(executeAlias("ld", new RolePrincipal("viewer")));
     }
 
 }

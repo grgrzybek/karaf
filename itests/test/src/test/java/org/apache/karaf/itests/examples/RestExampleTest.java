@@ -18,6 +18,7 @@ package org.apache.karaf.itests.examples;
 
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.karaf.itests.BaseTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -117,6 +118,7 @@ public class RestExampleTest extends BaseTest {
     }
 
     @Test
+    @Ignore("aries-jax-rs-whiteboard feature requires CXF 3.5.x")
     public void testWhiteboard() throws Exception {
         setup();
 

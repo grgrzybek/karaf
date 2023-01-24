@@ -233,7 +233,7 @@ public class RunMojoTest extends EasyMockSupport {
             mojo.deploy(context, null);
             fail("Expected MojoExecutionException");
         } catch (MojoExecutionException e) {
-            assertEquals("No artifact to deploy", e.getMessage());
+            assertEquals("Can't deploy project artifact in container", e.getMessage());
         }
     }
 

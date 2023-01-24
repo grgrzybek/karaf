@@ -64,12 +64,12 @@ public class WebTest extends BaseTest {
     @Test
     public void installUninstallCommands() throws Exception {
         System.out.println(executeCommand("web:install mvn:org.apache.karaf.examples/karaf-war-example-webapp/" + System.getProperty("karaf.version") + "/war test", new org.apache.karaf.jaas.boot.principal.RolePrincipal("admin")));
-        String listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+        String listOutput = executeCommand("web:wab-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         System.out.println(listOutput);
         assertContains("/test", listOutput);
         while (!listOutput.contains("Deployed")) {
             Thread.sleep(500);
-            listOutput = executeCommand("web:list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
+            listOutput = executeCommand("web:wab-list", new org.apache.karaf.jaas.boot.principal.RolePrincipal("viewer"));
         }
         URL url = new URL("http://localhost:" + getHttpPort() + "/test");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -74,6 +74,7 @@ public class OpenSSHGeneratorKeyFileProviderTest {
         OpenSSHKeyPairProvider provider =
             new OpenSSHKeyPairProvider(privateKeyTemp.toPath(), publicKeyTemp.toPath(), "DSA", 2048, null);
         KeyPair convertedKeyPair = provider.loadKeys(null).iterator().next();
+        provider.convertLegacyKey(privateKeyTemp.toPath());
         Assert.assertEquals("DSA", convertedKeyPair.getPrivate().getAlgorithm());
 
         Assert.assertArrayEquals(simpleKeyPair.getPrivate().getEncoded(),convertedKeyPair.getPrivate().getEncoded());

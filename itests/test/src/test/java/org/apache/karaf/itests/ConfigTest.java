@@ -47,7 +47,7 @@ public class ConfigTest extends BaseTest {
 
     @Test
     public void clAlias() throws Exception {
-        String configListOutput = executeAlias("cl org.apache.karaf.features");
+        String configListOutput = executeAlias("cl org.apache.karaf.features", new RolePrincipal("viewer"));
         System.out.println(configListOutput);
         assertFalse(configListOutput.isEmpty());
     }

@@ -197,11 +197,11 @@ public class FeatureTest extends BaseTest {
     @Test
     public void statusCommand() throws Exception {
         executeCommand("feature:install -v -r wrapper", new RolePrincipal("admin"));
-        String featureStatus = executeCommand("feature:status wrapper");
+        String featureStatus = executeCommand("feature:status wrapper", new RolePrincipal("admin"));
         assertContains(FeatureState.Started.name(), featureStatus);
 
         executeCommand("feature:uninstall wrapper", new RolePrincipal("admin"));
-        featureStatus = executeCommand("feature:status wrapper");
+        featureStatus = executeCommand("feature:status wrapper", new RolePrincipal("admin"));
         assertContains(FeatureState.Uninstalled.name(), featureStatus);
     }
 

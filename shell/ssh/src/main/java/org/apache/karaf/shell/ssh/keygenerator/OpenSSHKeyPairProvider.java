@@ -135,7 +135,7 @@ public class OpenSSHKeyPairProvider extends AbstractKeyPairProvider {
 //    }
 
     // karaf 4.4.3
-    private KeyPair convertLegacyKey(Path privateKeyPath) throws GeneralSecurityException, IOException {
+    public KeyPair convertLegacyKey(Path privateKeyPath) throws GeneralSecurityException, IOException {
         KeyPair keypair = null;
         SimpleGeneratorHostKeyProvider provider = new SimpleGeneratorHostKeyProvider();
         provider.setAlgorithm(algorithm);

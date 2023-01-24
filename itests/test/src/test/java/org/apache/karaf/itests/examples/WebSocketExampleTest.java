@@ -21,6 +21,7 @@ import org.apache.karaf.itests.util.SimpleSocket;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -39,6 +40,7 @@ import static junit.framework.TestCase.assertTrue;
 public class WebSocketExampleTest extends BaseTest {
 
     @Test(timeout = 60000)
+    @Ignore("ENTESB-9734: Jetty doesn't work with servlet API 4.0")
     public void test() throws Exception {
         featureService.installFeature("pax-web-jetty-websockets");
         featureService.installFeature("pax-web-karaf");

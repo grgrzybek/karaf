@@ -75,7 +75,7 @@ public class LogTest extends BaseTest {
         assertSetLevel("DEBUG");
         assertSetLevel("INFO");
         System.out.println(executeCommand("log:clear", new RolePrincipal("manager")));
-        String displayOutput = executeAlias("ld").trim();
+        String displayOutput = executeAlias("ld", new RolePrincipal("viewer")).trim();
         assertTrue("Should be empty but was: " + displayOutput, displayOutput.trim().isEmpty());
     }
 
