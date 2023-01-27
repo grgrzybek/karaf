@@ -111,8 +111,8 @@
 
     <!-- util -->
     <feature name="util" version="1.2.0">
-        <bundle dependency="true">mvn:org.osgi/org.osgi.util.function/1.2.0</bundle>
-        <bundle dependency="true">mvn:org.osgi/org.osgi.util.promise/1.2.0</bundle>
+        <bundle dependency="true">mvn:org.osgi/org.osgi.util.function/${org.osgi.util.function.version}</bundle>
+        <bundle dependency="true">mvn:org.osgi/org.osgi.util.promise/${org.osgi.util.promise.version}</bundle>
     </feature>
 
     <!-- xbean -->
