@@ -368,8 +368,8 @@
 
         <portlet-api.version>2.0</portlet-api.version>
         <plexus-utils.version>3.4.2</plexus-utils.version>
-        <slf4j.version>1.7.32.redhat-00001</slf4j.version>
-        <log4j2.version>2.19.0</log4j2.version>
+        <slf4j.version>1.7.36.redhat-00002</slf4j.version>
+        <log4j2.version>2.19.0.redhat-00001</log4j2.version>
         <servicemix.specs.version>2.9.0</servicemix.specs.version>
 
         <spec.activation.version>1.2.0.redhat-00001</spec.activation.version>
