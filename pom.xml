@@ -174,14 +174,15 @@
         <activemq.version>5.11.0.redhat-630516</activemq.version>
         <aopalliance.bundle.version>1.0.6.fuse-redhat-00006</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
-        <not-yet-commons-ssl.bundle.version>0.3.11.1-fuse-redhat-00006</not-yet-commons-ssl.bundle.version>
         <ant.bundle.version>1.7.0.6-fuse-redhat-00006</ant.bundle.version>
         <antlr.bundle.version>2.7.7.5-fuse-redhat-00002</antlr.bundle.version>
         <asm.version>9.4</asm.version>
-        <javax.annotation.version>1.3.2</javax.annotation.version>
         <jakarta.annotation.version>1.3.5.redhat-00003</jakarta.annotation.version>
-        <jsr305.annotation.version>3.0.2</jsr305.annotation.version>
-        <javax.interceptor.version>1.2.2</javax.interceptor.version>
+        <jakarta.el.version>3.0.3.redhat-00002</jakarta.el.version>
+        <jakarta.enterprise.cdi.version>2.0.2.redhat-00004</jakarta.enterprise.cdi.version>
+        <jakarta.inject.version>1.0.0.redhat-00002</jakarta.inject.version>
+        <jakarta.interceptor.version>1.2.5.redhat-00002</jakarta.interceptor.version>
+        <jsr305.annotation.version>3.0.2.redhat-00008</jsr305.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.11.12.redhat-00002</bytebuddy.version>
         <bouncycastle.version>1.72</bouncycastle.version>
@@ -194,11 +195,13 @@
         <jna.version>5.12.1</jna.version>
         <jakarta.activation.version>1.2.2.redhat-00001</jakarta.activation.version>
         <jakarta.jaxb.version>2.3.3.redhat-00001</jakarta.jaxb.version>
-        <jakarta.jaxws.version>2.3.3</jakarta.jaxws.version>
-        <jakarta.jws.version>2.1.0</jakarta.jws.version>
-        <jakarta.saaj.version>1.4.2</jakarta.saaj.version>
+        <jakarta.jaxws.version>2.3.3.redhat-00001</jakarta.jaxws.version>
+        <jakarta.ws.rs.version>2.1.6.redhat-00001</jakarta.ws.rs.version>
+        <jakarta.jws.version>2.1.0.redhat-00001</jakarta.jws.version>
+        <jakarta.saaj.version>1.4.2.redhat-00001</jakarta.saaj.version>
+        <javax.transaction.version>1.2</javax.transaction.version>
         <jaxb.version>2.3.3.redhat-00001</jaxb.version>
-        <glassfish.jaxb.version>2.3.3.redhat-00001</glassfish.jaxb.version>
+        <glassfish.jaxb.version>2.3.7</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
         <commons-codec.version>1.15.0.redhat-00001</commons-codec.version>
         <commons-compress.version>1.22</commons-compress.version>
@@ -369,8 +372,8 @@
         <log4j2.version>2.19.0</log4j2.version>
         <servicemix.specs.version>2.9.0</servicemix.specs.version>
 
-        <spec.activation.version>1.2.2</spec.activation.version>
-        <spec.annotation.version>1.3.5</spec.annotation.version>
+        <spec.activation.version>1.2.0.redhat-00001</spec.activation.version>
+        <spec.annotation.version>1.3.5.redhat-00003</spec.annotation.version>
         <spec.jaxb.version>2.3.2_3</spec.jaxb.version>
         <spec.jaxrs.version>2.1</spec.jaxrs.version>
         <spec.jaxws.version>2.3</spec.jaxws.version>
@@ -392,7 +395,7 @@
         <xerces.bundle.version>2.12.2.1-fuse-redhat-00003</xerces.bundle.version>
         <xalan.bundle.version>2.7.2.3-fuse-redhat-00006</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2.1-fuse-redhat-00006</xalan-serializer.bundle.version>
-        <javax.mail.version>1.6.1.redhat-1</javax.mail.version>
+        <javax.mail.version>1.6.2.redhat-00001</javax.mail.version>
         <javax.persistence.version>2.2.0.redhat-1</javax.persistence.version>
         <javax.validation.version>2.0.1.Final-redhat-1</javax.validation.version>
 
@@ -746,6 +749,12 @@
                 <groupId>org.apache.karaf.features</groupId>
                 <artifactId>org.apache.karaf.features.core</artifactId>
                 <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.activation</groupId>
+                        <artifactId>jakarta.activation</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.features</groupId>
@@ -1029,6 +1038,12 @@
                 <groupId>com.sun.mail</groupId>
                 <artifactId>javax.mail</artifactId>
                 <version>${javax.mail.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -1301,6 +1316,16 @@
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-core</artifactId>
                 <version>${maven.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.annotation</groupId>
+                        <artifactId>javax.annotation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.inject</groupId>
+                        <artifactId>javax.inject</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
@@ -1624,14 +1649,14 @@
                 <version>${servlet.spec.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.interceptor</groupId>
-                <artifactId>javax.interceptor-api</artifactId>
-                <version>${javax.interceptor.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${javax.validation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${javax.persistence.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
@@ -2120,9 +2145,9 @@
                 <version>${jakarta.activation.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>javax.annotation-api</artifactId>
-                <version>${javax.annotation.version}</version>
+                <groupId>com.sun.activation</groupId>
+                <artifactId>javax.activation</artifactId>
+                <version>${spec.activation.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.annotation</groupId>
@@ -2133,6 +2158,27 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${jsr305.annotation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.el</groupId>
+                <artifactId>jakarta.el-api</artifactId>
+                <version>${jakarta.el.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.enterprise</groupId>
+                <artifactId>jakarta.enterprise.cdi-api</artifactId>
+                <version>${jakarta.enterprise.cdi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.interceptor</groupId>
+                <artifactId>jakarta.interceptor-api</artifactId>
+                <version>${jakarta.interceptor.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>jakarta.transaction</groupId>
+                        <artifactId>jakarta.transaction-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>jakarta.xml.soap</groupId>
@@ -2150,14 +2196,30 @@
                 <version>${jakarta.jaxws.version}</version>
             </dependency>
             <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>${jakarta.ws.rs.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
                 <version>${jakarta.jaxb.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.transaction</groupId>
+                <artifactId>javax.transaction-api</artifactId>
+                <version>${javax.transaction.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
                 <version>${glassfish.jaxb.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.activation</groupId>
+                        <artifactId>jakarta.activation</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
@@ -2167,7 +2229,7 @@
             <dependency>
                 <groupId>com.sun.istack</groupId>
                 <artifactId>istack-commons-runtime</artifactId>
-                <version>3.0.10.redhat-00001</version>
+                <version>3.0.12.redhat-00001</version>
             </dependency>
 
             <!-- specs -->

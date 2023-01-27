@@ -40,7 +40,7 @@
 
     <!-- activation -->
     <feature name="activation" version="${spec.activation.version}">
-        <bundle start-level="10" dependency="true">mvn:com.sun.activation/jakarta.activation/${spec.activation.version}</bundle>
+        <bundle start-level="10" dependency="true">mvn:com.sun.activation/javax.activation/${spec.activation.version}</bundle>
     </feature>
 
     <!-- jaxb -->
