@@ -77,7 +77,6 @@
             <!-- can't upgrade to jakarta, see: https://github.com/eclipse-ee4j/jaf/issues/67 -->
             <groupId>com.sun.activation</groupId>
             <artifactId>javax.activation</artifactId>
-            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.servicemix.specs</groupId>
