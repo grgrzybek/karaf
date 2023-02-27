@@ -207,7 +207,7 @@
         <commons-compress.version>1.22</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
-        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
