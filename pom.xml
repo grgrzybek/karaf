@@ -207,7 +207,7 @@
         <commons-compress.version>1.22</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
-        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
@@ -355,12 +355,12 @@
 
         <pax.cdi.version>1.1.4</pax.cdi.version>
         <pax.exam.version>4.13.5</pax.exam.version>
-        <pax.logging.version>2.2.1</pax.logging.version>
+        <pax.logging.version>2.2.2</pax.logging.version>
         <pax.base.version>1.5.1</pax.base.version>
         <pax.swissbox.version>1.8.5</pax.swissbox.version>
         <pax.url.version>2.6.12</pax.url.version>
-        <pax.web.version>8.0.15</pax.web.version>
-        <pax.web.undertow.version>2.2.22.Final</pax.web.undertow.version>
+        <pax.web.version>8.0.17</pax.web.version>
+        <pax.web.undertow.version>2.2.23.SP1-redhat-00001</pax.web.undertow.version>
         <pax.tinybundle.version>3.0.0</pax.tinybundle.version>
         <pax.jdbc.version>1.5.5</pax.jdbc.version>
         <pax.jms.version>1.1.2</pax.jms.version>
@@ -369,7 +369,7 @@
         <portlet-api.version>2.0</portlet-api.version>
         <plexus-utils.version>3.4.2</plexus-utils.version>
         <slf4j.version>1.7.36.redhat-00002</slf4j.version>
-        <log4j2.version>2.19.0.redhat-00001</log4j2.version>
+        <log4j2.version>2.20.0</log4j2.version>
         <servicemix.specs.version>2.9.0</servicemix.specs.version>
 
         <spec.activation.version>1.2.0.redhat-00001</spec.activation.version>
