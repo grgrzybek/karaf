@@ -224,9 +224,7 @@ set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\lib\ext\bcutil-jdk18on-@@bouncycastle.ver
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-osgi\@@sshd.version@@\sshd-osgi-@@sshd.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-scp\@@sshd.version@@\sshd-scp-@@sshd.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\apache\sshd\sshd-sftp\@@sshd.version@@\sshd-sftp-@@sshd.version@@.jar
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\jline\jline-terminal\@@jline.version@@\jline-terminal-@@jline.version@@.jar
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\jline\jline-terminal-jansi\@@jline.version@@\jline-terminal-jansi-@@jline.version@@.jar
-set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\jline\jline-builtins\@@jline.version@@\jline-builtins-@@jline.version@@.jar
+set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\jline\jline\@@jline.version@@\jline-@@jline.version@@.jar
 set CLASSPATH=%CLASSPATH%;%KARAF_HOME%\system\org\fusesource\jansi\jansi\@@jansi.version@@\jansi-@@jansi.version@@.jar
 
 :EXECUTE
