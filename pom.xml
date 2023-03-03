@@ -184,7 +184,7 @@
         <jakarta.interceptor.version>1.2.5.redhat-00002</jakarta.interceptor.version>
         <jsr305.annotation.version>3.0.2.redhat-00008</jsr305.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
-        <bytebuddy.version>1.11.12.redhat-00002</bytebuddy.version>
+        <bytebuddy.version>1.12.18.redhat-00002</bytebuddy.version>
         <bouncycastle.version>1.72</bouncycastle.version>
         <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.12.1-fuse-redhat-00002</cglib.bundle.version>
@@ -312,15 +312,12 @@
         <guava.version>27.1-jre</guava.version>
         <guava.failureaccess.version>1.0.1.redhat-00002</guava.failureaccess.version>
         <narayana.version>5.11.4.Final-redhat-00001</narayana.version>
-        <hibernate.annotations.common.version>5.0.5.Final-redhat-00002</hibernate.annotations.common.version>
-        <hibernate.annotations.version>3.4.0.GA</hibernate.annotations.version>
-        <hibernate.ejb.version>3.4.0.GA</hibernate.ejb.version>
-        <hibernate.version>5.3.28.Final-redhat-00001</hibernate.version>
-        <hibernate.common.version>5.0.5.Final-redhat-00002</hibernate.common.version>
+        <hibernate.version>5.6.14.Final-redhat-00001</hibernate.version>
+        <hibernate.common.version>5.1.2.Final-redhat-00005</hibernate.common.version>
         <hibernate.validator.version>6.0.23.Final-redhat-00001</hibernate.validator.version>
         <httpcore.version>4.4.14</httpcore.version>
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
-        <jandex.version>2.0.5.Final-redhat-1</jandex.version>
+        <jandex.version>2.4.3.Final-redhat-00001</jandex.version>
         <jansi.version>2.4.0</jansi.version>
 <!--        <jansi.version>1.18.0.redhat-00001</jansi.version>-->
         <javassist.version>3.27.0.GA-redhat-00001</javassist.version>
