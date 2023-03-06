@@ -1278,6 +1278,7 @@ org.osgi.service.http.port=${env:ORG_APACHE_FELIX_HTTP_ORG_OSGI_SERVICE_HTTP_POR
 
     <feature name="jetty" description="Transition feature for backward compatibility" version="9.4.50.v20221201">
         <feature>pax-web-jetty</feature>
+        <feature>pax-web-jetty-websockets</feature>
     </feature>
 
     <feature name="kar" description="Provide KAR (KARaf archive) support" version="${project.version}">
