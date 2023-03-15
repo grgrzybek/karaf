@@ -20,6 +20,7 @@ package org.apache.karaf.shell.impl.console;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +29,13 @@ import java.util.Objects;
 
 import org.apache.felix.gogo.jline.Builtin;
 import org.apache.felix.gogo.jline.Posix;
+import org.apache.felix.gogo.jline.Shell;
 import org.apache.felix.gogo.runtime.CommandProcessorImpl;
 import org.apache.felix.gogo.runtime.CommandSessionImpl;
 import org.apache.felix.gogo.runtime.Reflective;
 import org.apache.felix.service.command.CommandSession;
 import org.apache.felix.service.command.Function;
+import org.apache.felix.service.command.Process;
 import org.apache.felix.service.threadio.ThreadIO;
 import org.apache.karaf.shell.api.console.Command;
 import org.apache.karaf.shell.api.console.Completer;
@@ -45,6 +48,12 @@ import org.apache.karaf.shell.impl.console.commands.ExitCommand;
 import org.apache.karaf.shell.impl.console.commands.Procedural;
 import org.apache.karaf.shell.impl.console.commands.SubShellCommand;
 import org.apache.karaf.shell.impl.console.commands.help.HelpCommand;
+import org.fusesource.jansi.AnsiColors;
+import org.fusesource.jansi.AnsiMode;
+import org.fusesource.jansi.AnsiPrintStream;
+import org.fusesource.jansi.AnsiType;
+import org.fusesource.jansi.io.AnsiOutputStream;
+import org.jline.builtins.Commands;
 
 public class SessionFactoryImpl extends RegistryImpl implements SessionFactory, Registry {
 
@@ -73,7 +82,21 @@ public class SessionFactoryImpl extends RegistryImpl implements SessionFactory, 
         register(new ShellCommand("removeCommand", "Remove a command", commandProcessor, "removeCommand"));
         register(new ShellCommand("eval", "Evaluate", commandProcessor, "eval"));
 
-        Builtin builtin = new Builtin();
+        Builtin builtin = new Builtin() {
+            public void history(CommandSession session, String[] argv) throws Exception {
+                Process process = Process.Utils.current();
+                PrintStream out = process.out();
+                if (Boolean.parseBoolean(String.valueOf(session.get("history.disable.ansi")))) {
+                    AnsiOutputStream aos = new AnsiOutputStream(
+                        out, new AnsiOutputStream.ZeroWidthSupplier(),
+                        AnsiMode.Strip, null, AnsiType.Unsupported, AnsiColors.Colors16,
+                        Charset.defaultCharset(), null, null, false
+                    );
+                    out = new AnsiPrintStream(aos, true);
+                }
+                Commands.history(Shell.getReader(session), out, process.err(), null, argv);
+            }
+        };
         for (String name : new String[]{"format", "getopt", "new", "set", "tac", "type", "jobs", "fg", "bg", "keymap", "setopt", "unsetopt", "complete", "history", "widget", "__files", "__directories", "__usage_completion"}) {
             register(new ShellCommand(name, null, builtin, name));
         }
