@@ -323,6 +323,7 @@ public class Builder {
     String consistencyReportProjectVersion;
     // KARAF-7074: for recursive/inner features, we should use parallelism by default
     int resolverParallelism = Math.max(2, Runtime.getRuntime().availableProcessors());
+    boolean certificateCheck = true;
 
     private ScheduledExecutorService executor;
     private DownloadManager manager;
@@ -643,6 +644,16 @@ public class Builder {
      */
     public Builder defaultStartLevel(int defaultStartLevel) {
         this.defaultStartLevel = defaultStartLevel;
+        return this;
+    }
+
+    /**
+     * Sets the flag for checking certificates when using HTTPS remote repositories.
+     * @param certificateCheck
+     * @return
+     */
+    public Builder setCertificateCheck(boolean certificateCheck) {
+        this.certificateCheck = certificateCheck;
         return this;
     }
 
@@ -1573,6 +1584,9 @@ public class Builder {
         }
         if (mavenRepositories != null) {
             props.put(ORG_OPS4J_PAX_URL_MVN_PID + ".repositories", mavenRepositories);
+        }
+        if (certificateCheck) {
+            props.put(ORG_OPS4J_PAX_URL_MVN_PID + ".certificateCheck", "true");
         }
         MavenResolver resolver = MavenResolvers.createMavenResolver(props, ORG_OPS4J_PAX_URL_MVN_PID);
         return resolverWrapper.apply(resolver);

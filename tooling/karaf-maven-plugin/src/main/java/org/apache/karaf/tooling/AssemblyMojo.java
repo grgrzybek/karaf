@@ -168,6 +168,12 @@ public class AssemblyMojo extends MojoSupport {
     protected boolean installAllFeaturesByDefault = true;
 
     /**
+     * Whether to verify certificates when using HTTPS maven repositories. Must be {@code true} for FIPS.
+     */
+    @Parameter(defaultValue = "true")
+    protected boolean certificateCheck = true;
+
+    /**
      * An environment identifier that may be used to select different variant of PID configuration file, e.g.,
      * <code>org.ops4j.pax.url.mvn.cfg#docker</code>.
      */
@@ -537,6 +543,7 @@ public class AssemblyMojo extends MojoSupport {
         builder.setConsistencyReportProjectVersion(consistencyReportProjectVersion);
         builder.environment(environment);
         builder.defaultStartLevel(defaultStartLevel);
+        builder.setCertificateCheck(certificateCheck);
         if (featuresProcessing != null) {
             builder.setFeaturesProcessing(featuresProcessing.toPath());
         }
