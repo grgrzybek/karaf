@@ -379,7 +379,7 @@
         <spec.xjc.version>2.3.2_2</spec.xjc.version>
 
         <spring.osgi.version>1.2.1</spring.osgi.version>
-        <spring53.version>5.3.25.1-fuse-redhat-00001</spring53.version>
+        <spring53.version>5.3.26.1-fuse-redhat-00001</spring53.version>
         <spring.ldap.version>2.4.1_1</spring.ldap.version>
         <spring.security57.version>5.7.7.1-fuse-redhat-00001</spring.security57.version>
 
