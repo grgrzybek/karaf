@@ -22,6 +22,7 @@ import org.apache.karaf.jaas.boot.principal.UserPrincipal;
 import javax.security.auth.Subject;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Array;
 import java.security.Principal;
 
 public final class Buffer implements Appendable, CharSequence {
@@ -146,6 +147,15 @@ public final class Buffer implements Appendable, CharSequence {
             buffer[position++] = 'l';
             return this;
         } else if (object.getClass().isArray()) {
+            Class<?> ct = object.getClass().getComponentType();
+            if (ct != null && ct.isPrimitive()) {
+                int len = Array.getLength(object);
+                Object[] array = new Object[len];
+                for (int i = 0; i < len; ++i) {
+                    array[i] = Array.get(object, i);
+                }
+                object = array;
+            }
             return format((Object[]) object);
         } else if (object instanceof Subject) {
             return format((Subject) object);
@@ -219,8 +229,15 @@ public final class Buffer implements Appendable, CharSequence {
 
     private void formatJson(String value) throws IOException {
         int len = value.length();
+        int max = Math.min(len, 255);
         require(len * 4);
-        position = transferJson(position, buffer, value, 0, len);
+        position = transferJson(position, buffer, value, 0, max);
+        if (len > max) {
+            require(3);
+            buffer[position++] = '.';
+            buffer[position++] = '.';
+            buffer[position++] = '.';
+        }
     }
 
     private void formatSyslog(String value) throws IOException {
