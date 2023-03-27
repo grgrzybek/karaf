@@ -341,7 +341,7 @@ public class FeatureConfigInstaller {
         if (storage != null && configCfgStore) {
             File cfgFile = getConfigFile(cid, jsonFormat);
             if (!cfgFile.exists()) {
-                cfgFile.getAbsoluteFile().mkdirs();
+                cfgFile.getParentFile().mkdirs();
                 File tmpCfgFile = File.createTempFile(cfgFile.getName(), ".tmp", cfgFile.getParentFile());
                 if (jsonFormat) {
                     Configurations.buildWriter().build(new FileWriter(tmpCfgFile)).writeConfiguration(convertToDict(props));
