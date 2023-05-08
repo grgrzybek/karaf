@@ -465,6 +465,10 @@ if "%KARAF_PROFILER%" == "" goto :RUN
                 --add-opens java.base/java.io=ALL-UNNAMED ^
                 --add-opens java.naming/javax.naming.spi=ALL-UNNAMED ^
                 --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED ^
+                --add-opens java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED ^
+                --add-opens java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED ^
+                --add-opens java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED ^
+                --add-opens java.xml/com.sun.org.apache.xerces.internal.util=ALL-UNNAMED ^
                 --add-exports=java.base/sun.net.www.protocol.file=ALL-UNNAMED ^
                 --add-exports=java.base/sun.net.www.protocol.ftp=ALL-UNNAMED ^
                 --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED ^
