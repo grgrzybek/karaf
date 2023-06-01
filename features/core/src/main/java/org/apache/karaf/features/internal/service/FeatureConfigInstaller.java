@@ -78,9 +78,7 @@ public class FeatureConfigInstaller {
             cid.isFactoryPid = true;
             cid.factoryPid = pid.substring(0, n);
             cid.pid = pid.substring(0, n);
-            if (pid.contains("~")) {
-                cid.name = pid.substring(n + 1);
-            }
+            cid.name = pid.substring(n + 1);
         } else {
             cid.pid = pid;
             cid.acl = pid.startsWith("org.apache.karaf.command.acl.") || pid.startsWith("jmx.acl");
