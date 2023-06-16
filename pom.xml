@@ -185,7 +185,7 @@
         <jsr305.annotation.version>3.0.2.redhat-00008</jsr305.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.12.18.redhat-00002</bytebuddy.version>
-        <bouncycastle.version>1.73</bouncycastle.version>
+        <bouncycastle.version>1.74</bouncycastle.version>
         <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.12.1-fuse-redhat-00002</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
