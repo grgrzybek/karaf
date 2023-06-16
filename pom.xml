@@ -31,7 +31,7 @@
     <groupId>org.apache.karaf</groupId>
     <artifactId>karaf</artifactId>
     <packaging>pom</packaging>
-    <version>4.4.3.redhat-SNAPSHOT</version>
+    <version>4.4.3.fuse-7_12_0-00014</version>
     <name>Apache Karaf</name>
     <inceptionYear>2007</inceptionYear>
 
