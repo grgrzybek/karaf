@@ -177,33 +177,33 @@
         <ant.bundle.version>1.7.0.6-fuse-redhat-00006</ant.bundle.version>
         <antlr.bundle.version>2.7.7.5-fuse-redhat-00002</antlr.bundle.version>
         <asm.version>9.5</asm.version>
-        <jakarta.annotation.version>1.3.5.redhat-00004</jakarta.annotation.version>
-        <jakarta.el.version>3.0.3.redhat-00002</jakarta.el.version>
+        <jakarta.annotation.version>1.3.5.redhat-00006</jakarta.annotation.version>
+        <jakarta.el.version>3.0.3.redhat-00003</jakarta.el.version>
         <jakarta.enterprise.cdi.version>2.0.2.redhat-00004</jakarta.enterprise.cdi.version>
         <jakarta.inject.version>1.0.0.redhat-00002</jakarta.inject.version>
-        <jakarta.interceptor.version>1.2.5.redhat-00002</jakarta.interceptor.version>
-        <jsr305.annotation.version>3.0.2.redhat-00008</jsr305.annotation.version>
+        <jakarta.interceptor.version>1.2.5.redhat-00003</jakarta.interceptor.version>
+        <jsr305.annotation.version>3.0.2.redhat-00009</jsr305.annotation.version>
         <awaitility.version>3.1.6</awaitility.version>
         <bytebuddy.version>1.12.18.redhat-00002</bytebuddy.version>
         <bouncycastle.version>1.74</bouncycastle.version>
         <camel.version>2.23.4</camel.version>
         <cglib.bundle.version>3.2.12.1-fuse-redhat-00002</cglib.bundle.version>
         <cglib2.version>2.2.0</cglib2.version>
-        <classmate.version>1.5.1</classmate.version>
-        <cxf.version>3.3.9</cxf.version>
+        <classmate.version>1.5.1.redhat-00001</classmate.version>
+        <cxf.version>3.3.9.redhat-00001</cxf.version>
         <eddsa.version>0.3.0</eddsa.version>
         <jna.version>5.12.1</jna.version>
-        <jakarta.activation.version>1.2.2.redhat-00001</jakarta.activation.version>
+        <jakarta.activation.version>1.2.2.redhat-00002</jakarta.activation.version>
         <jakarta.jaxb.version>2.3.3.redhat-00003</jakarta.jaxb.version>
-        <jakarta.jaxws.version>2.3.3.redhat-00001</jakarta.jaxws.version>
+        <jakarta.jaxws.version>2.3.3.redhat-00003</jakarta.jaxws.version>
         <jakarta.ws.rs.version>2.1.6.redhat-00001</jakarta.ws.rs.version>
-        <jakarta.jws.version>2.1.0.redhat-00001</jakarta.jws.version>
-        <jakarta.saaj.version>1.4.2.redhat-00001</jakarta.saaj.version>
+        <jakarta.jws.version>2.1.0.redhat-00003</jakarta.jws.version>
+        <jakarta.saaj.version>1.4.2.redhat-00004</jakarta.saaj.version>
         <javax.transaction.version>1.2</javax.transaction.version>
         <jaxb.version>2.3.3.redhat-00001</jaxb.version>
-        <glassfish.jaxb.version>2.3.7</glassfish.jaxb.version>
+        <glassfish.jaxb.version>2.3.7.redhat-00001</glassfish.jaxb.version>
         <commons-beanutils.version>1.9.4.redhat-00002</commons-beanutils.version>
-        <commons-codec.version>1.15.0.redhat-00001</commons-codec.version>
+        <commons-codec.version>1.15.0.redhat-00008</commons-codec.version>
         <commons-compress.version>1.23.0</commons-compress.version>
         <commons-collections.version>3.2.2.redhat-2</commons-collections.version>
         <commons-dbcp.version>1.4_3</commons-dbcp.version>
@@ -211,7 +211,7 @@
         <commons-jexl.version>2.1.1</commons-jexl.version>
         <commons-lang.version>2.6.0.redhat-7</commons-lang.version>
         <commons-lang3.version>3.12.0.redhat-00001</commons-lang3.version>
-        <commons-logging.version>1.2.0.redhat-3</commons-logging.version>
+        <commons-logging.version>1.2.0.redhat-00004</commons-logging.version>
         <commons-pool.version>1.6.0.redhat-10</commons-pool.version>
         <commons-dbcp2.version>2.9.0</commons-dbcp2.version>
         <commons-pool2.version>2.11.1.redhat-00001</commons-pool2.version>
@@ -225,7 +225,7 @@
         <servlet.spec3.version>3.1.0</servlet.spec3.version>
         <servlet.spec.version>4.0.1</servlet.spec.version>
 
-        <geronimo.jms-spec.version>1.1.1.redhat-2</geronimo.jms-spec.version>
+        <geronimo.jms-spec.version>1.1.1.redhat-00003</geronimo.jms-spec.version>
         <geronimo.jpa-spec.version>1.1</geronimo.jpa-spec.version>
         <geronimo.jta-spec.version>1.1.1</geronimo.jta-spec.version>
 
@@ -310,7 +310,7 @@
         <openjpa.version>3.2.2</openjpa.version>
         <geronimo.transaction.manager.version>3.1.3</geronimo.transaction.manager.version>
         <guava.version>27.1-jre</guava.version>
-        <guava.failureaccess.version>1.0.1.redhat-00002</guava.failureaccess.version>
+        <guava.failureaccess.version>1.0.1.redhat-00004</guava.failureaccess.version>
         <narayana.version>5.11.4.Final-redhat-00001</narayana.version>
         <hibernate.version>5.6.14.Final-redhat-00001</hibernate.version>
         <hibernate.common.version>5.1.2.Final-redhat-00005</hibernate.common.version>
@@ -318,15 +318,15 @@
         <httpcore.version>4.4.14</httpcore.version>
         <httpclient.version>4.5.13.redhat-00002</httpclient.version>
         <jandex.version>2.4.3.Final-redhat-00001</jandex.version>
-        <jansi.version>2.4.0</jansi.version>
+        <jansi.version>2.4.0.redhat-00001</jansi.version>
 <!--        <jansi.version>1.18.0.redhat-00001</jansi.version>-->
         <javassist.version>3.27.0.GA-redhat-00001</javassist.version>
         <jackson.version>2.12.6.redhat-00001</jackson.version>
         <jackson.databind.version>2.12.6.1-redhat-00004</jackson.databind.version>
         <jboss.logging.version>3.4.1.Final-redhat-00002</jboss.logging.version>
         <aesh.version>2.0.0.redhat-00001</aesh.version>
-        <jetty.version>9.4.51.v20230217</jetty.version>
-        <jline.version>3.21.0</jline.version>
+        <jetty.version>9.4.51.v20230217-redhat-00001</jetty.version>
+        <jline.version>3.21.0.redhat-00001</jline.version>
         <junit.version>4.13.2</junit.version>
         <jsw.version>3.2.3</jsw.version>
         <maven.version>3.8.6</maven.version>
@@ -365,8 +365,8 @@
 
         <portlet-api.version>2.0</portlet-api.version>
         <plexus-utils.version>3.4.2</plexus-utils.version>
-        <slf4j.version>1.7.36.redhat-00002</slf4j.version>
-        <log4j2.version>2.20.0</log4j2.version>
+        <slf4j.version>1.7.36.redhat-00003</slf4j.version>
+        <log4j2.version>2.20.0.redhat-00002</log4j2.version>
         <servicemix.specs.version>2.9.0</servicemix.specs.version>
 
         <spec.activation.version>1.2.0.redhat-00001</spec.activation.version>
@@ -375,7 +375,7 @@
         <spec.jaxrs.version>2.1</spec.jaxrs.version>
         <spec.jaxws.version>2.3</spec.jaxws.version>
         <spec.jws.version>1.1.1</spec.jws.version>
-        <spec.mail.version>1.6.5</spec.mail.version>
+        <spec.mail.version>1.6.5.redhat-00001</spec.mail.version>
         <spec.xjc.version>2.3.2_2</spec.xjc.version>
 
         <spring.osgi.version>1.2.1</spring.osgi.version>
@@ -384,7 +384,7 @@
         <spring.security57.version>5.7.8.1-fuse-redhat-00001</spring.security57.version>
 
         <sling.commons.johnzon.version>1.2.14</sling.commons.johnzon.version>
-        <sshd.version>2.9.2</sshd.version>
+        <sshd.version>2.9.2.redhat-00001</sshd.version>
         <derby-version>10.14.2.0</derby-version>
         <directory-version>2.0.0-M24</directory-version>
         <struts.bundle.version>1.3.10_1</struts.bundle.version>
@@ -2226,7 +2226,7 @@
             <dependency>
                 <groupId>com.sun.istack</groupId>
                 <artifactId>istack-commons-runtime</artifactId>
-                <version>3.0.12.redhat-00001</version>
+                <version>3.0.12.redhat-00006</version>
             </dependency>
 
             <!-- specs -->
