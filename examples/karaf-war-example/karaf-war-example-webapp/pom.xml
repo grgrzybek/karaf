@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-war-example</artifactId>
-        <version>4.4.3.fuse-7_12_0-00014</version>
+        <version>4.4.3.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
