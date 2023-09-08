@@ -29,7 +29,7 @@ set ARGS=%*
 rem Sourcing environment settings for karaf similar to tomcats setenv
 
 if "%KARAF_SCRIPT%" == "" (
-	SET KARAF_SCRIPT="karaf.bat"
+    SET KARAF_SCRIPT="karaf.bat"
 )
 if exist "%DIRNAME%setenv.bat" (
   call "%DIRNAME%setenv.bat"
@@ -212,8 +212,8 @@ if not "%JAVA%" == "" goto :Check_JAVA_END
     )
     if not exist "%JAVA_HOME%" (
        goto TryRegJDK
-	)
-	goto TryJDKEnd
+    )
+    goto TryJDKEnd
 :TryRegJDK
     rem try getting the JAVA_HOME from registry
     FOR /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKLM\Software\JavaSoft\Java Development Kit" /v CurrentVersion`) DO (
@@ -225,7 +225,7 @@ if not "%JAVA%" == "" goto :Check_JAVA_END
     if not exist "%JAVA_HOME%" (
        call :warn Unable to retrieve JAVA_HOME from Registry
     )
-	goto TryJDKEnd
+    goto TryJDKEnd
 :TryJDKEnd
     if not exist "%JAVA_HOME%" (
         call :warn JAVA_HOME is not valid: "%JAVA_HOME%"
@@ -479,7 +479,8 @@ if "%KARAF_PROFILER%" == "" goto :RUN
                 --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
                 --add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED ^
                 --add-exports=java.security.sasl/com.sun.security.sasl=ALL-UNNAMED ^
-		        --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED ^
+                --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED ^
+                -Djdk.util.zip.disableZip64ExtraFieldValidation=true ^
                 -classpath "%CLASSPATH%" ^
                 -Dkaraf.instances="%KARAF_HOME%\instances" ^
                 -Dkaraf.home="%KARAF_HOME%" ^
