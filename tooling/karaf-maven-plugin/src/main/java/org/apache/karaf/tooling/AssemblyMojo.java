@@ -554,10 +554,18 @@ public class AssemblyMojo extends MojoSupport {
         // Set up remote repositories from Maven build, to be used by pax-url-aether resolver
         String remoteRepositories = MavenUtil.remoteRepositoryList(project.getRemoteProjectRepositories());
         getLog().info("Using repositories:");
+        StringBuilder filteredRemoteRepositories = new StringBuilder();
         for (String r : remoteRepositories.split(",")) {
-            getLog().info("   " + r);
+            if (!r.trim().startsWith("zip:")) {
+                // filter out a repository from -Dpatch of patch-maven-plugin, because
+                // Pax URL can't handle it
+                getLog().info("   " + r);
+                filteredRemoteRepositories.append(",").append(r);
+            }
         }
-        builder.mavenRepositories(remoteRepositories);
+        if (!filteredRemoteRepositories.toString().isEmpty()) {
+            builder.mavenRepositories(filteredRemoteRepositories.toString().substring(1));
+        }
 
         // Set up config and system properties
         config.forEach(builder::config);
