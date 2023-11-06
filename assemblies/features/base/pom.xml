@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.assemblies.features</groupId>
         <artifactId>features</artifactId>
-        <version>4.4.3.fuse-7_12_1-00009</version>
+        <version>4.4.3.fuse-7_12_1-00009-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -414,10 +414,6 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>jenkins</id>
-            <name>jenkins</name>
-            <url>https://repo.jenkins-ci.org/releases/</url>
-        </repository>
+        
     </repositories>
 </project>

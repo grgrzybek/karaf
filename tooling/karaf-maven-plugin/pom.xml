@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.tooling</groupId>
         <artifactId>tooling</artifactId>
-        <version>4.4.3.fuse-7_12_1-00009</version>
+        <version>4.4.3.fuse-7_12_1-00009-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -441,19 +441,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <!--<outputDirectory>target/site</outputDirectory>-->
-        <plugins>
-            <plugin>
-                <artifactId>maven-plugin-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </reporting>
     <profiles>
         <profile>
             <id>skiptests</id>

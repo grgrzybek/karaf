@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.karaf.examples</groupId>
         <artifactId>karaf-docker-example</artifactId>
-        <version>4.4.3.fuse-7_12_1-00009</version>
+        <version>4.4.3.fuse-7_12_1-00009-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -37,7 +37,7 @@
             <dependency>
                 <groupId>org.apache.karaf</groupId>
                 <artifactId>karaf-bom</artifactId>
-                <version>${project.version}</version>
+                <version>4.4.3.fuse-7_12_1-00009-redhat-00001</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -71,7 +71,7 @@
             <artifactId>karaf-docker-example-app</artifactId>
             <type>xml</type>
             <classifier>features</classifier>
-            <version>${project.version}</version>
+            <version>4.4.3.fuse-7_12_1-00009-redhat-00001</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
