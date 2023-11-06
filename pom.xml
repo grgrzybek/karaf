@@ -171,7 +171,7 @@
         <distributionManagement.snapshot.name>Apache Development Snapshot Repository</distributionManagement.snapshot.name>
         <distributionManagement.snapshot.url>https://repository.apache.org/content/repositories/snapshots</distributionManagement.snapshot.url>
 
-        <activemq.version>5.11.0.redhat-630516</activemq.version>
+        <activemq.version>5.11.0.redhat-630517</activemq.version>
         <aopalliance.bundle.version>1.0.6.fuse-redhat-00006</aopalliance.bundle.version>
         <aspectj.bundle.version>1.9.5_1</aspectj.bundle.version>
         <ant.bundle.version>1.7.0.6-fuse-redhat-00006</ant.bundle.version>
