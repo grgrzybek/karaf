@@ -292,7 +292,7 @@
         <bundle start-level="30">mvn:org.springframework.security/spring-security-config/${spring.security31.version}</bundle>
         <bundle start-level="30">mvn:org.springframework.security/spring-security-web/${spring.security31.version}</bundle>
         <bundle start-level="30">mvn:org.springframework.security/spring-security-acl/${spring.security31.version}</bundle>
-        <bundle start-level="30">mvn:org.springframework.security/spring-security-taglibs/${spring.security31.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.springframework.security/spring-security-taglibs/${spring.security31.version}</bundle>-->
     </feature>
 
     <feature name="spring-security" description="Spring Security 4.2.x support" version="${spring.security42.version}">
@@ -304,7 +304,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security42.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security42.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security42.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security42.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security42.version}</bundle>-->
     </feature>
 
     <feature name="spring-security" description="Spring Security 5.3.x support" version="${spring.security53.version}">
@@ -322,7 +322,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security53.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security53.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security53.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security53.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security53.version}</bundle>-->
     </feature>
 
     <feature name="spring-security" description="Spring Security 5.4.x support" version="${spring.security54.version}">
@@ -340,7 +340,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security54.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security54.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security54.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security54.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security54.version}</bundle>-->
     </feature>
 
     <feature name="spring-security" description="Spring Security 5.5.x support" version="${spring.security55.version}">
@@ -358,7 +358,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security55.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security55.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security55.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security55.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security55.version}</bundle>-->
     </feature>
 
 </features>

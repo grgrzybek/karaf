@@ -196,11 +196,11 @@
             <artifactId>pax-web-runtime</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.ops4j.pax.web</groupId>
-            <artifactId>pax-web-jetty</artifactId>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.ops4j.pax.web</groupId>-->
+<!--            <artifactId>pax-web-jetty</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.karaf.http</groupId>
             <artifactId>org.apache.karaf.http.core</artifactId>
@@ -265,38 +265,38 @@
             <artifactId>org.apache.felix.metatype</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.webconsole</groupId>
-            <artifactId>org.apache.karaf.webconsole.console</artifactId>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.karaf.webconsole</groupId>-->
+<!--            <artifactId>org.apache.karaf.webconsole.console</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
-        <!-- webconsole deps -->
-        <dependency>
-            <groupId>org.apache.karaf.webconsole</groupId>
-            <artifactId>org.apache.karaf.webconsole.instance</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.webconsole</groupId>
-            <artifactId>org.apache.karaf.webconsole.features</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.webconsole</groupId>
-            <artifactId>org.apache.karaf.webconsole.gogo</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.webconsole</groupId>
-            <artifactId>org.apache.karaf.webconsole.http</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.webconsole.plugins.event</artifactId>
-            <scope>provided</scope>
-        </dependency>
+<!--        &lt;!&ndash; webconsole deps &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.karaf.webconsole</groupId>-->
+<!--            <artifactId>org.apache.karaf.webconsole.instance</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.karaf.webconsole</groupId>-->
+<!--            <artifactId>org.apache.karaf.webconsole.features</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.karaf.webconsole</groupId>-->
+<!--            <artifactId>org.apache.karaf.webconsole.gogo</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.karaf.webconsole</groupId>-->
+<!--            <artifactId>org.apache.karaf.webconsole.http</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.felix</groupId>-->
+<!--            <artifactId>org.apache.felix.webconsole.plugins.event</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <!-- ssh deps -->
         <dependency>
@@ -465,7 +465,7 @@
                                 <descriptor>file:${project.build.directory}/feature/feature.xml</descriptor>
                             </descriptors>
                             <distribution>org.apache.karaf.features:framework</distribution>
-                            <javase>9</javase>
+                            <javase>17</javase>
                             <framework>
                                 <feature>framework</feature>
                             </framework>

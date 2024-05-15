@@ -37,11 +37,11 @@ import org.apache.karaf.http.core.BalancingPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -174,7 +174,7 @@ public class ProxyServlet extends HttpServlet {
             }
 
             // pass the response code
-            servletResponse.setStatus(statusCode, proxyResponse.getStatusLine().getReasonPhrase());
+            servletResponse.setStatus(statusCode);
 
             // send the content to the client
             copyResponseEntity(proxyResponse, servletResponse);
@@ -326,12 +326,12 @@ public class ProxyServlet extends HttpServlet {
             //set cookie name prefixed w/ a proxy value so it won't collide w/ other cookies
             String proxyCookieName = getCookieNamePrefix() + cookie.getName();
             Cookie servletCookie = new Cookie(proxyCookieName, cookie.getValue());
-            servletCookie.setComment(cookie.getComment());
+//            servletCookie.setComment(cookie.getComment());
             servletCookie.setMaxAge((int) cookie.getMaxAge());
             servletCookie.setPath(path); //set to the path of the proxy servlet
             // don't set cookie domain
             servletCookie.setSecure(cookie.getSecure());
-            servletCookie.setVersion(cookie.getVersion());
+//            servletCookie.setVersion(cookie.getVersion());
             servletResponse.addCookie(servletCookie);
         }
     }

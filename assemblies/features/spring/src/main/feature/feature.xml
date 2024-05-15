@@ -114,7 +114,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security56.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security56.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security56.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security56.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security56.version}</bundle>-->
     </feature>
 
     <feature name="spring-security" description="Spring Security 5.7.x support" version="${spring.security57.version}">
@@ -132,7 +132,7 @@
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-config/${spring.security57.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-web/${spring.security57.version}</bundle>
         <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-acl/${spring.security57.version}</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security57.version}</bundle>
+<!--        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-security-taglibs/${spring.security57.version}</bundle>-->
     </feature>
 
     <!-- Aries Blueprint Spring support -->

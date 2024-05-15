@@ -24,7 +24,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,12 +37,10 @@ public class ProxyServiceImpl implements ProxyService {
     protected static final String CONFIGURATION_KEY = "proxies";
 
     private ConfigurationAdmin configurationAdmin;
-    private HttpService httpService;
     private BundleContext bundleContext;
     private Map<String, Proxy> proxies;
 
-    public ProxyServiceImpl(HttpService httpService, ConfigurationAdmin configurationAdmin, BundleContext bundleContext) {
-        this.httpService = httpService;
+    public ProxyServiceImpl(ConfigurationAdmin configurationAdmin, BundleContext bundleContext) {
         this.configurationAdmin = configurationAdmin;
         this.bundleContext = bundleContext;
         this.proxies = new HashMap<>();
@@ -84,7 +81,6 @@ public class ProxyServiceImpl implements ProxyService {
     @Override
     public void removeProxy(String url) throws Exception {
         LOG.debug("removing proxy {}", url);
-        httpService.unregister(url);
         proxies.remove(url);
         updateConfiguration();
     }
@@ -131,7 +127,7 @@ public class ProxyServiceImpl implements ProxyService {
                     proxyServlet.setBalancingPolicy(balancingPolicy);
                 }
             }
-            httpService.registerServlet(proxy.getUrl(), proxyServlet, new Hashtable(), null);
+//            httpService.registerServlet(proxy.getUrl(), proxyServlet, new Hashtable(), null);
             proxies.put(proxy.getUrl(), proxy);
         } catch (Exception e) {
             LOG.error("Can't add {} proxy to {}", proxy.getUrl(), proxy.getProxyTo(), e);
