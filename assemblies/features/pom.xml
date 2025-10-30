@@ -40,7 +40,7 @@
         <module>specs</module>
         <module>standard</module>
         <module>spring</module>
-        <module>spring-legacy</module>
+<!--        <module>spring-legacy</module>-->
         <module>enterprise</module>
     </modules>
 

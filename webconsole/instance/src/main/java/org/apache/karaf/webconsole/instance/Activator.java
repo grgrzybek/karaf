@@ -16,7 +16,7 @@
  */
 package org.apache.karaf.webconsole.instance;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -37,7 +37,7 @@ public class Activator extends BaseActivator {
         instancePlugin = new InstancePlugin();
         instancePlugin.setBundleContext(bundleContext);
         instancePlugin.setInstanceService(getTrackedService(InstanceService.class));
-        instancePlugin.start();
+//        instancePlugin.start();
 
         Dictionary<String, String> props = new Hashtable<>();
         props.put("felix.webconsole.label", "instance");
@@ -48,7 +48,7 @@ public class Activator extends BaseActivator {
     protected void doStop() {
         super.doStop();
         if (instancePlugin != null) {
-            instancePlugin.stop();
+//            instancePlugin.stop();
             instancePlugin = null;
         }
     }

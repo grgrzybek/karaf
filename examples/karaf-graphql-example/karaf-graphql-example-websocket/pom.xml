@@ -33,12 +33,12 @@
     <packaging>bundle</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>websocket-servlet</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.jetty.websocket</groupId>-->
+<!--            <artifactId>jetty-websocket-servlet</artifactId>-->
+<!--            <version>${jetty.version}</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.karaf.examples</groupId>
             <artifactId>karaf-graphql-example-api</artifactId>

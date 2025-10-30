@@ -180,8 +180,8 @@
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.service.http</artifactId>
-                <version>${org.osgi.service.http.version}</version>
+                <artifactId>org.osgi.service.servlet</artifactId>
+                <version>${org.osgi.service.servlet.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>

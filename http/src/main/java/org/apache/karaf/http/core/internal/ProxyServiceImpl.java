@@ -20,11 +20,11 @@ import org.apache.karaf.http.core.BalancingPolicy;
 import org.apache.karaf.http.core.Proxy;
 import org.apache.karaf.http.core.ProxyService;
 import org.apache.karaf.http.core.internal.proxy.ProxyServlet;
+import org.ops4j.pax.web.service.http.HttpService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

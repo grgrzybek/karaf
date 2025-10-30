@@ -16,7 +16,7 @@
  */
 package org.apache.karaf.webconsole.features;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -38,7 +38,7 @@ public class Activator extends BaseActivator {
         featuresPlugin = new FeaturesPlugin();
         featuresPlugin.setBundleContext(bundleContext);
         featuresPlugin.setFeaturesService(getTrackedService(FeaturesService.class));
-        featuresPlugin.start();
+//        featuresPlugin.start();
 
         Dictionary<String, String> props = new Hashtable<>();
         props.put("felix.webconsole.label", "features");
@@ -49,7 +49,7 @@ public class Activator extends BaseActivator {
     protected void doStop() {
         super.doStop();
         if (featuresPlugin != null) {
-            featuresPlugin.stop();
+//            featuresPlugin.stop();
             featuresPlugin = null;
         }
     }

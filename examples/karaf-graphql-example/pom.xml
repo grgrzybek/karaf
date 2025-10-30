@@ -37,7 +37,7 @@
         <module>karaf-graphql-example-commands</module>
         <module>karaf-graphql-example-core</module>
         <module>karaf-graphql-example-api</module>
-        <module>karaf-graphql-example-websocket</module>
+<!--        <module>karaf-graphql-example-websocket</module>-->
         <module>karaf-graphql-example-features</module>
     </modules>
 

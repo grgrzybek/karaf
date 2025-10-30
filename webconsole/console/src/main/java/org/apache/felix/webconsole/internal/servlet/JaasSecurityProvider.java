@@ -31,18 +31,19 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.felix.webconsole.WebConsoleSecurityProvider2;
+import org.apache.felix.webconsole.spi.SecurityProvider;
 import org.apache.karaf.jaas.boot.principal.ClientPrincipal;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.http.HttpContext;
+import org.osgi.service.servlet.context.ServletContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JaasSecurityProvider implements WebConsoleSecurityProvider2, ManagedService {
+public class JaasSecurityProvider implements SecurityProvider, ManagedService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JaasSecurityProvider.class);
 
@@ -74,11 +75,6 @@ public class JaasSecurityProvider implements WebConsoleSecurityProvider2, Manage
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    @Override
-    public Object authenticate(final String username, final String password) {
-        return doAuthenticate( "?", username, password );
     }
 
     @Override
@@ -155,7 +151,7 @@ public class JaasSecurityProvider implements WebConsoleSecurityProvider2, Manage
     }
 
     @Override
-    public boolean authenticate( HttpServletRequest request, HttpServletResponse response )
+    public Object authenticate( HttpServletRequest request, HttpServletResponse response )
     {
         // Return immediately if the header is missing
         String authHeader = request.getHeader( HEADER_AUTHORIZATION );
@@ -203,8 +199,8 @@ public class JaasSecurityProvider implements WebConsoleSecurityProvider2, Manage
                         if ( subject != null )
                         {
                             // as per the spec, set attributes
-                            request.setAttribute( HttpContext.AUTHENTICATION_TYPE, HttpServletRequest.BASIC_AUTH );
-                            request.setAttribute( HttpContext.REMOTE_USER, username );
+                            request.setAttribute( ServletContextHelper.AUTHENTICATION_TYPE, HttpServletRequest.BASIC_AUTH );
+                            request.setAttribute( ServletContextHelper.REMOTE_USER, username );
 
                             // set web console user attribute
                             request.setAttribute( WebConsoleSecurityProvider2.USER_ATTRIBUTE, username );
@@ -243,6 +239,10 @@ public class JaasSecurityProvider implements WebConsoleSecurityProvider2, Manage
 
         // inform HttpService that authentication failed
         return false;
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
     }
 
     private void requireAuthentication(HttpServletResponse response) {

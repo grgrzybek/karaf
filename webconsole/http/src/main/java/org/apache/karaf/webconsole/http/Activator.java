@@ -16,7 +16,7 @@
  */
 package org.apache.karaf.webconsole.http;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -49,7 +49,7 @@ public class Activator extends BaseActivator {
         httpPlugin.setBundleContext(bundleContext);
         httpPlugin.setWebContainer(webContainer);
         httpPlugin.setProxyService(proxyService);
-        httpPlugin.start();
+//        httpPlugin.start();
 
         Dictionary<String, String> props = new Hashtable<>();
         props.put("felix.webconsole.label", "http");
@@ -60,7 +60,7 @@ public class Activator extends BaseActivator {
     protected void doStop() {
         super.doStop();
         if (httpPlugin != null) {
-            httpPlugin.stop();
+//            httpPlugin.stop();
             httpPlugin = null;
         }
     }

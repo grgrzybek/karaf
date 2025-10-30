@@ -16,31 +16,39 @@
  */
 package org.apache.karaf.examples.servlet.upload;
 
+import jakarta.servlet.Servlet;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.http.HttpService;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 @org.osgi.service.component.annotations.Component
 public class Component {
 
-    @Reference
-    protected HttpService httpService;
+    private ServiceRegistration<Servlet> reg;
 
     @Activate
-    public void activate() throws Exception {
+    public void activate(BundleContext context) throws Exception {
         final String tmpDir = System.getProperty("java.io.tmpdir");
         final Path uploadPath = Paths.get(tmpDir, "karaf", "upload");
         uploadPath.toFile().mkdirs();
-        httpService.registerServlet("/upload-example", new UploadServlet(uploadPath), null, null);
+        Dictionary<String, Object> props = new Hashtable<>();
+        props.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "UploadServlet");
+        props.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/upload-example/*");
+        reg = context.registerService(Servlet.class, new UploadServlet(uploadPath), props);
     }
 
     @Deactivate
     public void deactivate() throws Exception {
-        httpService.unregister("/upload-example");
+        if (reg != null) {
+            reg.unregister();
+        }
     }
 
 }

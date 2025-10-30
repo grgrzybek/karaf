@@ -37,11 +37,11 @@ import java.security.AccessController;
 import java.util.zip.GZIPOutputStream;
 
 import javax.security.auth.Subject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.felix.webconsole.AbstractWebConsolePlugin;
+import org.apache.felix.webconsole.servlet.AbstractServlet;
 import org.apache.karaf.jaas.boot.principal.UserPrincipal;
 import org.apache.karaf.shell.api.console.Session;
 import org.apache.karaf.shell.api.console.SessionFactory;
@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * WebConsole plugin for {@link Session}.
  */
-public class GogoPlugin extends AbstractWebConsolePlugin {
+public class GogoPlugin extends AbstractServlet {
 
     private final Logger logger = LoggerFactory.getLogger(GogoPlugin.class);
 
@@ -64,10 +64,6 @@ public class GogoPlugin extends AbstractWebConsolePlugin {
     private BundleContext bundleContext;
     private SessionFactory sessionFactory;
 
-    @Override
-    protected boolean isHtmlRequest(HttpServletRequest request) {
-        return true;
-    }
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
@@ -77,28 +73,28 @@ public class GogoPlugin extends AbstractWebConsolePlugin {
         this.sessionFactory = sessionFactory;
     }
 
-    public void start() {
-        super.activate(bundleContext);
-        this.logger.info(LABEL + " plugin activated");
-    }
+//    public void start() {
+//        super.activate(bundleContext);
+//        this.logger.info(LABEL + " plugin activated");
+//    }
+//
+//    public void stop() {
+//        this.logger.info(LABEL + " plugin deactivated");
+//        super.deactivate();
+//    }
 
-    public void stop() {
-        this.logger.info(LABEL + " plugin deactivated");
-        super.deactivate();
-    }
+//    @Override
+//    public String getLabel() {
+//        return NAME;
+//    }
+//
+//    @Override
+//    public String getTitle() {
+//        return LABEL;
+//    }
 
     @Override
-    public String getLabel() {
-        return NAME;
-    }
-
-    @Override
-    public String getTitle() {
-        return LABEL;
-    }
-
-    @Override
-    protected void renderContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void renderContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter pw = response.getWriter();
 
         String appRoot = request.getContextPath() + request.getServletPath();

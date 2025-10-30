@@ -16,7 +16,7 @@
  */
 package org.apache.karaf.webconsole.gogo;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -37,7 +37,7 @@ public class Activator extends BaseActivator {
         gogoPlugin = new GogoPlugin();
         gogoPlugin.setBundleContext(bundleContext);
         gogoPlugin.setSessionFactory(getTrackedService(SessionFactory.class));
-        gogoPlugin.start();
+//        gogoPlugin.start();
 
         Dictionary<String, String> props = new Hashtable<>();
         props.put("felix.webconsole.label", "gogo");
@@ -48,7 +48,7 @@ public class Activator extends BaseActivator {
     protected void doStop() {
         super.doStop();
         if (gogoPlugin != null) {
-            gogoPlugin.stop();
+//            gogoPlugin.stop();
             gogoPlugin = null;
         }
     }

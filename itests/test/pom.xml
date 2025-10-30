@@ -63,6 +63,12 @@
         </dependency>
 
         <dependency>
+            <groupId>${servlet.spec.groupId}</groupId>
+            <artifactId>${servlet.spec.artifactId}</artifactId>
+            <version>${servlet.spec.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-container-karaf</artifactId>
             <scope>compile</scope>
@@ -204,7 +210,7 @@
 
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>websocket-client</artifactId>
+            <artifactId>jetty-websocket-core-client</artifactId>
             <version>${jetty.version}</version>
             <scope>test</scope>
         </dependency>

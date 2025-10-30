@@ -28,11 +28,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.felix.utils.json.JSONWriter;
+import org.apache.felix.webconsole.servlet.AbstractServlet;
+import org.apache.felix.webconsole.spi.BrandingPlugin;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.features.Repository;
@@ -45,7 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * WebConsole plugin to use {@link FeaturesService}.
  */
-public class FeaturesPlugin extends AbstractWebConsolePlugin {
+public class FeaturesPlugin extends AbstractServlet {
 
     private final Logger log = LoggerFactory.getLogger(FeaturesPlugin.class);
 
@@ -56,31 +58,26 @@ public class FeaturesPlugin extends AbstractWebConsolePlugin {
     private FeaturesService featuresService;
     private BundleContext bundleContext;
 
-    @Override
-    protected boolean isHtmlRequest(HttpServletRequest request) {
-        return true;
-    }
+//    public void start() {
+//        super.activate(bundleContext);
+//        this.classLoader = this.getClass().getClassLoader();
+//        this.log.info(LABEL + " plugin activated");
+//    }
+//
+//    public void stop() {
+//        this.log.info(LABEL + " plugin deactivated");
+//        super.deactivate();
+//    }
 
-    public void start() {
-        super.activate(bundleContext);
-        this.classLoader = this.getClass().getClassLoader();
-        this.log.info(LABEL + " plugin activated");
-    }
-
-    public void stop() {
-        this.log.info(LABEL + " plugin deactivated");
-        super.deactivate();
-    }
-
-    @Override
-    public String getLabel() {
-        return NAME;
-    }
-
-    @Override
-    public String getTitle() {
-        return LABEL;
-    }
+//    @Override
+//    public String getBrandName() {
+//        return NAME;
+//    }
+//
+//    @Override
+//    public String getTitle() {
+//        return LABEL;
+//    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -120,7 +117,7 @@ public class FeaturesPlugin extends AbstractWebConsolePlugin {
     }
 
     @Override
-    protected void renderContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void renderContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         final PrintWriter pw = response.getWriter();
 

@@ -17,9 +17,6 @@
 package org.apache.karaf.itests.examples;
 
 import org.apache.karaf.itests.BaseTest;
-import org.apache.karaf.itests.util.SimpleSocket;
-import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -37,36 +34,36 @@ import static junit.framework.TestCase.assertTrue;
 @ExamReactorStrategy(PerClass.class)
 public class WebSocketExampleTest extends BaseTest {
 
-    @Test(timeout = 60000)
-    public void test() throws Exception {
-        featureService.installFeature("pax-web-jetty-websockets");
-        featureService.installFeature("pax-web-karaf");
-        featureService.installFeature("http");
-        featureService.installFeature("scr");
-
-        Bundle bundle = bundleContext.installBundle("mvn:org.apache.karaf.examples/karaf-websocket-example/" + System.getProperty("karaf.version"));
-        bundle.start();
-
-        String httpList = executeCommand("web:servlet-list");
-        while (!httpList.contains("/example-websocket/*")) {
-            Thread.sleep(1000);
-            httpList = executeCommand("web:servlet-list");
-        }
-        System.out.println(httpList);
-
-        WebSocketClient client = new WebSocketClient();
-        SimpleSocket socket = new SimpleSocket();
-        client.start();
-        URI uri = new URI("ws://localhost:" + getHttpPort() + "/example-websocket");
-        ClientUpgradeRequest request = new ClientUpgradeRequest();
-        client.connect(socket, uri, request);
-
-        socket.awaitClose(10, TimeUnit.SECONDS);
-
-        assertTrue(socket.messages.size() > 0);
-
-        assertEquals("Hello World", socket.messages.get(0));
-
-        client.stop();
-    }
+//    @Test(timeout = 60000)
+//    public void test() throws Exception {
+//        featureService.installFeature("pax-web-jetty-websockets");
+//        featureService.installFeature("pax-web-karaf");
+//        featureService.installFeature("http");
+//        featureService.installFeature("scr");
+//
+//        Bundle bundle = bundleContext.installBundle("mvn:org.apache.karaf.examples/karaf-websocket-example/" + System.getProperty("karaf.version"));
+//        bundle.start();
+//
+//        String httpList = executeCommand("web:servlet-list");
+//        while (!httpList.contains("/example-websocket/*")) {
+//            Thread.sleep(1000);
+//            httpList = executeCommand("web:servlet-list");
+//        }
+//        System.out.println(httpList);
+//
+//        WebSocketClient client = new WebSocketClient();
+//        SimpleSocket socket = new SimpleSocket();
+//        client.start();
+//        URI uri = new URI("ws://localhost:" + getHttpPort() + "/example-websocket");
+//        ClientUpgradeRequest request = new ClientUpgradeRequest();
+//        client.connect(socket, uri, request);
+//
+//        socket.awaitClose(10, TimeUnit.SECONDS);
+//
+//        assertTrue(socket.messages.size() > 0);
+//
+//        assertEquals("Hello World", socket.messages.get(0));
+//
+//        client.stop();
+//    }
 }

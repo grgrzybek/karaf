@@ -16,12 +16,16 @@
  */
 package org.apache.karaf.examples.servlet.registration;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import jakarta.servlet.Servlet;
 import org.osgi.annotation.bundle.Header;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.http.HttpService;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.servlet.whiteboard.HttpWhiteboardConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
 @Header(name = Constants.BUNDLE_ACTIVATOR, value = "${@class}")
@@ -29,34 +33,21 @@ public class Activator implements BundleActivator {
 
     private ServiceTracker httpServiceTracker;
 
+    private ServiceRegistration<Servlet> reg;
+
     @Override
     public void start(BundleContext bundleContext) throws Exception {
-        httpServiceTracker = new ServiceTracker(bundleContext, HttpService.class.getName(), null) {
-            @Override
-            public Object addingService(ServiceReference ref) {
-                HttpService httpService = (HttpService) bundleContext.getService(ref);
-                try {
-                    httpService.registerServlet("/servlet-example", new ExampleServlet(), null, null);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                return httpService;
-            }
-
-            public void removedService(ServiceReference ref, Object service) {
-                try {
-                    ((HttpService) service).unregister("/servlet-example");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
-        httpServiceTracker.open();
+        Dictionary<String, Object> props = new Hashtable<>();
+        props.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "ExampleServlet");
+        props.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/servlet-example/*");
+        this.reg = bundleContext.registerService(Servlet.class, new ExampleServlet(), props);
     }
 
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
-        httpServiceTracker.close();
+        if (reg != null) {
+            reg.unregister();
+        }
     }
 
 }

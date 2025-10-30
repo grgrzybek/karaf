@@ -19,10 +19,10 @@
         limitations under the License.
     -->
 
-    <service interface="javax.servlet.Servlet">
+    <service interface="jakarta.servlet.Servlet">
         <service-properties>
-            <entry key="alias" value="/servlet-example"/>
-            <entry key="servlet-name" value="Example"/>
+            <entry key="osgi.http.whiteboard.servlet.pattern" value="/servlet-example/*"/>
+            <entry key="osgi.http.whiteboard.servlet.name" value="Example"/>
         </service-properties>
         <bean class="org.apache.karaf.examples.servlet.blueprint.ExampleServlet"/>
     </service>

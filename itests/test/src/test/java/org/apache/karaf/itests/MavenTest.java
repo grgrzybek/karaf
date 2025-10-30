@@ -18,6 +18,7 @@ package org.apache.karaf.itests;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -31,15 +32,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.util.Callback;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -97,25 +100,25 @@ public class MavenTest /*extends BaseTest*/ {
         server = new Server(0);
         server.setHandler(new AbstractHandler() {
             @Override
-            public void handle(String target, Request baseRequest, HttpServletRequest request,
-                               HttpServletResponse response) throws IOException, ServletException {
+            public boolean handle(Request request, Response response, Callback callback) throws Exception {
                 try {
-                    int port = baseRequest.getServerPort();
-                    if (port == 3333 && request.getRequestURI().endsWith(".jar")) {
+                    int port = Request.getServerPort(request);
+                    if (port == 3333 && request.getHttpURI().getPath().endsWith(".jar")) {
                         if (!requestAtPort3333Done.get()) {
                             requestAtPort3333Done.set(true);
                             // explicit timeout at first attempt - higher than the one set by Aether
                             Thread.sleep(4000);
                         }
                         response.setStatus(HttpServletResponse.SC_OK);
-                        response.getOutputStream().write(0x42);
+                        response.write(true, ByteBuffer.wrap(new byte[] { 0x42 }), callback);
                     } else {
                         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     }
                 } catch (Exception ignored) {
                 } finally {
-                    baseRequest.setHandled(true);
+                    callback.succeeded();
                 }
+                return true;
             }
         });
         server.start();
@@ -163,7 +166,7 @@ public class MavenTest /*extends BaseTest*/ {
 //                new TimeoutOption(3600000),
 //                KarafDistributionOption.debugConfiguration("8889", false),
                 bundle("mvn:commons-io/commons-io/2.5"),
-                mavenBundle(maven().groupId("javax.servlet").artifactId("javax.servlet-api").versionAsInProject()).noStart(),
+                mavenBundle(maven().groupId("jakarta.servlet").artifactId("jakarta.servlet-api").versionAsInProject()).noStart(),
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-server").versionAsInProject()).noStart(),
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-http").versionAsInProject()).noStart(),
                 mavenBundle(maven().groupId("org.eclipse.jetty").artifactId("jetty-util").versionAsInProject()).noStart(),
