@@ -145,7 +145,7 @@
                         !org.apache.karaf.command.acl.*,
                         *
                     </pidsToExtract>
-                    <javase>11</javase>
+                    <javase>${maven.compiler.target}</javase>
                 </configuration>
             </plugin>
             <plugin>

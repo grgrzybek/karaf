@@ -178,7 +178,7 @@
                     </bootFeatures>
                     <libraries>
                     </libraries>
-                    <javase>11</javase>
+                    <javase>${maven.compiler.target}</javase>
                     <generateConsistencyReport>${project.build.directory}</generateConsistencyReport>
                     <consistencyReportProjectName>Apache Karaf (full)</consistencyReportProjectName>
                 </configuration>

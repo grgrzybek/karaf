@@ -138,7 +138,7 @@
                     </bootFeatures>
                     <libraries>
                     </libraries>
-                    <javase>11</javase>
+                    <javase>${maven.compiler.target}</javase>
                 </configuration>
             </plugin>
         </plugins>
