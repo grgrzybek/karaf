@@ -174,7 +174,7 @@
                         <!-- minimal distribution -->
                         <!--<feature>minimal</feature>-->
                     </bootFeatures>
-                    <javase>${maven.compiler.target}</javase>
+                    <javase>17</javase>
                 </configuration>
             </plugin>
         </plugins>
